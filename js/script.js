@@ -600,7 +600,7 @@
                 break;
             case 'whoami':
             case 'about':
-                result = 'Jose Ayvar · Ingeniero de Software Jr\nDesarrollador Full Stack y docente de Informática, Robótica y Programación.\nPachacamac, Lima, Perú. Disponible para nuevos proyectos.';
+                result = 'Ayvar Jose · Ingeniero de Software Jr\nDesarrollador Full Stack y docente de Informática, Robótica y Programación.\nPachacamac, Lima, Perú. Disponible para nuevos proyectos.';
                 break;
             case 'skills': result = $$('.skill-name').map(name => `→ ${name.textContent}`).join('\n'); break;
             case 'lab': result = 'Abriendo el laboratorio. Explora las capas o simula una solicitud Full Stack.'; goTo('architectureLab'); break;
@@ -608,7 +608,7 @@
             case 'experience': result = 'Explora mi trayectoria profesional.'; goTo('experience'); break;
             case 'education': result = 'Formación técnica y estudios de Ingeniería de Software.'; goTo('education'); break;
             case 'contact': result = `Conectemos: ${emailAddress}\nTambién puedes usar el formulario de contacto.`; goTo('contact'); break;
-            case 'cv': result = 'Descarga solicitada: CV-Jose-Ayvar.pdf'; $('#downloadCV').click(); break;
+            case 'cv': result = 'Descarga solicitada: CV-Ayvar-Jose.pdf'; $('#downloadCV').click(); break;
             case 'theme': toggleTheme(); result = `Tema ${root.dataset.theme === 'dark' ? 'oscuro' : 'claro'} activado.`; break;
             default: result = `Comando no encontrado: ${raw.trim()}\nEscribe help para explorar los comandos disponibles.`;
         }

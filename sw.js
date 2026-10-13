@@ -1,6 +1,6 @@
 // Primero intento la red; si falla, uso la copia guardada.
-const CACHE = 'ayvar-v1';
-const CORE = ['/', 'index.html', 'css/style.css', 'css/enhancements.css', 'css/extras.css', 'css/ayvarcitoo.css', 'js/preferences.js', 'js/script.js', 'js/enhancements.js', 'js/extras.js', 'js/ayvarcitoo.js', 'img/yo.jpg', 'img/favicon.ico', 'img/icon-192.png'];
+const CACHE = 'ayvar-v3';
+const CORE = ['/', 'index.html', 'css/style.css', 'css/enhancements.css', 'css/extras.css', 'css/ayvarcitoo.css', 'js/preferences.js', 'js/script.js', 'js/enhancements.js', 'js/extras.js', 'js/ayvarcitoo.js', 'img/yo.jpg', 'img/favicon.ico?v=3', 'img/icon-192.png?v=2'];
 
 self.addEventListener('install', e => {
     e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));

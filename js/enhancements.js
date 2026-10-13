@@ -9,7 +9,7 @@
 
     (function boot() {
         try { if (sessionStorage.getItem('portfolio.boot') || !full()) return; sessionStorage.setItem('portfolio.boot', '1'); } catch { if (!full()) return; }
-        const lines = ['> iniciando jose-ayvar.dev', '> cargando stack: JavaScript · PHP · React · Node.js', '> conectando interfaz ↔ servidor ↔ datos', '> listo. Bienvenido.'];
+        const lines = ['> iniciando ayvar-jose.dev', '> cargando stack: JavaScript · PHP · React · Node.js', '> conectando interfaz ↔ servidor ↔ datos', '> listo. Bienvenido.'];
         const el = document.createElement('div');
         el.className = 'boot';
         el.setAttribute('aria-hidden', 'true');
