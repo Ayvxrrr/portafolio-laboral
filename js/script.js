@@ -436,6 +436,8 @@
     });
 
     const projectFeatures = {
+        'ayvar-ai': ['Chat con inteligencia artificial para explorar ideas y resolver dudas.', 'Modos de conversación: general, creativo, código y aprendizaje.', 'Historial de conversaciones y aplicación instalable.', 'Demo pública desplegada en Netlify y código disponible en GitHub.'],
+        restaurant: ['Carta interactiva con detalles de los platos.', 'Secciones de experiencias, historia del restaurante y contacto.', 'Página de reservas y diseño adaptable a móviles.', 'Demo pública desplegada en Netlify y código disponible en GitHub.'],
         ecommerce: ['Catálogo de productos y carrito de compras.', 'Pasarela de pagos con Stripe.', 'Panel de administración de la tienda.', 'Frontend en React y backend con Node.js y MongoDB.'],
         fitness: ['Seguimiento de ejercicios y actividad física.', 'Registro de nutrición y progreso personal.', 'Visualización del progreso con Chart.js.', 'Aplicación en React Native con Firebase y Redux.'],
         dashboard: ['Gráficos interactivos y visualización de datos.', 'Análisis de información en tiempo real.', 'Interfaz web construida con Vue.js y D3.js.', 'Backend con Express y PostgreSQL.']
@@ -459,6 +461,16 @@
         const detail = $('#projectDialogPreview');
         detail.className = `detail-preview ${[...preview.classList].find(name => name.startsWith('preview-'))}`;
         detail.replaceChildren(...[...preview.children].map(child => child.cloneNode(true)));
+        const demo = $('#projectDemo');
+        demo.hidden = !item.dataset.demo;
+        if (item.dataset.demo) demo.href = item.dataset.demo;
+        else demo.removeAttribute('href');
+        const repository = $('#projectRepository');
+        repository.href = item.dataset.repo || 'https://github.com/Ayvxrrr';
+        $('span', repository).textContent = item.dataset.repo ? 'Ver código en GitHub' : 'Perfil de GitHub';
+        $('#projectDialogCaption').textContent = item.dataset.demo
+            ? 'Captura real del sitio. Abre la demo para explorar el proyecto en funcionamiento.'
+            : 'Ilustración conceptual del proyecto. Consulta conmigo la disponibilidad de la demo y el código.';
         openDialog(projectDialog);
         projectDialog.scrollTop = 0;
     }
