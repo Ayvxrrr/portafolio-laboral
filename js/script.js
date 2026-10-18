@@ -370,9 +370,9 @@
     const projectFeatures = {
         'ayvar-ai': ['Chat con inteligencia artificial para explorar ideas y resolver dudas.', 'Modos de conversación: general, creativo, código y aprendizaje.', 'Historial de conversaciones y aplicación instalable.', 'Demo pública desplegada en Netlify y código disponible en GitHub.'],
         'el-tonito': ['Carta interactiva de pollo a la brasa, parrillas y promociones.', 'Carrito para armar pedidos y solicitarlos por WhatsApp.', 'Asistente con inteligencia artificial y diseño adaptable a celulares y computadoras.', 'Aplicación en React y TypeScript, publicada en Netlify con código disponible en GitHub.'],
-        ecommerce: ['Catálogo de productos y carrito de compras.', 'Pasarela de pagos con Stripe.', 'Panel de administración de la tienda.', 'Frontend en React y backend con Node.js y MongoDB.'],
-        fitness: ['Seguimiento de ejercicios y actividad física.', 'Registro de nutrición y progreso personal.', 'Visualización del progreso con Chart.js.', 'Aplicación en React Native con Firebase y Redux.'],
-        dashboard: ['Gráficos interactivos y visualización de datos.', 'Análisis de información en tiempo real.', 'Interfaz web construida con Vue.js y D3.js.', 'Backend con Express y PostgreSQL.']
+        ecommerce: ['Propuesta de catálogo de productos y carrito.', 'Flujo de pago conceptual con Stripe.', 'Diseño de un panel de administración.', 'Stack propuesto: React, Node.js y MongoDB.'],
+        fitness: ['Propuesta de registro de ejercicios y actividad física.', 'Diseño de un seguimiento de progreso personal.', 'Visualización conceptual de la actividad.', 'Stack propuesto: React Native, Firebase, Redux y Chart.js.'],
+        dashboard: ['Propuesta de gráficos y visualización de datos.', 'Métricas de ejemplo, sin conexión a datos reales.', 'Stack de interfaz propuesto: Vue.js y D3.js.', 'Stack de servidor propuesto: Express y PostgreSQL.']
     };
     if (window.portfolioExperience) window.portfolioExperience.projectFeatures = projectFeatures;
     const projectDialog = $('#projectDialog');
@@ -403,7 +403,7 @@
         $('span', repository).textContent = item.dataset.repo ? 'Ver código en GitHub' : 'Perfil de GitHub';
         $('#projectDialogCaption').textContent = item.dataset.demo
             ? 'Captura real del sitio. Abre la demo para explorar el proyecto en funcionamiento.'
-            : 'Ilustración conceptual del proyecto. Consulta conmigo la disponibilidad de la demo y el código.';
+            : 'Concepto visual, no un producto publicado. Las funciones y tecnologías mostradas son una propuesta.';
         openDialog(projectDialog);
         projectDialog.scrollTop = 0;
     }
@@ -542,7 +542,7 @@
                 break;
             case 'whoami':
             case 'about':
-                result = 'Ayvar Jose · Ingeniero de Software Jr\nDesarrollador Full Stack y docente de Informática, Robótica y Programación.\nPachacamac, Lima, Perú. Disponible para nuevos proyectos.';
+                result = 'Ayvar Jose · Desarrollador Full Stack Junior\nTitulado en Computación e Informática.\nExperiencia en proyectos de sistemas, páginas web y aplicaciones móviles.\nDesarrollador freelance y docente de computación.\nPachacamac, Lima, Perú. Disponible para nuevos proyectos.';
                 break;
             case 'skills': result = $$('.skill-name').map(name => `→ ${name.textContent}`).join('\n'); break;
             case 'lab': result = 'Abriendo el laboratorio. Explora las capas o simula una solicitud Full Stack.'; goTo('architectureLab'); break;

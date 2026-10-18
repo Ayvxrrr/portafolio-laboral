@@ -53,7 +53,7 @@
     const input = $('#terminalInput');
     const output = $('#terminalOutput');
     const extra = {
-        neofetch: () => 'jose@portfolio\n──────────────\nRol:       Ingeniero de Software Jr\nStack:     JavaScript · PHP · React · Node.js\nDatos:     MySQL · PostgreSQL · MongoDB\nNube:      AWS EC2 · RDS · S3\nDocente:   Informática, Robótica y Programación\nUbicación: Lima, Perú\nEstado:    ● disponible',
+        neofetch: () => 'jose@portfolio\n──────────────\nRol:       Desarrollador Full Stack Junior\nFormación: Titulado en Computación e Informática\nStack:     JavaScript · PHP · React · Node.js\nDatos:     MySQL · PostgreSQL · MongoDB\nNube:      AWS EC2 · RDS · S3\nDocente:   Informática, Robótica y Programación\nUbicación: Lima, Perú\nEstado:    ● disponible',
         hire: () => { setTimeout(() => $('a[href="#contact"]')?.click(), 400); return 'Buena decisión. Te llevo al formulario de contacto.\nTambién puedes escribirme a joseayvar28@gmail.com'; }
     };
     function runExtra(raw) {

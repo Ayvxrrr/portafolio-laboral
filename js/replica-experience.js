@@ -63,7 +63,7 @@
         $$('[data-presentation-line]').forEach(line => {
             i18n.html(line, () => [...(line.dataset.presentationLine === 'name' ? 'AYVAR JOSE.' : line.dataset.presentationLine === 'role' ? root.lang === 'en' ? 'FULL STACK' : 'DESARROLLADOR' : root.lang === 'en' ? 'DEVELOPER.' : 'FULL STACK.')].map((char, index) => `<span class="presentation-letter" style="--character:${index}">${char === ' ' ? '&nbsp;' : escape(char)}</span>`).join(''));
         });
-        i18n.html($('.about-introduction h2'), () => (root.lang === 'en' ? ['I’M AYVAR JOSE.', 'FULL STACK', 'DEVELOPER.'] : ['SOY AYVAR JOSE.', 'DESARROLLADOR', 'FULL STACK.']).map((text, index) => `<span class="about-title-line"><span class="about-title-text${index === 2 ? ' about-title-stroke' : ''}" style="--line-index:${index}">${escape(text)}</span></span>`).join(''));
+        i18n.html($('.about-introduction h2'), () => (root.lang === 'en' ? ['I’M AYVAR JOSE.', 'JUNIOR FULL STACK', 'DEVELOPER.'] : ['SOY AYVAR JOSE.', 'DESARROLLADOR', 'FULL STACK JR.']).map((text, index) => `<span class="about-title-line"><span class="about-title-text${index === 2 ? ' about-title-stroke' : ''}" style="--line-index:${index}">${escape(text)}</span></span>`).join(''));
         $$('.biography-ribbon > span').forEach(ribbon => i18n.html(ribbon, () => Array(2).fill(`AYVAR JOSE — <b>${i18n.t('DESARROLLADOR FULL STACK')}</b> —`).join(' ')));
         if (animate && motion() && typeof Element.prototype.animate === 'function') {
             $$('[data-presentation-line]').forEach((line, row) => {
