@@ -2,6 +2,8 @@
     'use strict';
 
     const root = document.documentElement;
+    const i18n = window.portfolioI18n;
+    const t = i18n.t;
     const $ = (selector, scope = document) => scope.querySelector(selector);
     const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
     const normalize = value => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
@@ -11,14 +13,14 @@
     const emailAddress = 'joseayvar28@gmail.com';
     const storage = {
         get(key) { try { return localStorage.getItem(`portfolio.${key}`); } catch { return null; } },
-        set(key, value) { try { localStorage.setItem(`portfolio.${key}`, value); } catch { /* Si no puedo guardar, las preferencias duran esta visita. */ } }
+        set(key, value) { try { localStorage.setItem(`portfolio.${key}`, value); } catch {} }
     };
 
     let toastTimer;
-    function notify(message) {
+    function notify(message, params = {}) {
         const region = $('#toastRegion');
         clearTimeout(toastTimer);
-        region.textContent = message;
+        i18n.text(region, message, params);
         region.classList.add('is-visible');
         toastTimer = setTimeout(() => region.classList.remove('is-visible'), 4000);
     }
@@ -29,27 +31,17 @@
 
     function updateAppearance() {
         const dark = root.dataset.theme === 'dark';
-        const label = dark ? 'Activar modo claro' : 'Activar modo oscuro';
+        const label = t(dark ? 'Activar modo claro' : 'Activar modo oscuro');
         themeToggle.setAttribute('aria-label', label);
         themeToggle.title = label;
         $('i', themeToggle).className = `fas fa-${dark ? 'sun' : 'moon'}`;
-        $('meta[name="theme-color"]').content = dark ? '#080a0b' : '#f4f5ef';
-        $$('[data-set-accent]').forEach(button => {
-            button.setAttribute('aria-pressed', String(button.dataset.setAccent === root.dataset.accent));
-        });
+        $('meta[name="theme-color"]').content = getComputedStyle(root).getPropertyValue('--bg').trim();
         document.dispatchEvent(new Event('portfolio:palette'));
     }
 
     function toggleTheme() {
         root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
         storage.set('theme', root.dataset.theme);
-        updateAppearance();
-    }
-
-    function setAccent(accent) {
-        if (!['lime', 'cyan', 'violet'].includes(accent)) return;
-        root.dataset.accent = accent;
-        storage.set('accent', accent);
         updateAppearance();
     }
 
@@ -78,7 +70,6 @@
 
     themeToggle.addEventListener('click', toggleTheme);
     motionToggle.addEventListener('click', toggleMotion);
-    $$('[data-set-accent]').forEach(button => button.addEventListener('click', () => setAccent(button.dataset.setAccent)));
     reducedMotion.addEventListener('change', updateMotion);
     updateAppearance();
     updateMotion();
@@ -96,44 +87,22 @@
     $$('a[target="_blank"]').forEach(link => { link.rel = 'noopener noreferrer'; });
 
     const navbar = $('.navbar');
-    const navToggle = $('.navbar-toggler');
-    const navMenu = $('#navbarNav');
     const navLinks = $$('.navbar-nav .nav-link');
     const sections = $$('main > section[id]');
-
-    function closeMenu() {
-        navMenu.classList.remove('show');
-        navToggle.setAttribute('aria-expanded', 'false');
-        navToggle.setAttribute('aria-label', 'Abrir menú de navegación');
-        $('i', navToggle).className = 'fas fa-bars';
-    }
-
-    navToggle.addEventListener('click', () => {
-        const open = navToggle.getAttribute('aria-expanded') !== 'true';
-        navMenu.classList.toggle('show', open);
-        navToggle.setAttribute('aria-expanded', String(open));
-        navToggle.setAttribute('aria-label', open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
-        $('i', navToggle).className = `fas fa-${open ? 'xmark' : 'bars'}`;
-    });
-    document.addEventListener('click', event => {
-        if (!navbar.contains(event.target)) closeMenu();
-    });
-    document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && navMenu.classList.contains('show')) {
-            closeMenu();
-            navToggle.focus();
-        }
-    });
-    matchMedia('(min-width: 992px)').addEventListener('change', closeMenu);
 
     function goTo(id) {
         const target = document.getElementById(id.replace(/^#/, ''));
         if (!target) return;
-        closeMenu();
-        target.scrollIntoView({ behavior: motionEnabled() ? 'smooth' : 'instant', block: 'start' });
-        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
-        target.focus({ preventScroll: true });
-        try { history.replaceState(null, '', `#${target.id}`); } catch { /* Puede fallar al abrir el archivo directamente. */ }
+        const arrive = (instant = false) => {
+            const changedView = window.portfolioExperience?.revealTarget(target) || false;
+            const behavior = instant || !motionEnabled() ? 'instant' : 'smooth';
+            if (!window.portfolioExperience?.alignTarget(target, { behavior })) target.scrollIntoView({ behavior, block: 'start' });
+            if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+            target.focus({ preventScroll: true });
+            try { history[changedView ? 'pushState' : 'replaceState']({ view: window.portfolioExperience?.currentSection() }, '', `#${target.id}`); } catch {}
+        };
+        if (window.portfolioChapters?.navigate(target, () => arrive(true))) return;
+        arrive();
     }
 
     document.addEventListener('click', event => {
@@ -151,8 +120,9 @@
         const total = root.scrollHeight - window.innerHeight;
         $('#scrollProgress').style.transform = `scaleX(${total > 0 ? Math.min(1, y / total) : 0})`;
         navbar.classList.toggle('scrolled', y > 30);
-        $('#backToTop').classList.toggle('active', y > 600);
-        const active = [...sections].reverse().find(section => section.offsetTop <= y + 150) || sections[0];
+        const chapter = window.portfolioExperience?.currentSection();
+        const visible = sections.filter(section => !section.hidden);
+        const active = visible.find(section => section.id === chapter) || [...visible].reverse().find(section => section.offsetTop <= y + 150) || visible[0];
         navLinks.forEach(link => {
             const selected = link.getAttribute('href') === `#${active.id}`;
             link.classList.toggle('active', selected);
@@ -164,51 +134,17 @@
     function scheduleScroll() { if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScroll); }
     window.addEventListener('scroll', scheduleScroll, { passive: true });
     window.addEventListener('resize', scheduleScroll, { passive: true });
+    document.addEventListener('portfolio:view', scheduleScroll);
     updateScroll();
 
     const timeFormatter = new Intl.DateTimeFormat('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hour12: false });
     function updateClock() {
         if (document.hidden) return;
         $('#localTime').textContent = `${timeFormatter.format(new Date())} PET`;
-        $('#currentYear').textContent = new Date().getFullYear();
     }
     updateClock();
     setInterval(updateClock, 60000);
     document.addEventListener('visibilitychange', updateClock);
-
-    const roles = ['Full Stack Developer', 'Ingeniero de Software Jr', 'Innovador Tecnológico'];
-    const typed = $('#typed');
-    let typeTimer;
-    let roleIndex = 0;
-    let character = roles[0].length;
-    let deleting = true;
-    function typeStep() {
-        if (!motionEnabled() || document.hidden) return;
-        const role = roles[roleIndex];
-        character += deleting ? -1 : 1;
-        typed.textContent = role.slice(0, character);
-        let delay = deleting ? 35 : 65;
-        if (character === 0) {
-            deleting = false;
-            roleIndex = (roleIndex + 1) % roles.length;
-            delay = 300;
-        } else if (!deleting && character === role.length) {
-            deleting = true;
-            delay = 2800;
-        }
-        typeTimer = setTimeout(typeStep, delay);
-    }
-    function syncTyping() {
-        clearTimeout(typeTimer);
-        roleIndex = 0;
-        character = roles[0].length;
-        deleting = true;
-        typed.textContent = roles[0];
-        if (motionEnabled() && !document.hidden) typeTimer = setTimeout(typeStep, 2800);
-    }
-    document.addEventListener('portfolio:motion', syncTyping);
-    document.addEventListener('visibilitychange', syncTyping);
-    syncTyping();
 
     function observeOnce(elements, callback, options = {}) {
         if (!('IntersectionObserver' in window)) { elements.forEach(callback); return; }
@@ -223,7 +159,7 @@
     }
 
     const revealElements = $$('[data-aos]');
-    if (motionEnabled() && 'IntersectionObserver' in window) {
+    if (!window.portfolioScroll && motionEnabled() && 'IntersectionObserver' in window) {
         revealElements.forEach(element => element.classList.add('reveal-pending'));
         observeOnce(revealElements, element => {
             element.classList.remove('reveal-pending');
@@ -256,9 +192,9 @@
         animateNumber(Number(circle.dataset.percent), value => circle.style.setProperty('--percent', value.toFixed(1)));
     });
 
-    const cards = $$('.certificate-card, .skill-category-card, .education-card, .timeline-content, .project-card, .contact-form-container');
+    const cards = $$('.certificate-card, .skill-category-card, .project-card, .contact-form-container');
     cards.forEach(card => card.classList.add('spotlight-card'));
-    [...cards, ...$$('[data-tilt]')].forEach(card => {
+    cards.forEach(card => {
         let frame = 0;
         card.addEventListener('pointermove', event => {
             if (!finePointer.matches || !motionEnabled()) return;
@@ -269,16 +205,10 @@
                 const y = event.clientY - rect.top;
                 card.style.setProperty('--spot-x', `${x}px`);
                 card.style.setProperty('--spot-y', `${y}px`);
-                if (card.hasAttribute('data-tilt')) {
-                    card.style.setProperty('--tilt-y', `${(x / rect.width - .5) * 9}deg`);
-                    card.style.setProperty('--tilt-x', `${(.5 - y / rect.height) * 7}deg`);
-                }
             });
         }, { passive: true });
         card.addEventListener('pointerleave', () => {
             cancelAnimationFrame(frame);
-            card.style.removeProperty('--tilt-x');
-            card.style.removeProperty('--tilt-y');
         });
     });
 
@@ -291,7 +221,7 @@
             const interactive = Boolean(event.target.closest('a, button, input, textarea'));
             halo.classList.add('is-active');
             halo.classList.toggle('is-hovering', interactive);
-            const halfSize = interactive ? 21 : 13;
+            const halfSize = halo.offsetWidth / 2;
             halo.style.transform = `translate3d(${event.clientX - halfSize}px, ${event.clientY - halfSize}px, 0)`;
         });
     }, { passive: true });
@@ -309,20 +239,21 @@
         setTimeout(() => ripple.remove(), 600);
     });
 
-    // Comparto el estado de búsqueda y filtros para que no se descoordinen.
+    // Comparto los filtros con la galería para que ambos muestren lo mismo xd.
     const projectItems = $$('.project-grid > [data-category]');
     const projectSearch = $('#projectSearch');
     let activeFilter = 'all';
     const projectIndex = projectItems.map(element => ({
         element,
         categories: element.dataset.category.split(' '),
-        text: normalize(`${$('.project-content', element).textContent} ${element.dataset.category}`)
+        searchText: () => normalize(`${$$('.project-title, .project-description, .project-category, .tech-tag', element).map(node => `${t(node.textContent, {}, 'es')} ${t(node.textContent, {}, 'en')}`).join(' ')} ${element.dataset.category}`)
     }));
     function filterProjects() {
         const terms = normalize(projectSearch.value).split(/\s+/).filter(Boolean);
         let visible = 0;
         projectIndex.forEach(project => {
-            const matches = (activeFilter === 'all' || project.categories.includes(activeFilter)) && terms.every(term => project.text.includes(term));
+            const text = project.searchText();
+            const matches = (activeFilter === 'all' || project.categories.includes(activeFilter)) && terms.every(term => text.includes(term));
             project.element.hidden = !matches;
             if (matches) visible++;
         });
@@ -331,7 +262,7 @@
             button.classList.toggle('active', active);
             button.setAttribute('aria-pressed', String(active));
         });
-        $('#projectResults').textContent = `${visible} ${visible === 1 ? 'proyecto encontrado' : 'proyectos encontrados'}`;
+        i18n.text($('#projectResults'), visible === 1 ? '{count} proyecto encontrado' : '{count} proyectos encontrados', { count: visible });
         $('#projectsEmpty').hidden = visible !== 0;
         scheduleScroll();
     }
@@ -347,7 +278,7 @@
         projectSearch.focus({ preventScroll: true });
     });
 
-    // Esto simula el flujo completo, no hace peticiones a un servidor.
+    // Es una simulación visual; no envío solicitudes a un servidor xd.
     const lab = $('#architectureLab');
     const runFlow = $('#runFlow');
     const flowLog = $('#flowLog');
@@ -381,14 +312,15 @@
         selectLayer('frontend');
         $('#labStatus').textContent = 'RECORRIDO COMPLETADO';
         flowLog.classList.add('is-complete');
-        flowLog.textContent = '✓ Simulación completada: interfaz → servidor → datos → respuesta.';
+        i18n.text(flowLog, '✓ Simulación completada: interfaz → servidor → datos → respuesta.');
     }
     $$('[data-layer]').forEach(button => button.addEventListener('click', () => {
         stopFlow();
         selectLayer(button.dataset.layer);
         $('#labStatus').textContent = 'EXPLORANDO ARQUITECTURA';
         flowLog.classList.remove('is-complete');
-        flowLog.textContent = `❯ Capa seleccionada: ${$('strong', button).textContent}. Inicia la simulación para recorrer el flujo completo.`;
+        const layer = { frontend: 'Interfaz', backend: 'Servidor', database: 'Datos' }[button.dataset.layer];
+        i18n.text(flowLog, () => t('❯ Capa seleccionada: {layer}. Inicia la simulación para recorrer el flujo completo.', { layer: t(layer) }));
     }));
     runFlow.addEventListener('click', () => {
         stopFlow();
@@ -408,7 +340,7 @@
             const [layer, status, message] = steps[index];
             selectLayer(layer);
             $('#labStatus').textContent = status;
-            flowLog.textContent = message;
+            i18n.text(flowLog, message);
             flowTimer = setTimeout(() => step(index + 1), 1000);
         }
         step(0);
@@ -442,13 +374,14 @@
         fitness: ['Seguimiento de ejercicios y actividad física.', 'Registro de nutrición y progreso personal.', 'Visualización del progreso con Chart.js.', 'Aplicación en React Native con Firebase y Redux.'],
         dashboard: ['Gráficos interactivos y visualización de datos.', 'Análisis de información en tiempo real.', 'Interfaz web construida con Vue.js y D3.js.', 'Backend con Express y PostgreSQL.']
     };
+    if (window.portfolioExperience) window.portfolioExperience.projectFeatures = projectFeatures;
     const projectDialog = $('#projectDialog');
     let selectedProject = '';
     function showProject(id) {
         const item = projectItems.find(project => project.dataset.project === id);
         if (!item) return;
-        selectedProject = $('.project-title', item).textContent;
-        $('#projectDialogTitle').textContent = selectedProject;
+        selectedProject = i18n.sourceOf($('.project-title', item).textContent);
+        $('#projectDialogTitle').textContent = t(selectedProject);
         $('#projectDialogCategory').textContent = $('.project-category', item).textContent;
         $('#projectDialogDescription').textContent = $('.project-description', item).textContent;
         $('#projectDialogTechnologies').replaceChildren(...$$('.tech-tag', item).map(tag => tag.cloneNode(true)));
@@ -477,7 +410,7 @@
     $$('[data-project-open]').forEach(button => button.addEventListener('click', () => showProject(button.dataset.projectOpen)));
     $('#projectContact').addEventListener('click', event => {
         event.preventDefault();
-        setSubject(`Consulta sobre ${selectedProject}`);
+        setSubject('Consulta sobre {project}', { project: selectedProject });
         projectDialog.close();
         goTo('contact');
     });
@@ -489,7 +422,7 @@
                 await navigator.clipboard.writeText(emailAddress);
                 copied = true;
             }
-        } catch { /* Si el navegador bloquea el portapapeles, pruebo la alternativa de abajo. */ }
+        } catch {}
         if (!copied) {
             const previous = document.activeElement;
             const field = document.createElement('textarea');
@@ -502,7 +435,7 @@
             field.remove();
             previous?.focus({ preventScroll: true });
         }
-        notify(copied ? 'Correo copiado. ¡Hablemos de tu próxima idea!' : `Puedes copiar mi correo: ${emailAddress}`);
+        notify(copied ? 'Correo copiado. ¡Hablemos de tu próxima idea!' : 'Puedes copiar mi correo: {email}', { email: emailAddress });
     }
     $$('[data-copy-email]').forEach(button => button.addEventListener('click', copyEmail));
 
@@ -510,9 +443,9 @@
     const commandSearch = $('#commandSearch');
     const commandResults = $('#commandResults');
     const navigationActions = [
-        ['Inicio', 'home', 'house'], ['Sobre mí', 'about', 'user'], ['Experiencia laboral', 'experience', 'briefcase'],
-        ['Stack y habilidades', 'skills', 'code'], ['Proyectos', 'projects', 'layer-group'], ['Taller en vivo', 'playground', 'laptop-code'],
-        ['Educación y estudios', 'education', 'graduation-cap'], ['Contacto', 'contact', 'envelope']
+        ['Inicio', 'home', 'house'], ['Sobre mí', 'about', 'user'],
+        ['Stack y habilidades', 'skills', 'code'], ['Proyectos', 'projects', 'layer-group'], ['Robot interactivo', 'playground', 'robot'],
+        ['Contacto', 'contact', 'envelope']
     ].map(([label, id, icon]) => ({ label, icon, group: 'SECCIÓN', run: () => goTo(id) }));
     const commandActions = [
         ...navigationActions,
@@ -522,16 +455,13 @@
         { label: 'Copiar correo electrónico', icon: 'copy', group: 'ACCIÓN', run: copyEmail },
         { label: 'Cambiar tema claro / oscuro', icon: 'circle-half-stroke', group: 'APARIENCIA', run: toggleTheme },
         { label: 'Pausar / activar animaciones', icon: 'pause', group: 'APARIENCIA', run: toggleMotion },
-        { label: 'Cambiar color neón', icon: 'palette', group: 'APARIENCIA', run: () => {
-            const accents = ['lime', 'cyan', 'violet'];
-            setAccent(accents[(accents.indexOf(root.dataset.accent) + 1) % accents.length]);
-        } }
+        { label: 'Cambiar idioma ES / EN', icon: 'language', group: 'APARIENCIA', run: () => i18n.setLanguage(root.lang === 'es' ? 'en' : 'es') }
     ];
     let matchingActions = [];
 
     function renderCommands() {
         const query = normalize(commandSearch.value);
-        matchingActions = commandActions.filter(action => normalize(`${action.label} ${action.group}`).includes(query));
+        matchingActions = commandActions.filter(action => normalize(`${t(action.label)} ${t(action.group)} ${action.label}`).includes(query));
         commandResults.replaceChildren(...matchingActions.map((action, index) => {
             const button = document.createElement('button');
             button.type = 'button';
@@ -547,7 +477,7 @@
             button.addEventListener('click', () => executeCommand(index));
             return button;
         }));
-        $('#commandStatus').textContent = `${matchingActions.length} acciones disponibles`;
+        i18n.text($('#commandStatus'), '{count} acciones disponibles', { count: matchingActions.length });
         if (!matchingActions.length) {
             const empty = document.createElement('p');
             empty.className = 'command-empty';
@@ -562,7 +492,6 @@
         action.run();
     }
     function openCommands() {
-        closeMenu();
         commandSearch.value = '';
         renderCommands();
         openDialog(commandDialog);
@@ -590,7 +519,7 @@
         }
     });
 
-    // Solo acepto los comandos de aquí, no ejecuto código del visitante.
+    // Solo ejecuto los comandos de esta lista, nunca código del visitante xd.
     const terminalInput = $('#terminalInput');
     const terminalOutput = $('#terminalOutput');
     const terminalHistory = [];
@@ -606,9 +535,10 @@
         terminalDraft = '';
         if (command === 'clear') { terminalOutput.replaceChildren(); return; }
         let result;
+        let params = {};
         switch (command) {
             case 'help':
-                result = 'whoami      Sobre mí\nskills      Mi stack tecnológico\nlab         Laboratorio Full Stack\nprojects    Explorar proyectos\nexperience  Mi experiencia laboral\neducation   Mi formación\ncontact     Hablemos\ncv          Descargar mi CV\ntheme       Cambiar claro / oscuro\nclear       Limpiar la terminal\n\n↑ / ↓ para recuperar comandos anteriores.';
+                result = 'whoami      Sobre mí\nskills      Mi stack tecnológico\nlab         Laboratorio Full Stack\nprojects    Explorar proyectos\ncontact     Hablemos\ncv          Descargar mi CV\ntheme       Cambiar claro / oscuro\nclear       Limpiar la terminal\n\n↑ / ↓ para recuperar comandos anteriores.';
                 break;
             case 'whoami':
             case 'about':
@@ -617,12 +547,10 @@
             case 'skills': result = $$('.skill-name').map(name => `→ ${name.textContent}`).join('\n'); break;
             case 'lab': result = 'Abriendo el laboratorio. Explora las capas o simula una solicitud Full Stack.'; goTo('architectureLab'); break;
             case 'projects': result = 'Abriendo mis proyectos. Filtra por categoría o busca tu tecnología favorita.'; goTo('projects'); break;
-            case 'experience': result = 'Explora mi trayectoria profesional.'; goTo('experience'); break;
-            case 'education': result = 'Formación técnica y estudios de Ingeniería de Software.'; goTo('education'); break;
-            case 'contact': result = `Conectemos: ${emailAddress}\nTambién puedes usar el formulario de contacto.`; goTo('contact'); break;
+            case 'contact': result = 'Conectemos: {email}\nTambién puedes usar el formulario de contacto.'; params = { email: emailAddress }; goTo('contact'); break;
             case 'cv': result = 'Descarga solicitada: CV-Ayvar-Jose.pdf'; $('#downloadCV').click(); break;
             case 'theme': toggleTheme(); result = `Tema ${root.dataset.theme === 'dark' ? 'oscuro' : 'claro'} activado.`; break;
-            default: result = `Comando no encontrado: ${raw.trim()}\nEscribe help para explorar los comandos disponibles.`;
+            default: result = 'Comando no encontrado: {command}\nEscribe help para explorar los comandos disponibles.'; params = { command: raw.trim() };
         }
         const entry = document.createElement('div');
         entry.className = 'terminal-entry';
@@ -630,8 +558,11 @@
         prompt.className = 'terminal-prompt';
         prompt.textContent = 'jose@portfolio ~ $ ';
         const output = document.createElement('p');
-        output.textContent = result;
-        entry.append(prompt, document.createTextNode(raw.trim()), output);
+        i18n.text(output, result, params);
+        const commandText = document.createElement('span');
+        commandText.setAttribute('data-i18n-ignore', '');
+        commandText.textContent = raw.trim();
+        entry.append(prompt, commandText, output);
         terminalOutput.append(entry);
         while (terminalOutput.children.length > 30) terminalOutput.firstElementChild.remove();
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
@@ -647,7 +578,7 @@
         terminalInput.setSelectionRange(terminalInput.value.length, terminalInput.value.length);
     });
 
-    // Muestro éxito solo cuando Netlify confirma el envío.
+    // Solo marco el envío como exitoso cuando Netlify lo confirma xd.
     const contactForm = $('#contactForm');
     const formFields = ['name', 'email', 'subject', 'message'].map(id => document.getElementById(id));
     const formStatus = $('#formStatus');
@@ -655,12 +586,15 @@
     const messageInput = $('#message');
     contactForm.noValidate = true;
     let sending = false;
+    let generatedSubject = null;
 
     function syncTopics() {
-        $$('[data-subject]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.subject === subjectInput.value)));
+        $$('[data-subject]').forEach(button => button.setAttribute('aria-pressed', String(t(button.dataset.subject) === subjectInput.value)));
     }
-    function setSubject(value) {
-        subjectInput.value = value;
+    function setSubject(source, params = {}) {
+        const localized = Object.fromEntries(Object.entries(params).map(([key, value]) => [key, t(value)]));
+        subjectInput.value = t(source, localized);
+        generatedSubject = { source, params, value: subjectInput.value };
         clearError(subjectInput);
         syncTopics();
     }
@@ -669,19 +603,20 @@
         input.classList.remove('is-invalid');
         input.removeAttribute('aria-invalid');
         const feedback = $('.form-feedback', input.closest('.form-group'));
-        if (feedback) feedback.textContent = '';
+        if (feedback) i18n.clear(feedback);
     }
     function validateField(input) {
         let message = '';
+        let params = {};
         if (!input.value.trim()) message = 'Completa este campo para continuar.';
         else if (input.type === 'email' && input.validity.typeMismatch) message = 'Escribe un correo electrónico válido.';
         else if (input.id === 'message' && input.value.trim().length < 10) message = 'Cuéntame un poco más: al menos 10 caracteres.';
-        else if (input.maxLength > 0 && input.value.length > input.maxLength) message = `Usa un máximo de ${input.maxLength} caracteres.`;
+        else if (input.maxLength > 0 && input.value.length > input.maxLength) { message = 'Usa un máximo de {count} caracteres.'; params = { count: input.maxLength }; }
         clearError(input);
         if (!message) return true;
         const feedback = $('.form-feedback', input.closest('.form-group'));
         feedback.id = `${input.id}Feedback`;
-        feedback.textContent = message;
+        i18n.text(feedback, message, params);
         input.classList.add('is-invalid');
         input.setAttribute('aria-invalid', 'true');
         input.setAttribute('aria-describedby', `${input.id === 'message' ? 'messageCount ' : ''}${feedback.id}`);
@@ -692,7 +627,7 @@
         input.addEventListener('blur', () => { if (input.value) validateField(input); });
     });
     $$('[data-subject]').forEach(button => button.addEventListener('click', () => setSubject(button.dataset.subject)));
-    subjectInput.addEventListener('input', syncTopics);
+    subjectInput.addEventListener('input', () => { generatedSubject = null; syncTopics(); });
     messageInput.addEventListener('input', updateMessageCount);
 
     contactForm.addEventListener('submit', async event => {
@@ -704,15 +639,16 @@
         const button = $('button[type="submit"]', contactForm);
         const submitText = $('.submit-text', button);
         const spinner = $('.spinner-border', button);
-        const originalLabel = submitText.innerHTML;
         button.disabled = true;
         contactForm.setAttribute('aria-busy', 'true');
         submitText.textContent = 'Enviando mensaje…';
         spinner.classList.remove('d-none');
         spinner.setAttribute('aria-hidden', 'true');
         formStatus.hidden = false;
+        const statusText = document.createElement('span');
+        formStatus.replaceChildren(statusText);
         formStatus.dataset.status = 'sending';
-        formStatus.textContent = 'Conectando con el servicio de mensajes…';
+        i18n.text(statusText, 'Conectando con el servicio de mensajes…');
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 20000);
         try {
@@ -723,22 +659,23 @@
             if (!response.ok) throw new Error('El servicio no confirmó la entrega.');
             const name = $('#name').value.trim();
             formStatus.dataset.status = 'success';
-            formStatus.textContent = `¡Gracias, ${name}! Tu mensaje se envió correctamente. Te responderé al correo que indicaste.`;
+            i18n.text(statusText, '¡Gracias, {name}! Tu mensaje se envió correctamente. Te responderé al correo que indicaste.', { name });
             const urgent = document.createElement('a');
             urgent.className = 'form-fallback';
             urgent.target = '_blank';
             urgent.rel = 'noopener noreferrer';
             urgent.textContent = '¿Urgente? Escríbeme por WhatsApp';
-            urgent.href = `https://wa.me/51946016559?text=${encodeURIComponent(`Hola Jose, soy ${name}. Te acabo de escribir desde tu portafolio: ${$('#subject').value.trim()}.`)}`;
+            urgent.href = `https://wa.me/51946016559?text=${encodeURIComponent(t('Hola Jose, soy {name}. Te acabo de escribir desde tu portafolio: {subject}.', { name, subject: $('#subject').value.trim() }))}`;
             formStatus.append(' ', urgent);
             contactForm.reset();
+            generatedSubject = null;
             syncTopics();
             updateMessageCount();
         } catch (error) {
             formStatus.dataset.status = 'error';
-            formStatus.textContent = error.name === 'AbortError'
-                ? `La conexión tardó demasiado y no se pudo confirmar el envío. Tu texto sigue aquí. Puedes intentarlo de nuevo o escribirme a ${emailAddress}.`
-                : `No se pudo enviar el mensaje. Tu texto sigue aquí para que puedas intentarlo de nuevo. También puedes escribirme a ${emailAddress}.`;
+            i18n.text(statusText, error.name === 'AbortError'
+                ? 'La conexión tardó demasiado y no se pudo confirmar el envío. Tu texto sigue aquí. Puedes intentarlo de nuevo o escribirme a {email}.'
+                : 'No se pudo enviar el mensaje. Tu texto sigue aquí para que puedas intentarlo de nuevo. También puedes escribirme a {email}.', { email: emailAddress });
             const fallback = document.createElement('a');
             fallback.className = 'form-fallback';
             fallback.textContent = 'Enviar con mi app de correo';
@@ -749,84 +686,18 @@
             sending = false;
             button.disabled = false;
             contactForm.removeAttribute('aria-busy');
-            submitText.innerHTML = originalLabel;
+            submitText.innerHTML = `<i class="fas fa-paper-plane me-2"></i> ${t('Enviar mensaje')}`;
             spinner.classList.add('d-none');
         }
     });
 
-    // Limito el fondo a 30 fps y lo pauso si la pestaña está oculta.
-    const canvas = $('#networkCanvas');
-    const context = canvas.getContext('2d');
-    if (!context) return;
-    let width = 0;
-    let height = 0;
-    let particles = [];
-    let networkFrame = 0;
-    let lastFrame = 0;
-    let accent = getComputedStyle(root).getPropertyValue('--accent').trim();
-    const pointer = { x: -1000, y: -1000 };
-
-    function drawNetwork(advance) {
-        context.clearRect(0, 0, width, height);
-        context.fillStyle = accent;
-        context.strokeStyle = accent;
-        particles.forEach((particle, index) => {
-            if (advance) {
-                particle.x = (particle.x + particle.vx + width) % width;
-                particle.y = (particle.y + particle.vy + height) % height;
-            }
-            context.globalAlpha = .35;
-            context.beginPath();
-            context.arc(particle.x, particle.y, 1.3, 0, Math.PI * 2);
-            context.fill();
-            function connect(other) {
-                const distance = Math.hypot(particle.x - other.x, particle.y - other.y);
-                if (distance > 140) return;
-                context.globalAlpha = (1 - distance / 140) * .2;
-                context.beginPath();
-                context.moveTo(particle.x, particle.y);
-                context.lineTo(other.x, other.y);
-                context.stroke();
-            }
-            for (let other = index + 1; other < particles.length; other++) connect(particles[other]);
-            if (finePointer.matches) connect(pointer);
-        });
-        context.globalAlpha = 1;
-    }
-    function animateNetwork(now) {
-        if (now - lastFrame > 32) { if (!root.classList.contains('is-scrolling')) drawNetwork(true); lastFrame = now; }
-        networkFrame = requestAnimationFrame(animateNetwork);
-    }
-    function syncNetwork() {
-        cancelAnimationFrame(networkFrame);
-        networkFrame = 0;
-        drawNetwork(false);
-        if (motionEnabled() && !document.hidden) networkFrame = requestAnimationFrame(animateNetwork);
-    }
-    function resizeNetwork() {
-        width = document.documentElement.clientWidth;
-        height = window.innerHeight;
-        const ratio = Math.min(window.devicePixelRatio || 1, 2);
-        canvas.width = Math.round(width * ratio);
-        canvas.height = Math.round(height * ratio);
-        context.setTransform(ratio, 0, 0, ratio, 0, 0);
-        particles = Array.from({ length: width < 768 ? 22 : 48 }, () => ({
-            x: Math.random() * width, y: Math.random() * height,
-            vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4
-        }));
-        syncNetwork();
-    }
-    document.addEventListener('pointermove', event => {
-        pointer.x = event.clientX;
-        pointer.y = event.clientY;
-    }, { passive: true });
-    document.documentElement.addEventListener('pointerleave', () => { pointer.x = -1000; pointer.y = -1000; });
-    document.addEventListener('visibilitychange', syncNetwork);
-    document.addEventListener('portfolio:motion', syncNetwork);
-    document.addEventListener('portfolio:palette', () => {
-        accent = getComputedStyle(root).getPropertyValue('--accent').trim();
-        drawNetwork(false);
+    document.addEventListener('portfolio:language', () => {
+        updateAppearance();
+        updateMotion();
+        filterProjects();
+        if (commandDialog.open) renderCommands();
+        if (generatedSubject && subjectInput.value === generatedSubject.value) setSubject(generatedSubject.source, generatedSubject.params);
+        syncTopics();
     });
-    window.addEventListener('resize', resizeNetwork, { passive: true });
-    resizeNetwork();
+
 })();

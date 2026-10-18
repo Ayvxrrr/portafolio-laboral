@@ -1,34 +1,20 @@
 (() => {
     'use strict';
     const root = document.documentElement;
+    const i18n = window.portfolioI18n;
+    const t = i18n.t;
     const $ = (s, c = document) => c.querySelector(s);
     const $$ = (s, c = document) => [...c.querySelectorAll(s)];
     const full = () => root.dataset.motion !== 'reduced';
     const fine = matchMedia('(hover: hover) and (pointer: fine)');
     const esc = t => String(t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-    (function boot() {
-        try { if (sessionStorage.getItem('portfolio.boot') || !full()) return; sessionStorage.setItem('portfolio.boot', '1'); } catch { if (!full()) return; }
-        const lines = ['> iniciando ayvar-jose.dev', '> cargando stack: JavaScript · PHP · React · Node.js', '> conectando interfaz ↔ servidor ↔ datos', '> listo. Bienvenido.'];
-        const el = document.createElement('div');
-        el.className = 'boot';
-        el.setAttribute('aria-hidden', 'true');
-        el.innerHTML = '<pre></pre><span>toca para saltar</span>';
-        document.body.append(el);
-        const pre = $('pre', el);
-        let i = 0;
-        const end = () => { if (el.classList.contains('is-done')) return; el.classList.add('is-done'); setTimeout(() => el.remove(), 500); };
-        const next = () => { if (el.classList.contains('is-done')) return; if (i < lines.length) { pre.textContent += lines[i++] + '\n'; setTimeout(next, 260); } else setTimeout(end, 400); };
-        el.addEventListener('click', end);
-        setTimeout(end, 3200);
-        next();
-    })();
-
     const glyphs = '01<>/{}[]#$%';
     function decode(el) {
-        const text = el.textContent;
+        const source = i18n.sourceOf(el.textContent);
         let frame = 0;
         const timer = setInterval(() => {
+            const text = t(source);
             frame++;
             el.textContent = [...text].map((c, k) => c === ' ' || k < frame * text.length / 16 ? c : glyphs[Math.random() * glyphs.length | 0]).join('');
             if (frame >= 16) { clearInterval(timer); el.textContent = text; }
@@ -41,19 +27,6 @@
             if (full()) decode(e.target);
         }), { threshold: 0.9 });
         $$('.section-header .section-subtitle').forEach(el => io.observe(el));
-    }
-
-    const sections = [['home', 'Inicio'], ['about', 'Sobre mí'], ['experience', 'Experiencia'], ['skills', 'Stack'], ['projects', 'Proyectos'], ['playground', 'Taller'], ['education', 'Educación'], ['contact', 'Contacto']];
-    const rail = document.createElement('nav');
-    rail.className = 'rail';
-    rail.setAttribute('aria-label', 'Secciones de la página');
-    rail.innerHTML = sections.map(([id, label]) => `<a href="#${id}" data-rail="${id}"><span>${label}</span></a>`).join('');
-    document.body.append(rail);
-    if ('IntersectionObserver' in window) {
-        const spy = new IntersectionObserver(entries => entries.forEach(e => {
-            if (e.isIntersecting) $$('[data-rail]').forEach(a => a.classList.toggle('is-on', a.dataset.rail === e.target.id));
-        }), { rootMargin: '-45% 0px -50% 0px' });
-        sections.forEach(([id]) => { const s = document.getElementById(id); if (s) spy.observe(s); });
     }
 
     if (fine.matches) {
@@ -92,8 +65,11 @@
         prompt.className = 'terminal-prompt';
         prompt.textContent = 'jose@portfolio ~ $ ';
         const p = document.createElement('p');
-        p.textContent = fn();
-        entry.append(prompt, document.createTextNode(raw.trim()), p);
+        i18n.text(p, fn());
+        const command = document.createElement('span');
+        command.setAttribute('data-i18n-ignore', '');
+        command.textContent = raw.trim();
+        entry.append(prompt, command, p);
         output.append(entry);
         output.scrollTop = output.scrollHeight;
         input.value = '';
@@ -113,7 +89,6 @@
         });
     }
 
-    // Si GitHub no responde, dejo este bloque oculto.
     const gh = $('#githubLive');
     if (gh && 'fetch' in window) {
         fetch('https://api.github.com/users/Ayvxrrr/repos?sort=updated&per_page=6', { headers: { Accept: 'application/vnd.github+json' } })
@@ -129,7 +104,7 @@
     }
 })();
 
-// El registro para usar la página sin conexión requiere HTTPS.
+// El modo sin conexión necesita HTTPS al publicar xd.
 (() => {
     if ('serviceWorker' in navigator && location.protocol === 'https:') {
         addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
@@ -146,7 +121,7 @@
         const prompt = window.__pwaPrompt;
         if (prompt) { prompt.prompt(); await prompt.userChoice.catch(() => {}); window.__pwaPrompt = null; return; }
         const toast = document.getElementById('toastRegion');
-        toast.textContent = /iphone|ipad|ipod/i.test(navigator.userAgent) ? 'En iPhone: toca Compartir y luego "Añadir a pantalla de inicio".' : 'Abre el menú del navegador y elige "Instalar app" o "Añadir a pantalla de inicio".';
+        window.portfolioI18n.text(toast, /iphone|ipad|ipod/i.test(navigator.userAgent) ? 'En iPhone: toca Compartir y luego "Añadir a pantalla de inicio".' : 'Abre el menú del navegador y elige "Instalar app" o "Añadir a pantalla de inicio".');
         toast.classList.add('is-visible');
         setTimeout(() => toast.classList.remove('is-visible'), 4500);
     });

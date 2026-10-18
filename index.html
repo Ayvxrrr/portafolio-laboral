@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="dark" data-accent="lime">
+<html lang="es" data-theme="dark" data-accent="mono">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#080a0b">
     <meta name="author" content="Ayvar Jose">
     <meta name="robots" content="index, follow, max-image-preview:large">
@@ -45,40 +45,30 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="js/preferences.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="js/preferences.js?v=23"></script>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/enhancements.css">
-    <link rel="stylesheet" href="css/extras.css">
-    <link rel="stylesheet" href="css/ayvarcitoo.css">
+    <link rel="stylesheet" href="css/style.css?v=23">
+    <link rel="stylesheet" href="css/enhancements.css?v=23">
+    <link rel="stylesheet" href="css/extras.css?v=23">
+    <link rel="stylesheet" href="css/ayvarcitoo.css?v=23">
+    <link rel="stylesheet" href="css/scroll-scenes.css?v=23">
+    <link rel="stylesheet" href="css/replica.css?v=24">
+    <link rel="stylesheet" href="css/scroll-narratives.css?v=23">
     <link rel="icon" type="image/x-icon" href="img/favicon.ico?v=3">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Ayvar Jose", "url": "https://ayvar.netlify.app/", "image": "https://ayvar.netlify.app/img/yo.jpg", "jobTitle": "Ingeniero de Software Jr", "description": "Desarrollador Full Stack y docente de informática, robótica y programación.", "address": {"@type": "PostalAddress", "addressLocality": "Lima", "addressCountry": "PE"}, "sameAs": ["https://github.com/Ayvxrrr", "https://www.linkedin.com/in/jose-ayvar-82a980398"], "alumniOf": [{"@type": "CollegeOrUniversity", "name": "Universidad Tecnológica del Perú (UTP)"}, {"@type": "EducationalOrganization", "name": "IESTP Trentino Juan Pablo II"}], "knowsAbout": ["JavaScript", "PHP", "Node.js", "React", "MySQL", "Desarrollo web Full Stack", "Docencia de programación"]}</script>
 </head>
 
-<body>
+<body class="replica-site">
     <a class="skip-link" href="#main">Saltar al contenido</a>
     <div class="scroll-progress" aria-hidden="true"><div id="scrollProgress"></div></div>
     <div class="cursor-halo" aria-hidden="true"></div>
-    <div class="ambient-background" aria-hidden="true">
-        <div class="ambient-grid"></div>
-        <div class="ambient-light ambient-light-one"></div>
-        <div class="ambient-light ambient-light-two"></div>
-        <div class="ambient-light ambient-light-three"></div>
-        <canvas id="networkCanvas"></canvas>
-        <div class="ambient-vignette"></div>
-    </div>
 
     <nav class="navbar navbar-expand-lg fixed-top" aria-label="Navegación principal">
         <div class="container">
             <a class="navbar-brand logo" href="#home" aria-label="Ayvar Jose, inicio">
-                <span class="logo-mark">a<span>j</span><span class="logo-dot">.</span></span>
-                <span class="logo-caption">AYVAR JOSE<span>DEVELOPER</span></span>
+                <span class="logo-word">AYVAR.</span>
             </a>
-            <button class="navbar-toggler" type="button"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú de navegación">
-                <i class="fas fa-bars" aria-hidden="true"></i>
-            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
@@ -87,119 +77,89 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="#projects">
+                            Trabajos
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="#about">
                             Sobre mí
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#experience">
-                            Experiencia
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#skills">
-                            Stack
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#projects">
-                            Proyectos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#education">
-                            Educación
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">
-                            Contacto <i class="fas fa-arrow-up-right-from-square nav-arrow" aria-hidden="true"></i>
-                        </a>
-                    </li>
                 </ul>
-                <div class="nav-tools">
-                    <button class="command-trigger" type="button" data-open-command aria-label="Abrir navegación rápida, Control K" aria-haspopup="dialog">
-                        <i class="fas fa-magnifying-glass" aria-hidden="true"></i><kbd>Ctrl K</kbd>
-                    </button>
-                    <button class="icon-button" type="button" id="themeToggle" aria-label="Activar modo claro" title="Activar modo claro">
-                        <i class="fas fa-sun" aria-hidden="true"></i>
-                    </button>
-                </div>
+            </div>
+            <div class="language-switch" role="group" aria-label="Idioma del sitio">
+                <button type="button" id="languageToggle" data-language-toggle aria-label="Cambiar a inglés" title="Cambiar a inglés"><span data-language-code>ES</span></button>
             </div>
         </div>
     </nav>
 
     <main id="main" tabindex="-1">
-    <section id="home" class="hero-section">
-        <div class="hero-grid" aria-hidden="true"></div>
-        <div class="container">
-            <div class="hero-topline"><span>PORTAFOLIO PERSONAL / 2026</span><span><i class="fas fa-location-dot" aria-hidden="true"></i> LIMA, PERÚ <span class="local-time" id="localTime"></span></span></div>
-            <div class="row align-items-center hero-layout">
-                <div class="col-lg-7">
-                    <div class="hero-content">
-                        <a class="availability" href="#contact"><span class="status-dot"></span> Disponible para nuevos proyectos <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
-                        <p class="hero-intro">Hola, soy Ayvar Jose <span class="wave-hand" aria-hidden="true">✳</span></p>
-                        <h1 class="hero-title">Transformo ideas<br>en <span class="hero-accent">experiencias<br>digitales<span class="title-period">.</span></span></h1>
-                        <div class="hero-role"><span class="code-bracket" aria-hidden="true">&lt;</span> <span id="typed" aria-hidden="true">Full Stack Developer</span><span class="type-caret" aria-hidden="true">_</span><span class="code-bracket" aria-hidden="true"> /&gt;</span><span class="visually-hidden">Ingeniero de Software Jr y desarrollador Full Stack</span></div>
-                        <p class="hero-text">Código con propósito. Diseño con intención. Desarrollo soluciones web con JavaScript, PHP, React y Node.js que conectan ideas con personas.</p>
-                        <div class="hero-actions">
-                            <a href="#projects" class="btn btn-primary">Explorar proyectos <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
-                            <a href="docs/CV-Ayvar-Jose.pdf" class="btn btn-outline-primary" id="downloadCV" download="CV-Ayvar-Jose.pdf">Descargar CV <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
-                        </div>
-                        <div class="hero-social-row">
-                            <span>ENCUÉNTRAME EN</span>
-                            <div class="social-icons">
-                                <a href="https://github.com/Ayvxrrr" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub" title="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
-                                <a href="https://www.linkedin.com/in/jose-ayvar-82a980398" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
-                                <a href="https://www.instagram.com/ayvxrcitoo/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                                <a href="https://www.tiktok.com/@ayvxrcitooo" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="TikTok" title="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
-                                <a href="https://wa.me/51946016559?text=Hola%20Jose%2C%20vi%20tu%20portafolio%20y%20quiero%20hablar%20contigo." target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                                <a href="mailto:joseayvar28@gmail.com" class="social-icon" aria-label="Enviar correo" title="Enviar correo"><i class="far fa-envelope" aria-hidden="true"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="hero-workspace" data-aos="fade-up">
-                        <div class="orbit orbit-one" aria-hidden="true"></div>
-                        <div class="orbit orbit-two" aria-hidden="true"></div>
-                        <div class="profile-window" data-tilt>
-                            <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span>ayvar-jose / profile.tsx</span><i class="fas fa-code" aria-hidden="true"></i></div>
-                            <div class="profile-portrait">
-                                <img src="img/yo.jpg" alt="Retrato de Ayvar Jose, desarrollador Full Stack" class="hero-image" width="640" height="641" fetchpriority="high">
-                                <span class="portrait-label"><span class="status-dot"></span> OPEN TO WORK</span>
-                                <div class="portrait-caption"><span>DETRÁS DEL CÓDIGO</span><h2>Ayvar Jose<span>.</span></h2><p>Ingeniero de Software Jr</p></div>
-                            </div>
-                            <div class="profile-status"><span><i class="fas fa-code-branch" aria-hidden="true"></i> main</span><span><span class="status-dot"></span> Siempre aprendiendo</span></div>
-                        </div>
-                        <a class="floating-tech tech-react" href="#skills" aria-label="Explorar habilidades en React"><i class="fab fa-react" aria-hidden="true"></i><span>React</span></a>
-                        <a class="floating-tech tech-js" href="#skills" aria-label="Explorar habilidades en JavaScript"><i class="fab fa-js" aria-hidden="true"></i></a>
-                        <div class="code-note">
-                            <div><span class="code-violet">const</span> developer <span class="code-violet">=</span> {</div>
-                            <div>&nbsp; mindset: <span class="code-lime">"never stop building"</span>,</div>
-                            <div>&nbsp; coffee: <span class="code-cyan">true</span></div>
-                            <div>};<span class="note-cursor" aria-hidden="true">▌</span></div>
-                        </div>
-                    </div>
-                </div>
+    <section id="home" class="hero-section presentation" data-view="home">
+        <div class="presentation-scene">
+        <div class="presentation-media" aria-hidden="true">
+            <video id="presentationVideo" muted loop playsinline preload="metadata" poster="img/project-ayvar-ai.jpg"><source src="img/presentation-typing.mp4" type="video/mp4"></video>
+            <div class="presentation-intro-cover" hidden></div>
+        </div>
+        <div class="presentation-content">
+            <h1 class="hero-title presentation-title" aria-label="Ayvar Jose, desarrollador Full Stack">
+                <span class="presentation-line" data-presentation-line="name">AYVAR JOSE.</span>
+                <span class="presentation-line" data-presentation-line="role">DESARROLLADOR</span>
+                <span class="presentation-line" data-presentation-line="stack">FULL STACK.</span>
+            </h1>
+            <div class="hero-actions presentation-actions">
+                <a href="#projects">Explorar proyectos <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="docs/CV-Ayvar-Jose.pdf" id="downloadCV" download="CV-Ayvar-Jose.pdf">Descargar CV <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
             </div>
-            <div class="hero-bottom">
-                <div class="hero-stats">
-                    <div class="stat-item"><strong class="stat-number" data-count="15">15+</strong><span class="stat-label">Proyectos realizados</span></div>
-                    <div class="stat-item"><strong class="stat-number" data-count="3">3+</strong><span class="stat-label">Años de experiencia</span></div>
-                    <div class="stat-item"><strong class="stat-number" data-count="10">10+</strong><span class="stat-label">Clientes</span></div>
-                </div>
-                <a href="#about" class="scroll-down"><span>EXPLORA MI UNIVERSO</span><i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+        </div>
+        <button class="presentation-orb" type="button" id="presentationTheme" role="switch" aria-checked="false" aria-label="Modo claro" title="Activar modo claro"><span class="orb-texture" aria-hidden="true"><img class="orb-bulb" src="img/light-bulb.jpg" alt="" width="750" height="829" draggable="false"></span><span class="orb-ring" aria-hidden="true"></span><span class="orb-toggle" aria-hidden="true"><span class="orb-switch-ball"><i class="fas fa-bolt"></i></span></span></button>
+        </div>
+        <div class="hero-social-row presentation-social">
+            <div class="social-icons">
+                <a href="https://github.com/Ayvxrrr" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub" title="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
+                <a href="https://www.linkedin.com/in/jose-ayvar-82a980398" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn" title="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                <a href="https://www.instagram.com/ayvxrcitoo/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                <a href="https://www.tiktok.com/@ayvxrcitooo" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="TikTok" title="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+                <a href="https://wa.me/51946016559?text=Hola%20Jose%2C%20vi%20tu%20portafolio%20y%20quiero%20hablar%20contigo." target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+                <a href="mailto:joseayvar28@gmail.com" class="social-icon" aria-label="Enviar correo" title="Enviar correo"><i class="far fa-envelope" aria-hidden="true"></i></a>
             </div>
+        </div>
+        <a class="presentation-scroll" href="#statement"><span>DESLIZA PARA EXPLORAR</span><span aria-hidden="true">↓</span></a>
+        <span class="presentation-location">LIMA, PERÚ <span id="localTime"></span></span>
+    </section>
+
+    <section id="statement" class="statement-section" data-view="home" aria-label="Mi forma de crear">
+        <h2 class="statement-stroke"><span>DISEÑO CON</span><span>INTENCIÓN.</span></h2>
+        <figure class="statement-photo"><img src="img/coding-setup.png" alt="Mi espacio de trabajo con código abierto en el monitor y teclado iluminado" width="768" height="1024" loading="lazy"></figure>
+        <h2 class="statement-fill"><span>CÓDIGO CON</span><span>PROPÓSITO.</span></h2>
+        <a href="#skills" class="statement-badge" aria-label="Explorar habilidades en JavaScript">JS</a>
+    </section>
+
+    <section id="biography" class="biography-section" data-view="home" aria-label="Detrás del código">
+        <div class="biography-ribbons" aria-hidden="true"><div class="biography-ribbon ribbon-outline"><span>AYVAR JOSE — FULL STACK DEVELOPER — AYVAR JOSE — FULL STACK DEVELOPER —</span></div><div class="biography-ribbon ribbon-fill"><span>AYVAR JOSE — FULL STACK DEVELOPER — AYVAR JOSE — FULL STACK DEVELOPER —</span></div></div>
+        <div class="biography-photo"><img src="img/yo.jpg" alt="Retrato de Ayvar Jose, desarrollador Full Stack" width="640" height="641" loading="lazy"></div>
+        <div class="biography-card">
+            <h2>Hola, soy Ayvar Jose.</h2>
+            <p>Desarrollo sitios y aplicaciones web. Me gusta convertir ideas en experiencias digitales que se ven bien y funcionan mejor.</p>
+            <a href="#projects">MIS TRABAJOS <span aria-hidden="true">↗</span></a>
+            <a href="#about">SOBRE MÍ <span aria-hidden="true">↗</span></a>
+            <div class="biography-stats"><span><strong class="stat-number" data-count="15">15+</strong><small>Proyectos realizados</small></span><span><strong class="stat-number" data-count="10">10+</strong><small>Clientes</small></span></div>
         </div>
     </section>
 
-    <div class="stack-strip" aria-label="Tecnologías principales">
+    <div class="stack-strip" data-view="about" aria-label="Tecnologías principales">
         <div class="container stack-strip-inner"><span class="stack-strip-label">MI KIT DE CREACIÓN <i class="fas fa-arrow-right" aria-hidden="true"></i></span><a href="#skills"><i class="fab fa-js" aria-hidden="true"></i> JavaScript</a><a href="#skills"><i class="fab fa-react" aria-hidden="true"></i> React</a><a href="#skills"><i class="fab fa-node-js" aria-hidden="true"></i> Node.js</a><a href="#skills"><i class="fab fa-php" aria-hidden="true"></i> PHP</a><a href="#skills"><i class="fas fa-database" aria-hidden="true"></i> MySQL</a><a href="#skills"><i class="fab fa-python" aria-hidden="true"></i> Python</a></div>
     </div>
 
-    <section id="about" class="about-section section-padding">
-        <div class="container">
+    <section id="about" class="about-section section-padding" data-view="about">
+        <div class="about-presentation">
+            <canvas id="aboutCanvas" class="experience-canvas" aria-hidden="true"></canvas>
+            <div class="about-introduction"><p class="experience-eyebrow">SOBRE MÍ</p><h2>SOY AYVAR JOSE.<br>DESARROLLADOR<br><span>FULL STACK.</span></h2><p>Me gusta explorar cómo se conectan el diseño y la programación. Construyo soluciones web con JavaScript, PHP, React y Node.js.</p><div class="about-jumps"><a href="#skills">MI STACK ↘</a><a href="#playground">ROBOT INTERACTIVO ↘</a><a href="#resume">MI CV ↘</a></div></div>
+            <img class="about-cutout" src="img/yo.jpg" alt="Retrato de Ayvar Jose, desarrollador Full Stack" width="640" height="641" loading="lazy">
+            <a class="page-scroll-cue" href="#resume"><span></span>DESLIZA PARA EXPLORAR</a>
+        </div>
+        <details class="profile-extras"><summary>Más sobre mí · terminal y detalles <span aria-hidden="true">+</span></summary>
+        <div class="container profile-extras-content">
             <div class="section-header text-center mb-5" data-aos="fade-up">
                 <h6 class="section-subtitle">01 / Un poco sobre mí</h6>
                 <h2 class="section-title">Curiosidad que se convierte<br>en <span class="text-primary">soluciones.</span></h2>
@@ -338,161 +298,19 @@
                 </div>
             </div>
         </div>
+        </details>
     </section>
 
-    <section id="experience" class="experience-section section-padding bg-light">
-        <div class="container">
-            <div class="section-header text-center mb-5" data-aos="fade-up">
-                <h6 class="section-subtitle">02 / El camino recorrido</h6>
-                <h2 class="section-title">Experiencia que<br>marca <span class="text-primary">la diferencia.</span></h2>
-                <div class="section-divider mx-auto"></div>
-            </div>
-            <div class="timeline" data-aos="fade-up">
-            <div class="timeline-item">
-                <div class="timeline-date">01/2026 – actualidad</div>
-                <div class="timeline-content">
-                    <div class="timeline-header">
-                        <h4>Desarrollador Web Freelance</h4> <span class="timeline-company">Proyectos
-                            Independientes</span> <span class="timeline-location">Lima, Perú</span>
-                    </div>
-                    <p> Desarrollo de sitios web, páginas web y sistemas personalizados para negocios y emprendimientos,
-                        adaptados a sus necesidades y requerimientos. Diseño y desarrollo de soluciones digitales
-                        funcionales, modernas y orientadas a mejorar la gestión, presencia y procesos de cada negocio.
-                    </p>
-                    <div class="timeline-skills"> <span class="skill-tag">Desarrollo Web</span> <span
-                            class="skill-tag">HTML</span> <span class="skill-tag">CSS</span> <span
-                            class="skill-tag">JavaScript</span> <span class="skill-tag">PHP</span> <span
-                            class="skill-tag">MySQL</span> <span class="skill-tag">Sistemas Web</span> <span
-                            class="skill-tag">Diseño Web</span> <span class="skill-tag">Desarrollo Freelance</span>
-                    </div>
-                </div>
-                <div class="timeline-icon"> <i class="fas fa-globe"></i> </div>
-            </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">01/2026 – actualidad</div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h4>Docente de Informática, Robótica y Programación</h4> <span
-                                class="timeline-company">Colegio San Miguel Emprendedor</span> <span
-                                class="timeline-location">El Agustino, Perú</span>
-                        </div>
-                        <p> Docente de Informática desde 1.º de Primaria hasta 5.º de Secundaria y Academia,
-                            desarrollando
-                            competencias digitales, pensamiento computacional y programación mediante proyectos
-                            prácticos adaptados al nivel de los estudiantes. Manejo de herramientas informáticas,
-                            programación web con HTML, CSS y JavaScript, Roblox Studio con Luau, Arduino, robótica y
-                            electrónica básica. </p>
-                        <div class="timeline-skills"> <span class="skill-tag">Informática</span> <span
-                                class="skill-tag">Programación</span> <span class="skill-tag">HTML</span> <span
-                                class="skill-tag">CSS</span> <span class="skill-tag">JavaScript</span> <span
-                                class="skill-tag">Roblox Studio</span> <span class="skill-tag">Luau</span> <span
-                                class="skill-tag">Arduino</span> <span class="skill-tag">Robótica</span> <span
-                                class="skill-tag">Electrónica</span> <span class="skill-tag">Pensamiento
-                                Computacional</span> <span class="skill-tag">Enseñanza</span> </div>
-                    </div>
-                    <div class="timeline-icon"> <i class="fas fa-laptop-code"></i> </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">01/2026 – 03/2026</div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h4>Desarrollador de Sistema de Ventas (Apoyo Técnico)</h4>
-                            <span class="timeline-company">Negociaciones Cedro Distribuidora de Cervezas y
-                                Gaseosas</span>
-                            <span class="timeline-location">Pachacamac, Perú</span>
-                        </div>
-                        <p>Colaboré en el desarrollo de un sistema de ventas local para un negocio de bebidas al por
-                            mayor, brindando apoyo en la programación con Java en NetBeans, la generación de reportes
-                            con Jaspersoft y la integración de JPOS para el manejo de la etiquetera. El sistema permitió
-                            optimizar el registro de ventas y el control de la información del negocio.</p>
-                        <div class="timeline-skills">
-                            <span class="skill-tag">Java</span>
-                            <span class="skill-tag">NetBeans</span>
-                            <span class="skill-tag">Jaspersoft</span>
-                            <span class="skill-tag">JPOS</span>
-                            <span class="skill-tag">Sistemas de Ventas</span>
-                            <span class="skill-tag">Reportes</span>
-                        </div>
-                    </div>
-                    <div class="timeline-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">09/2025 – 12/2025</div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h4>Operador de BPO y Digitalización</h4>
-                            <span class="timeline-company">Polysistemas</span>
-                            <span class="timeline-location">Pachacamac, Perú</span>
-                        </div>
-                        <p>Apoyo en digitalización y gestión documental, control de calidad, registro de información y
-                            soporte técnico básico.</p>
-                        <div class="timeline-skills">
-                            <span class="skill-tag">Digitalización</span>
-                            <span class="skill-tag">Gestión Documental</span>
-                            <span class="skill-tag">Control de Calidad</span>
-                            <span class="skill-tag">Soporte Técnico</span>
-                        </div>
-                    </div>
-                    <div class="timeline-icon">
-                        <i class="fas fa-desktop"></i>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">05/2024 – 07/2025</div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h4>Profesor Auxiliar de Informática</h4>
-                            <span class="timeline-company">IE 7102 San Francisco de Asís</span>
-                            <span class="timeline-location">Pachacamac, Perú</span>
-                        </div>
-                        <p>Apoyo en dictado de clases, demostraciones prácticas, asistencia personalizada y
-                            mantenimiento de equipos.</p>
-                        <div class="timeline-skills">
-                            <span class="skill-tag">Enseñanza</span>
-                            <span class="skill-tag">Soporte Técnico</span>
-                            <span class="skill-tag">Mantenimiento</span>
-                            <span class="skill-tag">Capacitación</span>
-                        </div>
-                    </div>
-                    <div class="timeline-icon">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-date">12/2022 – 06/2023</div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h4>Vendedor de Servicios</h4>
-                            <span class="timeline-company">Movistar Empresas Perú</span>
-                            <span class="timeline-location">Villa El Salvador, Perú</span>
-                        </div>
-                        <p>Atención a clientes corporativos, venta de servicios empresariales y soporte postventa.</p>
-                        <div class="timeline-skills">
-                            <span class="skill-tag">Ventas</span>
-                            <span class="skill-tag">Atención al Cliente</span>
-                            <span class="skill-tag">Servicios Empresariales</span>
-                            <span class="skill-tag">Soporte Postventa</span>
-                        </div>
-                    </div>
-                    <div class="timeline-icon">
-                        <i class="fas fa-headset"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <section id="resume" class="resume-scene" data-view="about">
+        <span class="resume-background" aria-hidden="true">CURRICULUM</span>
+        <div class="resume-sphere" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <a class="resume-download" href="docs/CV-Ayvar-Jose.pdf" download="CV-Ayvar-Jose.pdf"><span>DESCARGA AQUÍ</span><span>MI CV EN</span><span>FORMATO PDF <i class="fas fa-arrow-down" aria-hidden="true"></i></span></a>
     </section>
 
-    <section id="skills" class="skills-section section-padding">
+    <section id="skills" class="skills-section section-padding" data-view="about">
         <div class="container">
             <div class="section-header text-center mb-5" data-aos="fade-up">
-                <h6 class="section-subtitle">03 / Mi ecosistema tecnológico</h6>
+                <h6 class="section-subtitle">02 / Mi ecosistema tecnológico</h6>
                 <h2 class="section-title">Las herramientas.<br><span class="text-primary">Las posibilidades.</span></h2>
                 <div class="section-divider mx-auto"></div>
                 <p class="section-description mt-3">Del primer píxel a la última consulta. Un stack para construir de principio a fin.</p>
@@ -707,10 +525,10 @@
         </div>
     </section>
 
-    <section id="projects" class="projects-section section-padding bg-light">
+    <section id="projects" class="projects-section section-padding bg-light" data-view="projects">
         <div class="container">
             <div class="section-header text-center mb-5" data-aos="fade-up">
-                <h6 class="section-subtitle">04 / Ideas llevadas a la realidad</h6>
+                <h6 class="section-subtitle">03 / Ideas llevadas a la realidad</h6>
                 <h2 class="section-title">Menos palabras.<br>Más <span class="text-primary">proyectos.</span></h2>
                 <div class="section-divider mx-auto"></div>
                 <p class="section-description mt-3">Explora mi trabajo, descubre el stack y conoce qué hay detrás de cada solución.</p>
@@ -845,163 +663,33 @@
         </div>
     </section>
 
-    <section id="playground" class="playground-section section-padding">
+    <section id="playground" class="playground-section section-padding" data-view="about">
         <div class="container">
-            <div class="section-header text-center mb-5" data-aos="fade-up">
-                <h6 class="section-subtitle">Taller en vivo / Aprende haciendo</h6>
-                <h2 class="section-title">Escribe código.<br>Mira <span class="text-primary">cómo cobra vida.</span></h2>
-                <p class="section-description mt-3">Un mini editor con tres archivos, vista previa en tiempo real y retos que se comprueban solos. Supera los tres.</p>
-            </div>
-            <div class="ide" id="ide" data-aos="fade-up">
-                <div class="ide-burst" id="ideBurst" aria-hidden="true"></div>
-                <div class="ide-top">
-                    <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
-                    <div class="ide-tabs" role="tablist" aria-label="Archivos del proyecto">
-                        <button type="button" role="tab" data-file="html" aria-selected="true"><i class="fab fa-html5" aria-hidden="true"></i> index.html</button>
-                        <button type="button" role="tab" data-file="css" aria-selected="false"><i class="fab fa-css3-alt" aria-hidden="true"></i> style.css</button>
-                        <button type="button" role="tab" data-file="js" aria-selected="false"><i class="fab fa-js" aria-hidden="true"></i> script.js</button>
-                    </div>
-                    <div class="ide-actions">
-                        <button type="button" id="ideReset" aria-label="Restablecer el reto" title="Restablecer"><i class="fas fa-rotate-left" aria-hidden="true"></i></button>
-                        <button type="button" id="ideRun" class="ide-run"><i class="fas fa-play" aria-hidden="true"></i> Ejecutar</button>
-                    </div>
+            <div class="portrait-feature">
+                <div class="portrait-copy">
+                    <p class="portrait-eyebrow">04 / ROBÓTICA GENERATIVA</p>
+                    <h2 class="portrait-title">Ideas claras.<br>Soluciones que <span>conectan.</span></h2>
+                    <p class="portrait-message">Soy Ayvar Jose, desarrollador Full Stack. Transformo necesidades reales en experiencias digitales intuitivas, accesibles y bien construidas.</p>
+                    <a class="portrait-contact" href="#contact">HABLEMOS DE TU PRÓXIMO PROYECTO <i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
                 </div>
-                <div class="ide-body">
-                    <aside class="ide-side" aria-label="Retos">
-                        <div class="ide-progress"><span id="ideCount">0 / 3 retos</span><div><b id="ideProgress"></b></div></div>
-                        <div id="ideRetos" class="ide-retos"></div>
-                        <a class="text-link ide-finish" id="ideFinish" href="#contact" hidden>¡Completaste el taller! Hablemos</a>
-                    </aside>
-                    <div class="ide-main">
-                        <div class="ide-task"><p id="ideTask"></p><button type="button" id="ideHintBtn">Ver pista</button></div>
-                        <p class="ide-hint" id="ideHint" hidden></p>
-                        <div class="ide-code">
-                            <div class="ide-gutter" id="ideGutter" aria-hidden="true"></div>
-                            <div class="ide-edit">
-                                <pre id="ideHl" aria-hidden="true"></pre>
-                                <textarea id="ideCode" aria-label="Editor de código" spellcheck="false" autocapitalize="off" autocomplete="off" wrap="off"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ide-prev">
-                        <div class="ide-devices" role="group" aria-label="Tamaño de la vista previa">
-                            <span>VISTA PREVIA</span>
-                            <button type="button" data-device="desktop" aria-pressed="true"><i class="fas fa-desktop" aria-hidden="true"></i> Pantalla</button>
-                            <button type="button" data-device="mobile" aria-pressed="false"><i class="fas fa-mobile-screen" aria-hidden="true"></i> Móvil</button>
-                        </div>
-                        <div class="ide-stage" id="ideStage" data-device="desktop"><iframe id="ideFrame" class="ide-frame" title="Resultado del código" sandbox="allow-scripts"></iframe></div>
-                        <div class="ide-console" id="ideConsole" role="log" aria-label="Consola"></div>
-                    </div>
-                </div>
-                <div class="ide-bot">
-                    <div class="bot-avatar" aria-hidden="true"><i class="fas fa-robot"></i></div>
-                    <div class="bot-bubble"><strong>Ayvarcitoo · tu guía</strong><p id="ideBotText" aria-live="polite"></p></div>
-                    <div class="bot-actions">
-                        <button type="button" id="ideBotPrev">Atrás</button>
-                        <button type="button" id="ideBotAct" class="is-act">Hazlo por mí</button>
-                        <button type="button" id="ideBotNext" class="is-primary">Siguiente paso</button>
-                        <button type="button" id="ideTourBtn"><i class="fas fa-route" aria-hidden="true"></i> Tour</button>
-                    </div>
-                </div>
-                <div class="ide-statusbar"><span id="ideStatus" role="status" aria-live="polite">Listo</span><span><kbd>Ctrl</kbd> <kbd>Enter</kbd> ejecutar</span><span id="ideLang">HTML</span><span id="ideCursor">Ln 1, Col 1</span></div>
-            </div>
-        </div>
-    </section>
-
-    <section id="education" class="education-section section-padding">
-        <div class="container">
-            <div class="section-header text-center mb-5" data-aos="fade-up">
-                <h6 class="section-subtitle">05 / Aprendizaje continuo</h6>
-                <h2 class="section-title">Siempre en<br>modo <span class="text-primary">aprendiz.</span></h2>
-                <div class="section-divider mx-auto"></div>
-            </div>
-
-            <div class="row g-4">
-                <div class="col-md-6" data-aos="fade-right">
-                    <div class="education-card">
-                        <div class="education-banner is-utp"><img src="img/logo-utp.png" alt="Logo de la Universidad Tecnológica del Perú (UTP)" width="480" height="104" loading="lazy" decoding="async"></div>
-                        <div class="education-header">
-                            <div class="education-icon">
-                                <i class="fas fa-university"></i>
-                            </div>
-                            <div class="education-info">
-                                <h4>Estudiante de Ingeniería de Software</h4>
-                                <p class="institution">Universidad Tecnológica del Perú (UTP)</p>
-                                <span class="education-date">03/2026 – Presente</span>
-                            </div>
-                        </div>
-                        <div class="education-body">
-                            <p>Formación en desarrollo de software, algoritmos, estructuras de datos, ingeniería de
-                                software y sistemas de información.</p>
-                            <div class="education-skills">
-                                <span class="skill-badge">Algoritmos</span>
-                                <span class="skill-badge">Estructuras de Datos</span>
-                                <span class="skill-badge">Ingeniería de Software</span>
-                                <span class="skill-badge">Bases de Datos</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-6" data-aos="fade-left" data-aos-delay="100">
-                    <div class="education-card">
-                        <div class="education-banner is-trentino"><img src="img/logo-trentino.png" alt="Logo del IESTP Trentino Juan Pablo II" width="340" height="187" loading="lazy" decoding="async"></div>
-                        <div class="education-header">
-                            <div class="education-icon">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <div class="education-info">
-                                <h4>Técnico en Computación e Informática</h4>
-                                <p class="institution">IESTP Trentino Juan Pablo II</p>
-                                <span class="education-date">01/2023 – 12/2025</span>
-                            </div>
-                        </div>
-                        <div class="education-body">
-                            <p>Titulado de la carrera Técnica en Computación e Informática, con especialización en
-                                sistemas y tecnologías de la información, desarrollo de aplicaciones y redes de
-                                computadoras.</p>
-                            <div class="education-skills">
-                                <span class="skill-badge">Programación</span>
-                                <span class="skill-badge">Redes</span>
-                                <span class="skill-badge">Sistemas Operativos</span>
-                                <span class="skill-badge">Desarrollo Web</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Falta aprender quechua xd. -->
-            <div class="languages mt-5" data-aos="fade-up">
-                <h4 class="text-center mb-4">Idiomas</h4>
-                <div class="language-levels">
-                    <div class="language-level">
-                        <div class="language-info">
-                            <span class="language-name">Español</span>
-                            <span class="language-level-text">Nativo</span>
-                        </div>
-                        <div class="language-progress">
-                            <div class="progress-bar" style="width: 100%"></div>
-                        </div>
-                    </div>
-                    <div class="language-level">
-                        <div class="language-info">
-                            <span class="language-name">Inglés</span>
-                            <span class="language-level-text">Intermedio Avanzado</span>
-                        </div>
-                        <div class="language-progress">
-                            <div class="progress-bar" style="width: 80%"></div>
-                        </div>
-                    </div>
+                <div class="portrait-stage" id="portraitStage">
+                    <canvas id="robotParticles" role="img" aria-label="Robot 3D de partículas que se dispersan y se reconstruyen con el cursor"></canvas>
+                    <span class="portrait-status" id="portraitStatus" role="status" hidden></span>
+                    <nav class="portrait-links" aria-label="Información de Contacto">
+                        <a href="mailto:joseayvar28@gmail.com" aria-label="Enviar correo" title="Enviar correo"><i class="fas fa-envelope" aria-hidden="true"></i></a>
+                        <a href="https://www.instagram.com/ayvxrcitoo/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                        <a href="https://www.google.com/maps/search/?api=1&amp;query=Pachacamac%2C%20Lima%2C%20Per%C3%BA" target="_blank" rel="noopener noreferrer" aria-label="Ubicación" title="Ubicación"><i class="fas fa-location-dot" aria-hidden="true"></i></a>
+                    </nav>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact-section section-padding">
+    <section id="contact" class="contact-section section-padding" data-view="home">
+        <canvas id="contactCanvas" class="experience-canvas" aria-hidden="true"></canvas>
         <div class="container">
             <div class="section-header text-center mb-5" data-aos="fade-up">
-                <h6 class="section-subtitle">06 / El siguiente paso</h6>
+                <h6 class="section-subtitle">05 / El siguiente paso</h6>
                 <h2 class="section-title">¿Creamos algo<br><span class="text-primary">extraordinario?</span><span class="contact-star" aria-hidden="true">✳</span></h2>
                 <div class="section-divider mx-auto"></div>
                 <p class="section-description mt-3">¿Tienes un proyecto en mente? ¡Hablemos sobre cómo puedo ayudarte!
@@ -1125,7 +813,7 @@
                                 <div class="form-feedback"></div>
                             </div>
 
-                            <!-- Este campo queda oculto para detectar bots. -->
+                            <!-- Campo oculto para detectar bots, no lo borres xd. -->
                             <input type="text" name="bot-field" style="display: none" tabindex="-1" autocomplete="off" aria-hidden="true">
 
                             <div class="form-group mt-4">
@@ -1144,76 +832,15 @@
         </div>
     </section>
     </main>
-    <footer class="footer bg-dark text-white">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="footer-brand mb-3">
-                        <h3 class="logo-text">Ayvar Jose</h3>
-                        <p class="footer-description">Ingeniero de Software Jr & Desarrollador Full Stack</p>
-                    </div>
-                    <p class="mb-0">Creando soluciones digitales innovadoras para el futuro.</p>
-                </div>
-                <div class="col-lg-6">
-                    <div class="footer-social text-lg-end">
-                        <div class="social-icons">
-                            <a href="https://www.instagram.com/ayvxrcitoo/" target="_blank" class="social-icon">
-                                <i class="fab fa-instagram"></i>
-                            </a>
-                            <a href="https://www.linkedin.com/in/jose-ayvar-82a980398" class="social-icon"
-                                target="_blank">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-
-                            <a href="https://github.com/Ayvxrrr" target="_blank" class="social-icon">
-                                <i class="fab fa-github"></i>
-                            </a>
-                            <a href="https://www.tiktok.com/@ayvxrcitooo" target="_blank" class="social-icon">
-                                <i class="fab fa-tiktok"></i>
-                            </a>
-                            <a href="https://wa.me/51946016559?text=Hola%20Jose%2C%20vi%20tu%20portafolio%20y%20quiero%20hablar%20contigo." target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="WhatsApp" title="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
-                                <a href="mailto:joseayvar28@gmail.com" class="social-icon">
-                                <i class="fas fa-envelope"></i>
-                            </a>
-                        </div>
-                        <p class="mt-3">joseayvar28@gmail.com</p>
-                    </div>
-                </div>
-            </div>
-
-            <hr class="my-4 opacity-25">
-
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="mb-0">
-                        © <span id="currentYear">2026</span> <span class="text-primary">Ayvar Jose</span>. Todos los derechos reservados.
-                    </p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p class="mb-0">
-                        Hecho con intención <span class="text-primary">&lt;/&gt;</span> y mucho código.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <a href="#home" class="back-to-top" id="backToTop" aria-label="Volver al inicio">
-        <i class="fas fa-arrow-up" aria-hidden="true"></i>
-    </a>
-
     <div class="experience-controls" aria-label="Personalizar apariencia">
         <span class="controls-label">TU ESTILO</span>
-        <div class="accent-options" role="group" aria-label="Color de acento">
-            <button type="button" class="accent-option" data-set-accent="lime" aria-label="Neón lima" aria-pressed="true" title="Neón lima"><span style="--swatch:#c4f568"></span></button>
-            <button type="button" class="accent-option" data-set-accent="cyan" aria-label="Neón cian" aria-pressed="false" title="Neón cian"><span style="--swatch:#65e4f4"></span></button>
-            <button type="button" class="accent-option" data-set-accent="violet" aria-label="Neón violeta" aria-pressed="false" title="Neón violeta"><span style="--swatch:#b79aff"></span></button>
-        </div>
+        <span class="monochrome-indicator" title="Neón blanco y negro"><span aria-hidden="true"></span><span>NEÓN B/N</span></span>
         <span class="control-divider" aria-hidden="true"></span>
+        <button class="icon-button" type="button" id="themeToggle" aria-label="Activar modo claro" title="Activar modo claro"><i class="fas fa-sun" aria-hidden="true"></i></button>
         <button type="button" class="icon-button" id="motionToggle" aria-label="Pausar animaciones" aria-pressed="false" title="Pausar animaciones"><i class="fas fa-pause" aria-hidden="true"></i></button>
         <button type="button" class="icon-button" data-open-command aria-label="Abrir navegación rápida" aria-haspopup="dialog" title="Navegación rápida · Ctrl K"><i class="fas fa-terminal" aria-hidden="true"></i></button>
-    <button type="button" class="icon-button" id="installApp" aria-label="Instalar app" title="Instalar app"><i class="fas fa-download" aria-hidden="true"></i></button>
     </div>
+    <button type="button" class="icon-button" id="installApp" aria-label="Instalar app" title="Instalar app"><i class="fas fa-download" aria-hidden="true"></i></button>
 
     <dialog class="command-dialog" id="commandDialog" aria-labelledby="commandTitle">
         <div class="dialog-heading"><h2 id="commandTitle"><i class="fas fa-terminal" aria-hidden="true"></i> ¿A dónde vamos?</h2><button type="button" class="icon-button" data-close-dialog aria-label="Cerrar navegación rápida"><i class="fas fa-xmark" aria-hidden="true"></i></button></div>
@@ -1230,11 +857,20 @@
     </dialog>
 
     <div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="true"></div>
+    <span class="visually-hidden" id="languageStatus" role="status" aria-live="polite"></span>
 
-    <script src="js/script.js"></script>
-    <script src="js/enhancements.js"></script>
-    <script src="js/extras.js"></script>
-    <script src="js/ayvarcitoo.js"></script>
+    <script src="js/i18n.js?v=24"></script>
+    <script src="js/presentation-intro.js?v=23"></script>
+    <script src="js/about-robot.js?v=23"></script>
+    <script src="js/scroll-narratives.js?v=23"></script>
+    <script src="js/replica-experience.js?v=23"></script>
+    <script src="js/chapter-transitions.js?v=23"></script>
+    <script src="js/scroll-scenes.js?v=23"></script>
+    <script src="js/script.js?v=23"></script>
+    <script src="js/enhancements.js?v=23"></script>
+    <script src="js/extras.js?v=23"></script>
+    <script src="js/ayvarcitoo.js?v=24"></script>
+    <script src="js/portrait-robot.js?v=23"></script>
 </body>
 
 </html>

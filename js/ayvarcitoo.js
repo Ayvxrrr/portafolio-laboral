@@ -2,6 +2,8 @@
     'use strict';
     const AI_ENDPOINT = '/.netlify/functions/chat'; // Vacío para usar solo respuestas locales.
     const root = document.documentElement;
+    const i18n = window.portfolioI18n;
+    const t = i18n.t;
     const $ = (s, c = document) => c.querySelector(s);
     const full = () => root.dataset.motion !== 'reduced';
     const esc = t => String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
@@ -17,17 +19,17 @@
         cv: { label: 'Descargar CV', href: 'docs/CV-Ayvar-Jose.pdf', download: true },
         go: (label, id) => ({ label, go: id })
     };
-    const sections = [['inicio', 'home'], ['sobre mi', 'about'], ['experiencia', 'experience'], ['stack', 'skills'], ['habilidades', 'skills'], ['proyectos', 'projects'], ['taller', 'playground'], ['editor', 'playground'], ['retos', 'playground'], ['educacion', 'education'], ['estudios', 'education'], ['contacto', 'contact']];
+    const sections = [['inicio', 'home'], ['home', 'home'], ['sobre mi', 'about'], ['about', 'about'], ['stack', 'skills'], ['habilidades', 'skills'], ['skills', 'skills'], ['proyectos', 'projects'], ['projects', 'projects'], ['taller', 'playground'], ['retrato', 'playground'], ['particulas', 'playground'], ['playground', 'playground'], ['workshop', 'playground'], ['editor', 'playground'], ['retos', 'playground'], ['challenges', 'playground'], ['contacto', 'contact'], ['contact', 'contact']];
+    const sectionLabels = { home: 'Inicio', about: 'Sobre mí', skills: 'Stack', projects: 'Proyectos', playground: 'Robot interactivo', contact: 'Contacto' };
 
     // Respuestas locales por si la IA falla xd.
     const kb = [
-        { k: ['hola', 'buenas', 'hey', 'buenos dias', 'buenas tardes', 'buenas noches', 'saludos'], a: '¡Hola! 👋 Soy <strong>Ayvarcitoo</strong>. Pregúntame lo que quieras sobre Jose, o pídeme que te lleve a una sección.' },
-        { k: ['quien eres', 'que eres', 'como te llamas', 'eres un bot', 'eres una ia', 'eres humano', 'ayvarcitoo'], a: 'Soy <strong>Ayvarcitoo</strong>, el asistente virtual del portafolio de Jose. Respondo sobre su experiencia, te guío por la página y explico conceptos de programación.' },
-        { k: ['quien es jose', 'sobre jose', 'presentate', 'cuentame de', 'perfil', 'sobre ti', 'quien es'], a: '<strong>Ayvar Jose</strong> es Ingeniero de Software Jr y desarrollador Full Stack en Lima, Perú. Estudia Ingeniería de Software en la UTP, es técnico titulado en Computación e Informática y combina el desarrollo web con la docencia de informática, robótica y programación.', act: [A.go('Sobre mí', 'about')] },
+        { k: ['hola', 'buenas', 'hey', 'buenos dias', 'buenas tardes', 'buenas noches', 'saludos'], a: '¡Hola! 👋 Soy <strong>Ayvarcitoo</strong>. Pregúntame sobre el perfil de Jose, sus proyectos y tecnologías, o cómo se relacionan con una idea de trabajo.' },
+        { k: ['quien eres', 'que eres', 'como te llamas', 'eres un bot', 'eres una ia', 'eres humano', 'ayvarcitoo'], a: 'Soy <strong>Ayvarcitoo</strong>, el asistente del portafolio de Jose. Puedo conversar sobre su perfil profesional, proyectos, tecnologías y explicar temas relacionados con su trabajo.' },
+        { k: ['quien es jose', 'sobre jose', 'presentate', 'cuentame de', 'perfil', 'sobre ti', 'quien es'], a: '<strong>Ayvar Jose</strong> es Ingeniero de Software Jr y desarrollador Full Stack en Lima, Perú. Combina el desarrollo web con la docencia de informática, robótica y programación.', act: [A.go('Sobre mí', 'about')] },
         { k: ['tecnolog', 'stack', 'lenguaje', 'habilidad', 'skills', 'sabe programar', 'dominas', 'domina', 'react', 'node', 'php', 'java', 'javascript', 'python', 'mysql', 'aws', 'docker', 'angular', 'tailwind', 'frameworks'], a: 'Su base es <strong>JavaScript, HTML5 y CSS3</strong>, con <strong>PHP, Node.js y Java (Spring Boot)</strong> en el backend. Usa <strong>React, Angular, Bootstrap y Tailwind</strong>; bases de datos <strong>MySQL, PostgreSQL, MongoDB y Firebase</strong>; y trabaja con <strong>AWS, Git/GitHub, Docker</strong> y CI/CD inicial.', act: [A.go('Ver stack', 'skills')] },
-        { k: ['experiencia', 'trabajo', 'trabajado', 'laboral', 'empleo', 'donde trabaj', 'cargos', 'historial'], a: 'Hoy es <strong>desarrollador web freelance</strong> y <strong>docente de Computación</strong> en el Colegio San Miguel Emprendedor. Antes dio apoyo técnico en un sistema de ventas con Java (Negociaciones Cedro), fue docente de robótica, operador de BPO y digitalización en Polysistemas, docente auxiliar en la IE 7102 y vendedor en Movistar Empresas.', act: [A.go('Ver experiencia', 'experience')] },
-        { k: ['docente', 'profesor', 'ensena', 'ensenar', 'clases', 'colegio', 'roblox', 'robotica', 'arduino', 'alumnos'], a: 'Enseña computación en primaria, secundaria y academia: ofimática, diseño gráfico y 3D, <strong>Roblox Studio (Luau)</strong>, algoritmos y desarrollo web. También dictó un taller de <strong>robótica con Arduino</strong>. Por eso creó el taller en vivo de esta página.', act: [A.go('Probar el taller', 'playground')] },
-        { k: ['estudi', 'universidad', 'utp', 'instituto', 'carrera', 'titulo', 'educacion', 'certificad', 'curso'], a: 'Estudia <strong>Ingeniería de Software en la UTP</strong> y es <strong>Técnico en Computación e Informática</strong> titulado del IESTP Trentino Juan Pablo II. Tiene certificados de <strong>Python Basic</strong> y de un curso técnico de <strong>Java</strong> (POO, APIs y aplicaciones básicas).', act: [A.go('Ver educación', 'education')] },
+        { k: ['docente', 'profesor', 'ensena', 'ensenar', 'clases', 'colegio', 'roblox', 'robotica', 'arduino', 'alumnos'], a: 'Enseña computación en primaria, secundaria y academia: ofimática, diseño gráfico y 3D, <strong>Roblox Studio (Luau)</strong>, algoritmos y desarrollo web. También dictó un taller de <strong>robótica con Arduino</strong>. En esta página puedes interactuar con un robot 3D de partículas.', act: [A.go('Ver robot interactivo', 'playground')] },
+        { k: ['estudi', 'universidad', 'utp', 'instituto', 'carrera', 'titulo', 'educacion', 'certificad', 'curso'], a: 'Puedes consultar el detalle de su formación académica en su <strong>CV</strong> o en su perfil de <strong>LinkedIn</strong>.', act: [A.cv, A.li] },
         { k: ['proyecto', 'proyectos', 'trabajos hechos', 'realizado', 'demo', 'portafolio de'], a: 'Puedes probar <strong>Ayvar AI</strong>, su asistente de inteligencia artificial, y <strong>El Toñito</strong>, una web para pollería con carta interactiva, pedidos por WhatsApp y asistente con IA. Ambos tienen vista previa, demo en Netlify y código en GitHub en la sección de proyectos. También encontrarás demostraciones conceptuales de otras soluciones.', act: [A.go('Ver proyectos', 'projects'), A.gh] },
         { k: ['contact', 'escribir', 'whatsapp', 'wsp', 'correo', 'email', 'mail', 'telefono', 'numero', 'llamar', 'celular', 'hablar con'], a: 'Puedes escribirle usando el botón de <strong>WhatsApp</strong>, el formulario de contacto o su correo <strong>joseayvar28@gmail.com</strong>.', act: [A.wa, A.mail, A.go('Formulario', 'contact')] },
         { k: ['disponible', 'contratar', 'contratarte', 'freelance', 'cotizar', 'presupuesto', 'precio', 'cobras', 'cuanto cuesta', 'tarifa', 'sitio web para', 'pagina web para'], a: 'Sí, Jose está <strong>disponible para nuevos proyectos</strong> web y sistemas a medida. El presupuesto depende de lo que necesites, así que lo mejor es contarle tu idea por WhatsApp.', act: [A.wa, A.mail] },
@@ -35,30 +37,58 @@
         { k: ['donde vive', 'ubicacion', 'ubicado', 'lima', 'pachacamac', 'pais', 'remoto', 'presencial'], a: 'Jose vive en <strong>Lima, Perú</strong> (Pachacámac). Para coordinar la modalidad de trabajo, escríbele directamente.', act: [A.wa] },
         { k: ['ingles', 'idioma', 'idiomas', 'english'], a: 'Su CV indica <strong>inglés nivel básico</strong>. Español es su idioma principal.' },
         { k: ['github', 'linkedin', 'redes', 'repositorio'], a: 'Encuentras a Jose en GitHub y LinkedIn:', act: [A.gh, A.li] },
-        { k: ['taller', 'retos', 'editor', 'codigo en vivo', 'como funciona el taller'], a: 'El <strong>taller en vivo</strong> es un mini editor con HTML, CSS y JavaScript, vista previa en tiempo real y 3 retos que se comprueban solos. Yo te guío paso a paso.', act: [A.go('Ir al taller', 'playground')] },
-        { k: ['como esta hecho', 'hecho con', 'como lo hizo', 'tecnologias del portafolio', 'esta pagina', 'este portafolio'], a: 'Este portafolio está hecho con <strong>HTML, CSS y JavaScript puros</strong>, sin frameworks: animaciones, terminal, taller de código y yo, todo a mano. Se publica en Netlify.' },
-        { k: ['edad', 'cuantos anos', 'anos tiene', 'que edad', 'nacio', 'cumpleanos', 'fecha de nacimiento', 'cuando naciste'], a: `Jose nació el <strong>28 de abril de 2005</strong> y tiene <strong>${age()} años</strong>. Joven, pero con bastante código a cuestas 😄` },
-        { k: ['novia', 'novio', 'pareja', 'soltero', 'casado', 'esposa', 'enamorado'], a: 'Jose está <strong>casado con su computadora y con la programación</strong> 😄. Su compromiso más serio es con el código.' },
+        { k: ['taller', 'retrato', 'robot', 'particulas', 'editor', 'codigo en vivo', 'como funciona el taller'], a: 'En la sección <strong>Robot interactivo</strong>, un modelo 3D se forma con partículas, gira con el desplazamiento y se desintegra al acercar el cursor para volver a integrarse cuando lo alejas.', act: [A.go('Ver robot interactivo', 'playground')] },
+        { k: ['como esta hecho', 'hecho con', 'como lo hizo', 'tecnologias del portafolio', 'esta pagina', 'este portafolio'], a: 'Este portafolio está hecho con <strong>HTML, CSS y JavaScript puros</strong>, sin frameworks: experiencias animadas, un robot 3D interactivo de partículas y un asistente virtual. Se publica en Netlify.' },
+        { k: ['edad', 'cuantos anos', 'anos tiene', 'que edad', 'nacio', 'cumpleanos', 'fecha de nacimiento', 'cuando naciste'], a: () => t('Jose nació el <strong>28 de abril de 2005</strong> y tiene <strong>{age} años</strong>. Joven, pero con bastante código a cuestas 😄', { age: age() }) },
+        { k: ['novia', 'novio', 'pareja', 'soltero', 'casado', 'esposa', 'enamorado'], a: 'Prefiero mantener la conversación en el perfil profesional de Jose 😊. Puedo contarte sobre sus proyectos, experiencia y tecnologías.' },
         { k: ['hobby', 'hobbies', 'pasatiempo', 'pasatiempos', 'le gusta', 'aficion', 'tiempo libre', 'gustos'], a: 'Eso es parte de su misterio 😄. Lo que sí se nota es que lo suyo es <strong>programar y enseñar tecnología</strong>. Si quieres conocerlo mejor, escríbele.', act: [A.wa] },
         { k: ['instalar', 'instalo', 'app', 'aplicacion', 'descargar la pagina', 'pantalla de inicio'], a: 'Este portafolio se puede <strong>instalar como app</strong> y abrir incluso sin conexión. En Android o PC pulsa el botón; en iPhone usa <em>Compartir</em> y luego <em>Añadir a pantalla de inicio</em>.', act: [{ label: 'Instalar app', install: true }] },
         { k: ['gracias', 'genial', 'excelente', 'buenisimo', 'chevere'], a: '¡Con gusto! 😊 Si quieres, pregúntame algo más o escríbele a Jose.' },
         { k: ['chau', 'adios', 'hasta luego', 'nos vemos'], a: '¡Hasta pronto! 👋 Cuando quieras volver, aquí estaré.' },
         { k: ['chiste', 'algo gracioso'], a: '¿Por qué los programadores confunden Halloween con Navidad? Porque <code>Oct 31 == Dec 25</code> 🎃🎄' },
-        { k: ['ayuda', 'que puedes hacer', 'que haces', 'comandos', 'opciones'], a: 'Puedo: 🔹 contarte sobre la <strong>experiencia y tecnologías</strong> de Jose, 🔹 <strong>llevarte</strong> a cualquier sección ("llévame a proyectos"), 🔹 cambiar el <strong>modo claro/oscuro</strong>, 🔹 explicarte conceptos de programación ("¿qué es una API?").' }
+        { k: ['ayuda', 'que puedes hacer', 'que haces', 'comandos', 'opciones'], a: 'Puedo conversar sobre el <strong>perfil y los proyectos</strong> de Jose, explicar tecnologías que usa, relacionar sus habilidades con una necesidad laboral, ayudarte a explorar la página o preparar preguntas profesionales. Pregúntame con tus propias palabras.' }
     ];
+    const aliases = {
+        hola: ['hello', 'hi', 'good morning', 'good afternoon', 'good evening', 'greetings'],
+        'quien eres': ['who are you', 'what are you', 'your name', 'are you a bot', 'are you human'],
+        'quien es jose': ['who is jose', 'about jose', 'introduce', 'profile', 'tell me about him'],
+        tecnolog: ['technolog', 'programming language', 'framework', 'what does he use', 'what can he build'],
+        docente: ['teacher', 'teach', 'robotics', 'student', 'class', 'school'],
+        estudi: ['education', 'studies', 'study', 'university', 'degree', 'certificate', 'academic', 'course'],
+        proyecto: ['project', 'portfolio', 'what has he built'],
+        contact: ['reach him', 'write to', 'phone', 'number', 'message jose', 'talk to jose'],
+        disponible: ['available', 'availability', 'hire', 'quote', 'budget', 'pricing', 'price', 'cost', 'rate', 'website for'],
+        cv: ['curriculum vitae'],
+        'donde vive': ['where does he live', 'where is he', 'location', 'remote', 'on site', 'peru'],
+        ingles: ['spoken language', 'spanish'],
+        github: ['social', 'repository', 'repositories'],
+        taller: ['playground', 'workshop', 'challenge', 'live editor'],
+        'como esta hecho': ['how was this built', 'how is this built', 'this website', 'this portfolio', 'made with'],
+        edad: ['age', 'how old', 'birthday', 'born', 'birth date'],
+        novia: ['girlfriend', 'boyfriend', 'partner', 'single', 'married', 'wife'],
+        hobby: ['hobbies', 'free time', 'interest', 'likes'],
+        instalar: ['install', 'offline', 'home screen'],
+        gracias: ['thanks', 'thank you', 'awesome', 'great', 'excellent'],
+        chau: ['bye', 'goodbye', 'see you'], chiste: ['joke', 'funny'],
+        ayuda: ['help', 'what can you do', 'commands', 'options']
+    };
+    kb.forEach(entry => entry.k.push(...(aliases[entry.k[0]] || [])));
     const lessons = [
-        { k: ['html'], a: '<strong>HTML</strong> es el lenguaje que da <em>estructura</em> a una página: títulos, párrafos, imágenes y botones se definen con etiquetas como <code>&lt;h1&gt;</code> o <code>&lt;p&gt;</code>.' },
-        { k: ['css'], a: '<strong>CSS</strong> da <em>estilo</em> a la página: colores, tamaños, espacios y animaciones. Una regla tiene selector, propiedad y valor: <code>h1 { color: red; }</code>.' },
-        { k: ['javascript', 'js'], a: '<strong>JavaScript</strong> da <em>comportamiento</em>: reacciona a clics, valida formularios y actualiza la página sin recargarla.' },
-        { k: ['api'], a: 'Una <strong>API</strong> es un "mesero" entre programas: tú pides datos con una solicitud y ella te devuelve la respuesta, normalmente en formato JSON.' },
-        { k: ['base de datos', 'sql', 'mysql'], a: 'Una <strong>base de datos</strong> guarda información ordenada, como tablas de usuarios o ventas. Con <strong>SQL</strong> se consulta y modifica, por ejemplo <code>SELECT * FROM clientes;</code>.' },
-        { k: ['git', 'github'], a: '<strong>Git</strong> guarda el historial de cambios de tu código para poder volver atrás o trabajar en equipo. <strong>GitHub</strong> es la plataforma donde se comparten esos repositorios.' },
-        { k: ['frontend', 'backend', 'full stack', 'fullstack'], a: 'El <strong>frontend</strong> es lo que ves y tocas en la web. El <strong>backend</strong> es lo que ocurre detrás: servidor, lógica y base de datos. Un desarrollador <strong>Full Stack</strong> trabaja en ambos.' },
-        { k: ['responsive', 'adaptable'], a: 'Un diseño <strong>responsive</strong> se adapta a cualquier pantalla (celular, tablet o PC) usando CSS flexible como Grid, Flexbox y media queries.' },
-        { k: ['variable'], a: 'Una <strong>variable</strong> es una caja con nombre donde guardas un dato: <code>let edad = 20;</code>. Luego puedes usarla o cambiarla.' },
-        { k: ['funcion'], a: 'Una <strong>función</strong> es un bloque de código reutilizable con nombre: <code>function saludar() { console.log("Hola"); }</code> y se ejecuta al llamarla.' }
+        { k: ['html'], a: '<strong>HTML</strong> da estructura a una página: define títulos, párrafos, imágenes y botones con etiquetas como <code>&lt;h1&gt;</code> o <code>&lt;p&gt;</code>. Es parte de la base con la que Jose crea experiencias web.' },
+        { k: ['css'], a: '<strong>CSS</strong> define la presentación: colores, tamaños, espacios y animaciones. Se usa junto con HTML y JavaScript en los proyectos web de Jose para construir interfaces claras y adaptables.' },
+        { k: ['javascript', 'js'], a: '<strong>JavaScript</strong> añade comportamiento a una web: responde a clics, valida formularios y actualiza la interfaz. Es una de las tecnologías principales del stack de Jose y aparece en sus proyectos Full Stack.' },
+        { k: ['api'], a: 'Una <strong>API</strong> permite que dos programas intercambien solicitudes y respuestas, a menudo en JSON. Entender APIs ayuda a comprender cómo se conectan interfaces y servicios en el desarrollo Full Stack que realiza Jose.' },
+        { k: ['base de datos', 'sql', 'mysql'], a: 'Una <strong>base de datos</strong> organiza información, y <strong>SQL</strong> permite consultarla o modificarla. Jose incluye MySQL y PostgreSQL entre sus tecnologías; por ejemplo, una consulta podría ser <code>SELECT * FROM clientes;</code>.' },
+        { k: ['git', 'github'], a: '<strong>Git</strong> registra cambios del código para revisar versiones y colaborar; <strong>GitHub</strong> aloja repositorios. Puedes explorar en GitHub el código de proyectos publicados de Jose, como Ayvar AI y El Toñito.' },
+        { k: ['frontend', 'backend', 'full stack', 'fullstack'], a: 'El <strong>frontend</strong> es la interfaz con la que interactúa el usuario; el <strong>backend</strong> maneja lógica y servicios. El perfil <strong>Full Stack</strong> de Jose abarca ambos lados del desarrollo.' },
+        { k: ['responsive', 'adaptable'], a: 'Un diseño <strong>responsive</strong> adapta la interfaz a móviles y computadoras con técnicas como Grid, Flexbox y media queries. Jose presenta sus proyectos para celular y escritorio.' },
+        { k: ['variable'], a: 'Una <strong>variable</strong> guarda un valor que el programa puede consultar o cambiar, por ejemplo <code>let edad = 20;</code>. Es un concepto básico de JavaScript, una tecnología central del stack de Jose.' },
+        { k: ['funcion'], a: 'Una <strong>función</strong> agrupa instrucciones reutilizables, por ejemplo <code>function saludar() { console.log("Hola"); }</code>. Es uno de los fundamentos de JavaScript y del trabajo web de Jose.' }
     ];
-    const FALLBACK = { a: 'Esa pregunta se me escapa 😅. Puedo contarte sobre la <strong>experiencia, tecnologías y estudios</strong> de Jose, o llevarte a una sección. Para otra consulta, escríbele directo.', act: [A.wa] };
+    lessons[4].k.push('database');
+    lessons[8].k.push('variable');
+    lessons[9].k.push('function');
+    const FALLBACK = { a: 'No tengo suficiente información para responder eso con seguridad. Puedo ayudarte con el perfil profesional, los proyectos o las tecnologías de Jose; si quieres, cuéntame cómo se relaciona tu pregunta con alguno de esos temas.' };
 
     const fab = document.createElement('button');
     fab.className = 'ayv-fab';
@@ -80,7 +110,7 @@
     panel.innerHTML = `<header class="ayv-head"><div class="ayv-ava" aria-hidden="true"><i class="fas fa-robot"></i></div><div><strong>Ayvarcitoo</strong><span id="ayvState"><i class="status-dot" aria-hidden="true"></i> En línea</span></div><button type="button" class="ayv-close" aria-label="Cerrar chat"><i class="fas fa-xmark" aria-hidden="true"></i></button></header>
         <div class="ayv-log" id="ayvLog" role="log" aria-live="polite"></div>
         <div class="ayv-chips" id="ayvChips"></div>
-        <form class="ayv-form" id="ayvForm"><label class="visually-hidden" for="ayvInput">Escribe tu pregunta</label><input id="ayvInput" type="text" maxlength="300" placeholder="Pregúntame sobre Jose…" autocomplete="off"><button type="submit" aria-label="Enviar"><i class="fas fa-paper-plane" aria-hidden="true"></i></button></form>`;
+        <form class="ayv-form" id="ayvForm"><label class="visually-hidden" for="ayvInput">Escribe tu pregunta</label><input id="ayvInput" type="text" maxlength="300" placeholder="Pregúntame sobre Jose y su trabajo…" autocomplete="off"><button type="submit" aria-label="Enviar"><i class="fas fa-paper-plane" aria-hidden="true"></i></button></form>`;
     document.body.append(fab, tip, panel);
     const log = $('#ayvLog'), input = $('#ayvInput'), chips = $('#ayvChips');
     const hist = [];
@@ -100,12 +130,13 @@
         });
         return box;
     }
-    function add(role, html, act) {
+    function add(role, html, act, remote = false) {
         const m = document.createElement('div');
         m.className = `ayv-msg ${role}`;
         const b = document.createElement('div');
         b.className = 'ayv-bubble';
-        b.innerHTML = html;
+        if (role === 'bot' && !remote) i18n.html(b, html);
+        else { b.innerHTML = html; b.setAttribute('data-i18n-ignore', ''); }
         m.append(b);
         if (act?.length) m.append(actions(act));
         log.append(m);
@@ -130,7 +161,7 @@
         const ctl = new AbortController();
         const t = setTimeout(() => ctl.abort(), 20000);
         try {
-            const r = await fetch(AI_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: hist.slice(-8) }), signal: ctl.signal });
+            const r = await fetch(AI_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: hist.slice(-8), language: root.lang }), signal: ctl.signal });
             if (!r.ok) throw new Error(String(r.status));
             const { reply } = await r.json();
             if (!reply) throw new Error('vacío');
@@ -141,22 +172,22 @@
     }
     async function answer(text) {
         const n = norm(text);
-        const nav = /(llevame|lleva|ir a|ve a|vamos|muestrame|mostrar|abre|abrir|quiero ver|ver)\b/.test(n) && sections.find(([k]) => n.includes(k));
-        if (nav) { setTimeout(() => go(nav[1]), 500); return { a: `Te llevo a <strong>${esc(nav[0])}</strong> 🚀` }; }
-        const th = n.match(/\b(claro|oscuro)\b/);
-        if (th && /(modo|tema|activa|pon|cambia)/.test(n)) {
-            const want = th[1] === 'claro' ? 'light' : 'dark';
+        const nav = /(llevame|lleva|ir a|ve a|vamos|muestrame|mostrar|abre|abrir|quiero ver|ver|take me|go to|show|open|want to see)\b/.test(n) && sections.find(([k]) => n.includes(k));
+        if (nav) { setTimeout(() => go(nav[1]), 500); return { a: () => t('Te llevo a <strong>{section}</strong> 🚀', { section: t(sectionLabels[nav[1]]) }) }; }
+        const th = n.match(/\b(claro|oscuro|light|dark)\b/);
+        if (th && /(modo|tema|activa|pon|cambia|mode|theme|enable|switch|set|turn)/.test(n)) {
+            const want = ['claro', 'light'].includes(th[1]) ? 'light' : 'dark';
             if ((root.dataset.theme || 'dark') !== want) $('#themeToggle')?.click();
-            return { a: `Listo, activé el modo <strong>${th[1]}</strong> ✨` };
+            return { a: () => t('Listo, activé el modo <strong>{theme}</strong> ✨', { theme: t(want === 'light' ? 'claro' : 'oscuro') }) };
         }
-        const generic = /^(que es|que son|como (se|puedo|hago)|explica|explicame|diferencia|por que|para que sirve|cual es la diferencia)/.test(n);
+        if (ai !== 'off') { const r = await askAI(); if (r) return { ai: r }; }
+        const generic = /^(que es|que son|como (se|puedo|hago)|explica|explicame|diferencia|por que|para que sirve|cual es la diferencia|what is|what are|how (do|does|can|to)|explain|difference|why|what does)/.test(n);
         if (generic) {
             const les = best(n, lessons);
             if (les) return les;
         }
         const hit = best(n, kb);
         if (hit) return hit;
-        if (ai !== 'off') { const r = await askAI(); if (r) return { ai: r }; }
         return FALLBACK;
     }
     async function send(text) {
@@ -166,12 +197,12 @@
         chips.hidden = true;
         add('user', esc(text));
         hist.push({ role: 'user', content: text });
-        const t = typing();
+        const pending = typing();
         const [res] = await Promise.all([answer(text), wait(550)]);
-        t.remove();
+        pending.remove();
         const html = res.ai ? fmt(res.ai) : res.a;
-        add('bot', html, res.act);
-        hist.push({ role: 'assistant', content: res.ai || plain(res.a) });
+        add('bot', html, res.act, Boolean(res.ai));
+        hist.push({ role: 'assistant', content: res.ai || plain(typeof res.a === 'function' ? res.a() : t(res.a)) });
         busy = false;
         input.focus({ preventScroll: true });
     }
@@ -182,12 +213,12 @@
         fab.setAttribute('aria-expanded', 'true');
         if (!welcomed) {
             welcomed = true;
-            add('bot', '¡Hola! Soy <strong>Ayvarcitoo</strong> 👋, el asistente de Jose. Pregúntame por su experiencia, tecnologías o cómo contratarlo. También te llevo a cualquier sección o te explico conceptos de programación.');
+            add('bot', '¡Hola! Soy <strong>Ayvarcitoo</strong> 👋, el asistente del portafolio de Jose. Pregúntame sobre su perfil, proyectos y tecnologías, o cómo sus habilidades podrían relacionarse con una oportunidad o idea. También puedo guiarte por la página.');
             ['¿Qué tecnologías usa?', '¿Está disponible?', 'Llévame a proyectos', '¿Puedo instalar la app?', 'Descargar CV'].forEach(q => {
                 const b = document.createElement('button');
                 b.type = 'button';
                 b.textContent = q;
-                b.addEventListener('click', () => send(q));
+                b.addEventListener('click', () => send(t(q)));
                 chips.append(b);
             });
         }
@@ -210,6 +241,6 @@
             sessionStorage.setItem('ayv.tip', '1');
             setTimeout(() => { tip.hidden = true; }, 8000);
         }, 7000);
-    } catch { /* Si no se puede guardar, el chat sigue funcionando. */ }
+    } catch {}
     tip.addEventListener('click', open);
 })();
