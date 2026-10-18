@@ -101,7 +101,7 @@
                 Object.values(textures).forEach(texture => { texture.anisotropy = anisotropy; texture.needsUpdate = true; });
                 force = true;
             }
-            const interval = quality === 'low' ? 66 : quality === 'high' ? 25 : 40;
+            const interval = quality === 'low' ? 33 : 16;
             if (!force && rendered && now - last < interval) return motion;
             const alpha = !motion || !rendered ? 1 : .15;
             pose.x = mix(pose.x, mix(2.6, -3.33, progress), alpha);

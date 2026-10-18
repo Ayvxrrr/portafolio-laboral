@@ -339,6 +339,9 @@
         document.addEventListener('portfolio:view', () => { entryAt = 0; layout(); invalidate(); });
         document.addEventListener('portfolio:language', () => { layout(); invalidate(); });
         layout();
+        if (getView() === 'about') loadRobot();
+        else if ('requestIdleCallback' in window) requestIdleCallback(loadRobot, { timeout: 1200 });
+        else setTimeout(loadRobot, 300);
         return { layout, render, align };
     }
     window.portfolioNarratives = { createHome, createWorks, createAbout };
