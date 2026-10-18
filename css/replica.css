@@ -360,7 +360,7 @@
     .presentation-orb .orb-toggle { position: static; width: auto; height: auto; border: 0; transform: none; }
     .presentation-orb .orb-switch-ball { position: static; width: auto; height: auto; background: transparent; color: var(--text); font-size: 18px; }
     .presentation-orb:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
-    .replica-site #installApp { right: max(72px, calc(72px + env(safe-area-inset-right))); bottom: max(16px, env(safe-area-inset-bottom)); width: 44px; height: 44px; }
+    .replica-site #installApp { right: max(16px, env(safe-area-inset-right)); bottom: max(72px, calc(72px + env(safe-area-inset-bottom))); width: 44px; height: 44px; }
     .replica-site .ayv-fab { right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); width: 44px; height: 44px; }
     .replica-site .ayv-fab::after { inset: -3px; border-radius: 50%; }
     .replica-site .ayv-tip { right: 16px; bottom: 72px; max-width: min(240px, calc(100vw - 32px)); }
