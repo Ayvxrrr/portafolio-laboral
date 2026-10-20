@@ -370,7 +370,7 @@
     const projectFeatures = {
         'ayvar-ai': ['Chat con inteligencia artificial para explorar ideas y resolver dudas.', 'Modos de conversación: general, creativo, código y aprendizaje.', 'Historial de conversaciones y aplicación instalable.', 'Demo pública desplegada en Netlify y código disponible en GitHub.'],
         'el-tonito': ['Carta interactiva de pollo a la brasa, parrillas y promociones.', 'Carrito para armar pedidos y solicitarlos por WhatsApp.', 'Asistente con inteligencia artificial y diseño adaptable a celulares y computadoras.', 'Aplicación en React y TypeScript, publicada en Netlify con código disponible en GitHub.'],
-        ecommerce: ['Propuesta de catálogo de productos y carrito.', 'Flujo de pago conceptual con Stripe.', 'Diseño de un panel de administración.', 'Stack propuesto: React, Node.js y MongoDB.'],
+        'ayvar-pos': ['Punto de venta con carrito, validación de stock y registro de ventas.', 'Gestión de productos, categorías, inventario y clientes.', 'Acceso por roles: administrador, cajero y almacén.', 'Reportes de ventas y exportación CSV/PDF; tickets internos no válidos ante SUNAT.', 'Demo pública desplegada en Vercel y código disponible en GitHub.'],
         fitness: ['Propuesta de registro de ejercicios y actividad física.', 'Diseño de un seguimiento de progreso personal.', 'Visualización conceptual de la actividad.', 'Stack propuesto: React Native, Firebase, Redux y Chart.js.'],
         dashboard: ['Propuesta de gráficos y visualización de datos.', 'Métricas de ejemplo, sin conexión a datos reales.', 'Stack de interfaz propuesto: Vue.js y D3.js.', 'Stack de servidor propuesto: Express y PostgreSQL.']
     };
@@ -385,6 +385,10 @@
         $('#projectDialogCategory').textContent = $('.project-category', item).textContent;
         $('#projectDialogDescription').textContent = $('.project-description', item).textContent;
         $('#projectDialogTechnologies').replaceChildren(...$$('.tech-tag', item).map(tag => tag.cloneNode(true)));
+        const demoTemplate = $('.project-demo-template', item);
+        const demoAccess = $('#projectDialogDemoAccess');
+        demoAccess.hidden = !demoTemplate;
+        demoAccess.replaceChildren(...(demoTemplate ? [demoTemplate.content.cloneNode(true)] : []));
         $('#projectDialogFeatures').replaceChildren(...projectFeatures[id].map(text => {
             const li = document.createElement('li');
             li.textContent = text;

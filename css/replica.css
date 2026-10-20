@@ -202,7 +202,7 @@
 .works-slider-ready:not(.works-grid-view) .project-detail-link { align-self: center; width: auto; display: inline-flex; justify-content: center; gap: 8px; padding: 0; border: 0; font-size: 12px; margin-top: 20px; color: var(--text); }
 .replica-site [data-project="ayvar-ai"] { --project-ink: #32782e; --project-tint: #a3d82f; }
 .replica-site [data-project="el-tonito"] { --project-ink: #b33d2c; --project-tint: #f28150; }
-.replica-site [data-project="ecommerce"] { --project-ink: #6750a4; --project-tint: #b49bea; }
+.replica-site [data-project="ayvar-pos"] { --project-ink: #127b66; --project-tint: #83d8b9; }
 .replica-site [data-project="fitness"] { --project-ink: #aa3672; --project-tint: #ec8eb8; }
 .replica-site [data-project="dashboard"] { --project-ink: #066d86; --project-tint: #68d6e6; }
 :root[data-theme="light"] .replica-site #projects [data-project] { --project-ink: var(--project-tint); }
