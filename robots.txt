@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ayvar.netlify.app/sitemap.xml
+Sitemap: https://ayvar.pages.dev/sitemap.xml

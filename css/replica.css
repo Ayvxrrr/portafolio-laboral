@@ -53,6 +53,7 @@
 .replica-site .presentation-title { font: 900 clamp(32px, min(7.3vw, 14svh), 126px)/.82 'Segoe UI', Arial, sans-serif; letter-spacing: -.035em; color: var(--text); margin: 0; transition: color .55s; }
 .presentation-line { display: block; width: max-content; max-width: 100%; padding-bottom: .075em; overflow: clip; }
 .presentation-letter { display: inline-block; transform-origin: left bottom; }
+.presentation-description { max-width: min(490px, 68vw); margin: 18px 0 0; font-size: clamp(13px, 1.3vw, 18px); line-height: 1.6; color: var(--text); text-wrap: pretty; }
 .replica-site .presentation-actions { position: absolute; top: 100%; left: 0; width: 100%; margin-top: 24px; flex-wrap: wrap; gap: 8px 25px; }
 .presentation-actions a { display: inline-flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; color: var(--text); font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; border-bottom: 1px solid color-mix(in srgb, var(--text) 35%, transparent); padding: 3px 0; }
 .presentation-actions i { margin-left: 8px; font-size: 10px; }
