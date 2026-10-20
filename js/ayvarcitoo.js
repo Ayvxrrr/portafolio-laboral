@@ -1,6 +1,6 @@
 (() => {
     'use strict';
-    const AI_ENDPOINT = '/.netlify/functions/chat'; // Vacío para usar solo respuestas locales.
+    const AI_ENDPOINT = '/api/chat'; // Misma ruta en Cloudflare y Netlify. Vacío para usar solo respuestas locales.
     const root = document.documentElement;
     const i18n = window.portfolioI18n;
     const t = i18n.t;
@@ -40,7 +40,7 @@
         { k: ['ingles', 'idioma', 'idiomas', 'english'], a: 'Su CV indica <strong>inglés nivel básico</strong>. Español es su idioma principal.' },
         { k: ['github', 'linkedin', 'redes', 'repositorio'], a: 'Encuentras a Jose en GitHub y LinkedIn:', act: [A.gh, A.li] },
         { k: ['taller', 'retrato', 'robot', 'particulas', 'editor', 'codigo en vivo', 'como funciona el taller'], a: 'En la sección <strong>Robot interactivo</strong>, un modelo 3D se forma con partículas, gira con el desplazamiento y se desintegra al acercar el cursor para volver a integrarse cuando lo alejas.', act: [A.go('Ver robot interactivo', 'playground')] },
-        { k: ['como esta hecho', 'hecho con', 'como lo hizo', 'tecnologias del portafolio', 'esta pagina', 'este portafolio'], a: 'Este portafolio está hecho con <strong>HTML, CSS y JavaScript puros</strong>, sin frameworks: experiencias animadas, un robot 3D interactivo de partículas y un asistente virtual. Se publica en Netlify.' },
+        { k: ['como esta hecho', 'hecho con', 'como lo hizo', 'tecnologias del portafolio', 'esta pagina', 'este portafolio'], a: 'Este portafolio está hecho con <strong>HTML, CSS y JavaScript puros</strong>, sin frameworks: experiencias animadas, un robot 3D interactivo de partículas y un asistente virtual. Es compatible con Cloudflare Pages y Netlify.' },
         { k: ['edad', 'cuantos anos', 'anos tiene', 'que edad', 'nacio', 'cumpleanos', 'fecha de nacimiento', 'cuando naciste'], a: () => t('Jose nació el <strong>28 de abril de 2005</strong> y tiene <strong>{age} años</strong>. Joven, pero con bastante código a cuestas 😄', { age: age() }) },
         { k: ['novia', 'novio', 'pareja', 'soltero', 'casado', 'esposa', 'enamorado'], a: 'Prefiero mantener la conversación en el perfil profesional de Jose 😊. Puedo contarte sobre sus proyectos, experiencia y tecnologías.' },
         { k: ['hobby', 'hobbies', 'pasatiempo', 'pasatiempos', 'le gusta', 'aficion', 'tiempo libre', 'gustos'], a: 'Eso es parte de su misterio 😄. Lo que sí se nota es que lo suyo es <strong>programar y enseñar tecnología</strong>. Si quieres conocerlo mejor, escríbele.', act: [A.wa] },

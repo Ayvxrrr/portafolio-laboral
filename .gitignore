@@ -1,0 +1,7 @@
+# Claves locales: nunca subirlas a GitHub.
+.env*
+.dev.vars*
+
+# Archivos generados por las herramientas de desarrollo.
+.wrangler/
+node_modules/
