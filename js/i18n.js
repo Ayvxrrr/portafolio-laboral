@@ -126,7 +126,6 @@
         ['Preparando robot interactivo…', 'Preparing interactive robot…'],
         ['No se pudo cargar el robot 3D. Intenta abrir el portafolio desde el servidor web.', 'The 3D robot could not be loaded. Try opening the portfolio from its web server.'],
         ['05 / El siguiente paso', '05 / The next step'], ['¿Hablamos de', 'Let’s talk about'], ['tu proyecto?', 'your project.'],
-        ['Sitios web y sistemas a medida para negocios y emprendimientos.', 'Websites and custom systems for businesses and entrepreneurs.'],
         ['Hablemos de tu proyecto', 'Let’s talk about your project'],
         ['Cuéntame qué necesita tu negocio. Revisamos juntos las funciones, los plazos y el presupuesto antes de empezar.', 'Tell me what your business needs. We’ll review the features, timeline and budget together before getting started.'],
         ['Información de Contacto', 'Contact information'],

@@ -582,7 +582,7 @@
         terminalInput.setSelectionRange(terminalInput.value.length, terminalInput.value.length);
     });
 
-    // Solo marco el envío como exitoso cuando Netlify lo confirma xd.
+    // Solo marco el envío como exitoso cuando Formspree lo confirma.
     const contactForm = $('#contactForm');
     const formFields = ['name', 'email', 'subject', 'message'].map(id => document.getElementById(id));
     const formStatus = $('#formStatus');
@@ -656,11 +656,13 @@
         const controller = new AbortController();
         const timeout = setTimeout(() => controller.abort(), 20000);
         try {
-            const response = await fetch('/', {
-                method: 'POST', body: new URLSearchParams(new FormData(contactForm)).toString(),
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, signal: controller.signal
+            const response = await fetch(contactForm.action, {
+                method: 'POST', body: new FormData(contactForm),
+                headers: { Accept: 'application/json' }, signal: controller.signal
             });
-            if (!response.ok) throw new Error('El servicio no confirmó la entrega.');
+            const result = await response.json();
+            const confirmed = result?.ok === true || (result?.ok !== false && typeof result?.next === 'string');
+            if (!response.ok || !confirmed || result?.error || result?.errors?.length) throw new Error('El servicio no confirmó la entrega.');
             const name = $('#name').value.trim();
             formStatus.dataset.status = 'success';
             i18n.text(statusText, '¡Gracias, {name}! Tu mensaje se envió correctamente. Te responderé al correo que indicaste.', { name });
