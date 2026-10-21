@@ -56,7 +56,7 @@
                 { transform: `${depth} scale(1)`, offset: 1 }
             ], { duration: 2400, delay: 1500, easing: 'ease-out' });
             hero.querySelectorAll('.presentation-social .social-icon').forEach((icon, index) => animate(icon, [{ transform: 'translateY(60px)', opacity: 0 }, { transform: 'translateY(0)', opacity: 1 }], { duration: 850, delay: 1500 + index * 200, easing: 'cubic-bezier(.16,1,.3,1)' }));
-            hero.querySelectorAll('.presentation-actions, .presentation-scroll, .presentation-location').forEach((element, index) => animate(element, [{ opacity: 0, transform: 'translateY(15px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 650, delay: 2300 + index * 100, easing: 'ease-out' }));
+            hero.querySelectorAll('.presentation-description, .presentation-actions, .presentation-scroll, .presentation-location').forEach((element, index) => animate(element, [{ opacity: 0, transform: 'translateY(15px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 650, delay: 2300 + index * 100, easing: 'ease-out' }));
             state.timers.push(setTimeout(() => { if (active === state) { document.body.dataset.introPhase = 'interactive'; document.dispatchEvent(new Event('portfolio:intro-ready')); } }, 2050));
             state.timers.push(setTimeout(() => finish(state), 4600));
             Promise.all(state.animations.map(animation => animation.finished.catch(() => {}))).then(() => finish(state));

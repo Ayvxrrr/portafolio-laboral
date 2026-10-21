@@ -35,7 +35,7 @@ test('la vista previa está declarada en el HTML inicial sin ejecutar JavaScript
 
 test('la tarjeta social usa una imagen JPEG pública, ligera y de 1200 × 630', async () => {
   const imageURL = new URL(meta('og:image'));
-  assert.equal(imageURL.href, `${site}img/og-image-neon-bw.jpg`);
+  assert.equal(imageURL.href, `${site}img/og-image-neon-portrait.jpg`);
   assert.equal(meta('og:image:secure_url'), imageURL.href);
   assert.equal(meta('twitter:image'), imageURL.href);
   assert.equal(meta('og:image:type'), 'image/jpeg');
@@ -50,7 +50,7 @@ test('la tarjeta social usa una imagen JPEG pública, ligera y de 1200 × 630', 
     const marker = image[offset + 1];
     if (marker === 0xc0 || marker === 0xc2) {
       dimensions = { width: image.readUInt16BE(offset + 7), height: image.readUInt16BE(offset + 5) };
-      assert.equal(image[offset + 9], 1, 'La imagen debe tener un único canal de gris, sin acentos verdes');
+      assert.equal(image[offset + 9], 3, 'El JPEG debe conservar el color del retrato');
       break;
     }
     offset += image.readUInt16BE(offset + 2) + 2;
@@ -58,11 +58,11 @@ test('la tarjeta social usa una imagen JPEG pública, ligera y de 1200 × 630', 
   assert.deepEqual(dimensions, { width: 1200, height: 630 });
 });
 
-test('la imagen de compartir coincide con el tema blanco y negro sin cambiar la web', async () => {
+test('la tarjeta conserva el tema blanco y negro con una foto a color, sin cambiar la web', async () => {
   assert.ok(html.includes('data-accent="mono"'));
   const preferences = await readFile(new URL('../js/preferences.js', import.meta.url), 'utf8');
   assert.ok(preferences.includes("root.dataset.accent = 'mono'"));
-  assert.ok(meta('og:image').endsWith('/og-image-neon-bw.jpg'));
+  assert.ok(meta('og:image').endsWith('/og-image-neon-portrait.jpg'));
 });
 
 test('se restaura el texto de portada sin volver a utilizar Netlify Forms', async () => {
