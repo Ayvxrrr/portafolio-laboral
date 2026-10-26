@@ -124,7 +124,6 @@
 .about-introduction h2 { font-size: 3.5vw; font-weight: 800; line-height: 1.05; letter-spacing: -.035em; }
 .about-introduction h2 .about-title-stroke { color: transparent; -webkit-text-stroke: 1px var(--text); }
 .about-introduction > p:not(.experience-eyebrow) { font-size: clamp(15px, 1.6vw, 23px); line-height: 1.8; max-width: 39vw; margin-top: 28px; }
-.about-jumps { display: flex; flex-wrap: wrap; gap: 22px; margin-top: 30px; font-size: 11px; font-weight: 700; }
 .about-cutout { position: absolute; right: 8vw; top: 22vh; width: 30vw; height: 53vh; object-fit: cover; object-position: center 32%; filter: none; opacity: .6; mask-image: radial-gradient(ellipse, #000 40%, transparent 72%); }
 .page-scroll-cue { position: absolute; left: 50%; top: 100px; translate: -50% 0; width: 76px; color: var(--text); text-align: center; font-size: 8px; font-weight: 600; line-height: 1.4; letter-spacing: 2px; z-index: 3; }
 .page-scroll-cue > span { display: block; height: 3px; background: var(--muted); margin-bottom: 8px; }
@@ -302,7 +301,6 @@
     .about-introduction > p:not(.experience-eyebrow) { max-width: 75vw; font-size: 15px; }
     .about-cutout { top: 24vh; right: -10vw; width: 70vw; height: 50vh; opacity: .28; }
     .page-scroll-cue { top: 90px; font-size: 7px; }
-    .about-jumps { gap: 15px; font-size: 10px; }
     .profile-extras { width: 84vw; }
     .profile-extras > summary { font-size: 11px; }
     .resume-scene { min-height: 85svh; padding-inline: 9vw; justify-content: center; }

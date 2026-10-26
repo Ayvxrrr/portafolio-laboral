@@ -18,7 +18,6 @@
         ['MIS TRABAJOS', 'MY WORKS'], ['SOBRE MÍ', 'ABOUT ME'], ['SOY AYVAR JOSE.', 'I’M AYVAR JOSE.'], ['DESARROLLADOR', 'DEVELOPER'],
         ['DESARROLLADOR FULL STACK', 'FULL STACK DEVELOPER'],
         ['Soy titulado en Computación e Informática, con experiencia en proyectos de sistemas, páginas web y aplicaciones móviles. Me enfoco en crear soluciones prácticas y fáciles de usar.', 'I hold a technical degree in Computing and Informatics, with experience in systems, websites and mobile app projects. I focus on creating practical, easy-to-use solutions.'],
-        ['MI STACK ↘', 'MY STACK ↘'], ['ROBOT INTERACTIVO ↘', 'INTERACTIVE ROBOT ↘'], ['MI CV ↘', 'MY CV ↘'],
         ['Más sobre mí · terminal y detalles', 'More about me · terminal and details'],
         ['CURRICULUM', 'RESUME'], ['DESCARGA AQUÍ', 'DOWNLOAD HERE'], ['MI CV EN', 'MY CV IN'], ['FORMATO PDF', 'PDF FORMAT'],
         ['Seleccionar proyecto', 'Select a project'], ['Ver proyecto {number}', 'View project {number}'],
