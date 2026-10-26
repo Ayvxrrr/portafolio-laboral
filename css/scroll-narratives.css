@@ -27,41 +27,74 @@
 .works-grid-view .work-preview-stage { position: relative; perspective: none; }
 .works-grid-view .work-step, .works-grid-view .work-paragraph, .works-grid-view .work-word { opacity: 1 !important; transform: none !important; }
 
-.about-journey.about-story-ready { position: relative; height: 270vh; height: 270svh; }
-.about-story-ready .about-story-stage { --text: var(--about-foreground, #f5f5f5); --muted: color-mix(in srgb, var(--text) 70%, transparent); position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 0; overflow: clip; color: var(--text); background: var(--about-background, #090909); }
+.about-journey.about-story-ready { position: relative; height: calc(270vh + var(--about-stage-overflow, 0px)); height: calc(270svh + var(--about-stage-overflow, 0px)); }
+.about-story-ready .about-story-stage { --text: var(--about-foreground, #fff); --muted: color-mix(in srgb, var(--text) 70%, transparent); position: sticky; top: calc(0px - var(--about-stage-overflow, 0px)); height: max(100vh, 640px); height: max(100svh, 640px); min-height: 0; overflow: clip; color: var(--text); background: radial-gradient(circle at bottom center, var(--about-gradient-center, rgb(60 60 60)) 0%, var(--about-background, #000) 70%); }
 .about-robot-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
 #aboutRobotCanvas { display: block; width: 100%; height: 100%; }
 .about-model-status { position: absolute; z-index: 4; left: 5vw; bottom: 12vh; max-width: 50vw; font: 9px/1.7 var(--mono); color: var(--muted); }
 .has-robot .about-cutout { opacity: 0 !important; }
-.about-story-stage .about-introduction { position: absolute; z-index: 2; left: 0; top: 0; width: 61%; padding-top: 23vh; perspective: 800px; opacity: calc(1 - var(--about-intro-exit, 0)); transform: perspective(900px) translate3d(0, calc(var(--about-intro-exit, 0) * -85px), 0) rotateX(calc(var(--about-intro-exit, 0) * -15deg)); transform-origin: center top; }
+.about-story-stage .about-introduction { position: absolute; z-index: 0; left: 11vw; top: 20%; width: max-content; max-width: 86vw; padding: 3vw; opacity: 1; transform: none; pointer-events: none; }
+.about-story-stage .experience-eyebrow { display: none; }
+.about-story-stage .about-introduction h2 { margin: 0; font-size: 3.5vw; font-weight: 800; line-height: 1.15; letter-spacing: normal; }
+.about-story-stage .about-introduction > p:not(.experience-eyebrow) { width: 40vw; max-width: 100%; font-size: 1.7vw; font-weight: 300; line-height: 3vw; margin: 1em 0; opacity: 0; transform: translateY(20px); transition: opacity .6s ease-in, transform .6s ease-in; }
 .about-title-line { display: block; overflow: clip; }
-.about-title-text { --line-entry: clamp(0, calc(var(--about-enter, 1) * 1.5 - var(--line-index, 0) * .15), 1); display: block; transform: translateY(calc((1 - var(--line-entry)) * 115%)); }
-.about-introduction h2 .about-title-stroke { color: transparent; -webkit-text-stroke: 1px var(--text); }
-.about-story-stage .page-scroll-cue { top: 95px; }
-.about-story-stage .about-resume-panel { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; min-height: 0; padding: 100px 9vw; color: var(--text); opacity: var(--about-cv-enter, 0); pointer-events: none; background: transparent; }
+.about-title-text { display: block; transform: translateY(100%); transition: transform .3s cubic-bezier(.55, .055, .675, .19); transition-delay: calc((2 - var(--line-index, 0)) * .15s); }
+.about-introduction h2 .about-title-stroke { color: transparent; -webkit-text-stroke: 1px color-mix(in srgb, var(--text) 80%, transparent); }
+.about-story-stage[data-about-phase="profile"] .about-title-text { transform: translateY(0); transition: transform 1s cubic-bezier(.165, .84, .44, 1); transition-delay: calc(.5s + var(--line-index, 0) * .15s); }
+.about-story-stage[data-about-phase="profile"] .about-introduction > p:not(.experience-eyebrow) { opacity: 1; transform: none; transition-duration: 1s; transition-delay: 1s; }
+.about-story-stage .page-scroll-cue { top: 12%; width: 70px; translate: -50% -50%; font-size: 10px; font-weight: 400; line-height: 1.15; letter-spacing: 3px; }
+.about-story-stage .about-resume-panel { position: absolute; z-index: 2; inset: 0; display: block; width: 100%; height: 100%; min-height: 0; padding: 0; color: var(--text); opacity: 1; pointer-events: none; background: transparent; }
 .about-story-stage.is-cv-visible .about-resume-panel { pointer-events: auto; }
-.about-story-stage .resume-background { left: -13%; color: transparent; -webkit-text-stroke-color: color-mix(in srgb, var(--text) 17%, transparent); }
-.resume-letter-shell { display: inline-block; overflow: clip; }
-.resume-letter { display: inline-block; transform: translate3d(calc((1 - var(--about-cv-enter, 0)) * var(--resume-side) * 115%), calc(var(--resume-float, 0px) * var(--resume-side)), 0) skewY(calc((1 - var(--about-cv-enter, 0)) * var(--resume-side) * 17deg)); }
-.about-story-stage .resume-download { perspective: 600px; }
-.about-story-stage .resume-download > span { --cv-line: clamp(0, calc(var(--about-cv-enter, 0) * 1.5 - var(--cv-index, 0) * .12), 1); display: block; opacity: var(--cv-line); transform: translate3d(0, calc((1 - var(--cv-line)) * 85px), 0) rotateX(calc((1 - var(--cv-line)) * -30deg)); }
+.about-story-stage .resume-background { left: 45vw; top: 50%; translate: calc(-50% + var(--resume-word-x, 0px)) -50%; font-size: 55vw; font-weight: 800; line-height: 1.15; letter-spacing: normal; color: transparent; -webkit-text-stroke: 2px rgb(0 0 0 / .5); }
+.resume-letter-shell { display: inline-block; overflow: clip; transform: translateY(calc(var(--resume-float, 0px) * var(--resume-side, 1))); }
+.resume-letter { display: inline-block; transform: translateX(calc((1 - var(--about-cv-enter, 0)) * var(--resume-side) * 115%)) skewY(calc((1 - var(--about-cv-enter, 0)) * var(--resume-side) * 17deg)); }
+.about-story-stage .resume-download { position: absolute; left: 45vw; top: 40%; display: block; max-width: 43.5vw; color: #524d4a; font-size: 4.5vw; font-weight: 800; line-height: 1.15; letter-spacing: normal; perspective: 400px; overflow: clip; }
+.about-story-stage .resume-download > span { display: block; transform: translateY(300%); transition: transform .5s cubic-bezier(.55, .055, .675, .19); }
+.about-story-stage .resume-download > span:first-child { color: #2d2d2d; text-decoration: none; }
+.about-story-stage[data-about-phase="resume"] .resume-download > span { transform: none; transition: transform 1s cubic-bezier(.165, .84, .44, 1); transition-delay: calc(2.3s + var(--cv-index, 0) * .15s); }
 .about-story-stage .resume-download > span:nth-child(2) { --cv-index: 1; }
 .about-story-stage .resume-download > span:nth-child(3) { --cv-index: 2; }
+.resume-blob { position: absolute; z-index: 1; left: 61vw; top: 42%; width: 16vw; aspect-ratio: 1; border-radius: 47% 53% 51% 49%; background: #ffd700; opacity: 0; transform: translate(var(--resume-pointer-x, 0px), var(--resume-pointer-y, 0px)); transition: opacity 1s, transform .4s ease-out; pointer-events: none; }
+.about-story-stage[data-about-phase="resume"] .resume-blob { opacity: 1; transition-delay: 1.2s, 0s; animation: about-resume-blob 8s ease-in-out infinite alternate; }
+@keyframes about-resume-blob { to { border-radius: 56% 44% 45% 55%; rotate: 35deg; } }
 .has-robot .resume-sphere { display: none; }
 .about-story-stage .about-introduction:focus-within { opacity: 1; transform: none; }
 .about-story-stage .about-resume-panel:focus-within, .about-story-stage .about-resume-panel:focus-within .resume-download > span { pointer-events: auto; opacity: 1; transform: none; }
 .about-journey.is-static { height: auto !important; }
-.is-static .about-story-stage { --about-background: #090909 !important; --about-foreground: #f5f5f5 !important; position: relative; height: auto; }
+.is-static .about-story-stage { --about-background: #090909 !important; --about-foreground: #f5f5f5 !important; position: relative; top: 0; height: auto; }
 :root[data-theme="light"] .is-static .about-story-stage { --about-background: #f5f5f5 !important; --about-foreground: #111 !important; }
-.is-static .about-introduction { position: relative; opacity: 1; transform: none; }
+.is-static .about-introduction { position: relative; left: 11vw; top: auto; padding-top: 20vh; opacity: 1; transform: none; }
+.is-static .about-introduction > p:not(.experience-eyebrow) { opacity: 1; transform: none; }
 .is-static .about-robot-layer { height: 100svh; bottom: auto; }
 .is-static .about-resume-panel { position: relative; height: 95svh; min-height: 650px; opacity: 1; pointer-events: auto; }
 .is-static .about-title-text, .is-static .resume-letter, .is-static .resume-download > span { transform: none; opacity: 1; }
+.is-static .about-title-text, .is-static .about-introduction > p, .is-static .resume-download > span { transition: none !important; }
+
+@media (min-width: 1200px) {
+    .about-story-stage .page-scroll-cue { width: 5vw; font-size: .75vw; }
+    .about-story-stage .scroll-meter-track { height: .32vw; }
+    .about-story-stage .experience-quality { gap: 1.5vw; }
+    .about-story-stage .experience-quality button { margin: 15px 0; font-size: .8vw; }
+    .about-story-stage .experience-quality i { width: 1.5vw; height: 1.5vw; border-width: 2px; }
+    .about-story-stage .experience-quality [aria-pressed="true"] i::after { width: .5vw; height: .5vw; inset: 50%; translate: -50% -50%; }
+}
+
+@media (max-width: 1000px) {
+    .about-story-stage .about-introduction { left: 50%; translate: -50% 0; }
+    .about-story-stage .about-introduction h2 { font-size: 5vw; }
+    .about-story-stage .about-introduction > p:not(.experience-eyebrow) { line-height: 3.5vw; }
+    .about-robot-layer { top: auto; bottom: 0; height: 60vw; }
+}
+@media (max-width: 800px) {
+    .about-story-stage .about-introduction h2 { font-size: 40px; }
+    .about-story-stage .about-introduction > p:not(.experience-eyebrow) { width: 50vw; font-size: 15px; line-height: 30px; }
+    .about-story-stage .page-scroll-cue { top: 20%; }
+    .about-story-stage .experience-quality { top: auto; bottom: 0; left: 2vw; translate: none; }
+}
 
 @media (max-width: 991.98px) {
     .works-slider-ready.work-story-enabled:not(.works-grid-view) .project-content { padding-inline: 5vw; }
     .works-slider-ready.work-story-enabled:not(.works-grid-view) .work-preview-stage { right: 4%; width: 42%; height: 30vw; min-height: 230px; }
-    .about-story-stage .about-introduction { width: 70%; padding-left: 9vw; }
 }
 @media (max-width: 650px) {
     .works-slider-ready.work-story-enabled:not(.works-grid-view) .project-content { padding: 0 9vw 95px; height: auto; overflow: visible; }
@@ -75,13 +108,24 @@
     .works-progress-cue { display: block; top: 118px; left: 9%; translate: none; width: 72px; text-align: left; font-size: 7px; letter-spacing: 1px; }
     .works-progress-cue .scroll-meter-track { height: 2px; margin-bottom: 4px; }
     .works-progress-cue .scroll-meter-caption { white-space: nowrap; }
-    .about-journey.about-story-ready { height: 240svh; }
-    .about-story-stage .about-introduction { width: 100%; padding: 23vh 9vw 12vh; }
-    .about-robot-layer { top: auto; bottom: 0; height: min(95vw, 47svh); }
-    .about-story-stage .about-resume-panel { padding-inline: 9vw; }
-    .about-story-stage .page-scroll-cue { top: 89px; }
+    .about-journey.about-story-ready { height: calc(240svh + var(--about-stage-overflow, 0px)); }
+    .about-story-stage .about-introduction { top: 25%; }
+    .about-story-stage .about-introduction h2 { font-size: 30px; }
+    .about-story-stage .about-introduction > p:not(.experience-eyebrow) { line-height: 25px; }
+    .about-robot-layer { height: 80vw; }
+    .about-story-stage .resume-download { left: 50%; top: 35%; translate: -50% -50%; max-width: none; width: max-content; font-size: 40px; white-space: nowrap; }
     .about-model-status { max-width: 80vw; left: 9vw; bottom: 18vh; font-size: 8px; }
     .is-static .about-resume-panel { min-height: 650px; }
+}
+@media (max-width: 450px) {
+    .about-story-stage .about-introduction { width: 50vw; padding: 0; }
+    .about-story-stage .about-introduction h2 { font-size: 20px; }
+    .about-story-stage .about-introduction > p:not(.experience-eyebrow) { width: 100%; font-size: 13px; line-height: 15px; }
+    .about-robot-layer { height: 100vw; }
+    .about-story-stage .resume-download { top: 45%; font-size: 30px; }
+}
+@media (max-width: 350px) {
+    .about-story-stage .about-introduction h2 { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
     .work-step, .work-paragraph, .work-word, .work-backdrop-letter, .work-preview-stage .project-preview, .work-preview-stage .project-screenshot { opacity: 1 !important; transform: none !important; }

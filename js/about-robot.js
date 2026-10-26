@@ -1,5 +1,27 @@
 (() => {
     'use strict';
+    const poses = {
+        idle: { x: 0, y: -10.5, z: -5, rx: 0, ry: 0, rz: 0, opacity: 1, emissive: 0, light: 0 },
+        profile: { x: 2.6, y: -8.77, z: -8.47, rx: .39, ry: -1.09, rz: 0, opacity: 1, emissive: 1, light: 2.5 },
+        resume: { x: -3.33, y: -10.77, z: -4, rx: .06, ry: -5, rz: .01, opacity: 1, emissive: 1, light: 2.5 }
+    };
+    const mix = (a, b, t) => a + (b - a) * t;
+    const clamp = value => Math.max(0, Math.min(1, value));
+    const expo = value => value === 0 || value === 1 ? value : value < .5 ? Math.pow(2, 20 * value - 10) / 2 : (2 - Math.pow(2, -20 * value + 10)) / 2;
+    function samplePose(from, phase, elapsed, entrance = false) {
+        const target = entrance ? { ...poses.idle, z: -6 } : poses[phase];
+        const result = {};
+        for (const key of Object.keys(target)) {
+            const position = ['x', 'y', 'z'].includes(key), rotation = ['rx', 'ry', 'rz'].includes(key);
+            const delay = entrance ? 1000 : phase === 'resume' ? position ? 1500 : rotation ? 500 : 0 : 0;
+            const duration = entrance ? key === 'opacity' ? 500 : 1000 : 1500;
+            const t = clamp((elapsed - delay) / duration);
+            const eased = entrance ? t === 1 ? 1 : 1 - Math.pow(2, -10 * t) : expo(t);
+            result[key] = mix(from[key], target[key], eased);
+        }
+        return result;
+    }
+    const phaseForOffset = (offset, height) => offset <= 0 ? 'idle' : offset < height * .5 ? 'profile' : 'resume';
     const scripts = new Map();
     function loadScript(source) {
         if (scripts.has(source)) return scripts.get(source);
@@ -16,35 +38,35 @@
         await loadScript('js/vendor/three/GLTFLoader.js');
         const THREE = window.THREE;
         const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'low-power' });
-        renderer.outputEncoding = THREE.sRGBEncoding;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = .95;
+        // El acabado de referencia usa salida y atlas lineales, sin el filtro ACES xd.
+        renderer.outputEncoding = THREE.LinearEncoding;
+        renderer.toneMapping = THREE.NoToneMapping;
+        renderer.toneMappingExposure = 1;
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         renderer.setClearColor(0x000000, 0);
         const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x000000, 1, 200);
         const camera = new THREE.PerspectiveCamera(30, 1, 1, 200);
         camera.position.set(0, 0, 10);
         const outer = new THREE.Group(); outer.position.y = -4; scene.add(outer);
         const follow = new THREE.Group(); outer.add(follow);
-        scene.add(new THREE.HemisphereLight(0xdce6f2, 0x302a25, .28));
-        const point = new THREE.PointLight(0xfff1db, .85); point.position.set(.37, 3.2, 3.5); follow.add(point);
-        const spot = new THREE.SpotLight(0xfff5e8, 6, 60, Math.PI / 4, .65, 1);
-        spot.position.set(-4, 8, 6); spot.target.position.set(0, 0, -6);
+        const point = new THREE.PointLight(0xffffff, 0); point.position.set(.37, 3.2, 3.5); follow.add(point);
+        const spot = new THREE.SpotLight(0xffffff, 12, 18, Math.PI / 1.5, 1, 1);
+        spot.position.set(0, 0, 2);
         spot.castShadow = true;
-        spot.shadow.bias = -.0001; spot.shadow.normalBias = .025;
+        spot.shadow.bias = 0; spot.shadow.normalBias = 0;
         spot.shadow.camera.near = .5; spot.shadow.camera.far = 50;
-        follow.add(spot); follow.add(spot.target);
-        const rim = new THREE.DirectionalLight(0xd9e5f5, .6); rim.position.set(5, 3, -8); follow.add(rim);
+        follow.add(spot); scene.add(spot.target);
         const textureLoader = new THREE.TextureLoader();
         const textures = {};
         let gltf;
         try {
             [gltf] = await Promise.all([
                 new Promise((resolve, reject) => new THREE.GLTFLoader().load('img/models/robot/steel-giant.glb', resolve, undefined, reject)),
-                ...['map', 'emissive', 'normal', 'roughness', 'metalness'].map(name => new Promise((resolve, reject) => textureLoader.load(`img/models/robot/${name}.webp`, texture => {
+                ...['map', 'emissive', 'normal', 'normal-detail', 'roughness', 'metalness'].map(name => new Promise((resolve, reject) => textureLoader.load(`img/models/robot/${name}.${name === 'normal-detail' ? 'png' : 'webp'}`, texture => {
                     // Estos atlas van con flipY=true; invertirlos descoloca los ojos y el metal xd.
                     texture.flipY = true;
-                    if (name === 'map' || name === 'emissive') texture.encoding = THREE.sRGBEncoding;
+                    texture.encoding = THREE.LinearEncoding;
                     textures[name] = texture; resolve(texture);
                 }, undefined, reject)))
             ]);
@@ -58,28 +80,12 @@
             if (object.material) (Array.isArray(object.material) ? object.material : [object.material]).forEach(material => material.dispose());
         });
 
-        // Genero los reflejos una vez para no cargar un HDR ni repetir ese trabajo xd.
-        const studio = new THREE.Scene(); studio.background = new THREE.Color(0x202126);
-        [
-            { position: [-6, 6, 7], size: [6, 10], color: [3, 2.8, 2.5] },
-            { position: [7, 3, -3], size: [3, 8], color: [1.5, 1.7, 2] },
-            { position: [0, 10, 0], size: [8, 8], color: [2, 2, 2] }
-        ].forEach(({ position, size, color }) => {
-            const panel = new THREE.Mesh(new THREE.PlaneGeometry(...size), new THREE.MeshBasicMaterial({ color: new THREE.Color(...color), side: THREE.DoubleSide }));
-            panel.position.set(...position); panel.lookAt(0, 0, 0); studio.add(panel);
-        });
-        const pmrem = new THREE.PMREMGenerator(renderer);
-        const environment = pmrem.fromScene(studio, .05, .1, 50);
-        scene.environment = environment.texture;
-        pmrem.dispose();
-        studio.traverse(object => { object.geometry?.dispose(); object.material?.dispose(); });
-
-        const material = new THREE.MeshStandardMaterial({ color: 0x6e6b65, map: textures.map, emissive: 0xffdd00, emissiveMap: textures.emissive, emissiveIntensity: 1.2, normalMap: textures.normal, normalScale: new THREE.Vector2(.75, .75), roughnessMap: textures.roughness, metalnessMap: textures.metalness, roughness: .7, metalness: .85, envMapIntensity: .65 });
+        const material = new THREE.MeshStandardMaterial({ color: 0x332f2c, map: textures.map, emissive: 0xffff00, emissiveMap: textures.emissive, emissiveIntensity: 0, normalMap: textures.normal, roughnessMap: textures.roughness, metalnessMap: textures.metalness, roughness: .2, metalness: .2, transparent: true, opacity: 0 });
         const robot = new THREE.Mesh(geometry, material); follow.add(robot);
         let width = 0, height = 0, quality = '', last = 0, rendered = false;
-        const pose = { x: 2.6, y: -8.77, z: -8.47, rx: .39, ry: -1.09 };
-        const mix = (a, b, t) => a + (b - a) * t;
-        function render({ progress = 0, pointerX = 0, pointerY = 0, motion = true, visible = true, now = performance.now(), force = false } = {}) {
+        let phase = null, phaseAt = 0, entrance = false;
+        let pose = { ...poses.idle, opacity: 0 }, from = { ...pose };
+        function render({ phase: requestedPhase = 'profile', pointerX = 0, pointerY = 0, motion = true, visible = true, now = performance.now(), force = false } = {}) {
             if (!visible || document.hidden || renderer.getContext().isContextLost()) return false;
             const selected = getQuality();
             const rect = canvas.getBoundingClientRect();
@@ -88,38 +94,47 @@
                 width = nextWidth; height = nextHeight; quality = selected;
                 renderer.setPixelRatio(Math.min(devicePixelRatio || 1, quality === 'low' ? 1 : quality === 'high' ? 2 : 1.5));
                 renderer.setSize(width, height, false);
-                camera.aspect = width / height; camera.updateProjectionMatrix();
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
                 // Bajo resolución y sombras, pero no quito el relieve ni los ojos xd.
                 renderer.shadowMap.enabled = quality !== 'low';
                 robot.castShadow = robot.receiveShadow = renderer.shadowMap.enabled;
-                const shadowSize = quality === 'high' ? 2048 : 1024;
+                const shadowSize = 2048;
                 if (spot.shadow.mapSize.x !== shadowSize) {
                     spot.shadow.map?.dispose(); spot.shadow.map = null;
                     spot.shadow.mapSize.set(shadowSize, shadowSize);
                 }
-                const anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), quality === 'low' ? 1 : quality === 'high' ? 8 : 4);
+                const anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), quality === 'high' ? 8 : 1);
                 Object.values(textures).forEach(texture => { texture.anisotropy = anisotropy; texture.needsUpdate = true; });
+                material.normalMap = quality === 'low' ? textures.normal : textures['normal-detail'];
+                material.emissive.setHex(quality === 'low' ? 0x000000 : 0xffff00);
                 force = true;
             }
             const interval = quality === 'low' ? 33 : 16;
             if (!force && rendered && now - last < interval) return motion;
-            const alpha = !motion || !rendered ? 1 : .15;
-            pose.x = mix(pose.x, mix(2.6, -3.33, progress), alpha);
-            pose.y = mix(pose.y, mix(-8.77, -10.77, progress), alpha);
-            pose.z = mix(pose.z, mix(-8.47, -4, progress), alpha);
-            pose.rx = mix(pose.rx, mix(.39, .06, progress), alpha);
-            pose.ry = mix(pose.ry, mix(-1.09, -5, progress), alpha);
+            const nextPhase = Object.hasOwn(poses, requestedPhase) ? requestedPhase : 'profile';
+            if (phase !== nextPhase) {
+                from = { ...pose }; entrance = phase === null && nextPhase === 'idle';
+                phase = nextPhase; phaseAt = now;
+            }
+            pose = motion ? samplePose(from, phase, now - phaseAt, entrance) : { ...poses[phase] };
             robot.position.set(pose.x, pose.y, pose.z);
-            robot.rotation.set(pose.rx, pose.ry, progress * .01);
-            follow.rotation.y = mix(follow.rotation.y, motion ? pointerX * Math.PI / 10 : 0, motion ? .06 : 1);
-            spot.position.set(-4 + (motion ? pointerX * 3 : 0), 8 + (motion ? pointerY * 2 : 0), 6);
+            robot.rotation.set(pose.rx, pose.ry, pose.rz);
+            const frames = Math.min(64, last ? now - last : 16.67) / (1000 / 60);
+            follow.rotation.y = mix(follow.rotation.y, motion ? pointerX * Math.PI / 10 : 0, motion ? 1 - Math.pow(.98, frames) : 1);
+            const lightEase = motion ? 1 - Math.pow(.6, frames) : 1;
+            spot.position.x = mix(spot.position.x, motion ? 12 * pointerX : 0, lightEase);
+            spot.position.y = mix(spot.position.y, motion ? 7 + 5 * pointerY : 7, lightEase);
+            point.intensity = pose.light; material.opacity = pose.opacity; material.emissiveIntensity = pose.emissive;
             renderer.render(scene, camera);
             rendered = true; last = now;
-            canvas.dataset.robotProgress = progress.toFixed(3);
+            canvas.dataset.robotPhase = phase;
+            canvas.dataset.robotProgress = phase === 'resume' ? '1.000' : '0.000';
+            canvas.dataset.robotYaw = follow.rotation.y.toFixed(4);
             canvas.dataset.quality = quality;
             return motion;
         }
-        return { render, dispose() { geometry.dispose(); material.dispose(); Object.values(textures).forEach(texture => texture.dispose()); environment.dispose(); spot.shadow.map?.dispose(); renderer.dispose(); } };
+        return { render, dispose() { geometry.dispose(); material.dispose(); Object.values(textures).forEach(texture => texture.dispose()); spot.shadow.map?.dispose(); renderer.dispose(); } };
     }
 
     async function createParticles(canvas, getQuality, invalidate = () => {}) {
@@ -258,5 +273,5 @@
         };
     }
 
-    window.portfolioAboutRobot = { create, createParticles };
+    window.portfolioAboutRobot = { create, createParticles, motion: { poses, samplePose, phaseForOffset } };
 })();

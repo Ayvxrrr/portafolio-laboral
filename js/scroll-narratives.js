@@ -275,30 +275,34 @@
         const status = document.createElement('span'); status.className = 'about-model-status'; status.setAttribute('role', 'status'); status.hidden = true; stage.append(status);
         const updateMeter = meter($('.page-scroll-cue', stage), 'DESLIZA HACIA ABAJO', 'Progreso de la historia de perfil');
         const backdrop = $('.resume-background', resume);
-        i18n.html(backdrop, () => [...i18n.t('CURRICULUM')].map((char, index) => `<span class="resume-letter-shell"><span class="resume-letter" style="--resume-side:${index % 2 ? 1 : -1};--resume-index:${index}">${escape(char)}</span></span>`).join(''));
-        let progress = 0, target = 0, start = 0, range = 1, last = 0, entryAt = 0, active = false, staticMode = !motion(), actor = null, attempted = false, dirty = true;
+        i18n.html(backdrop, () => [...i18n.t('CURRICULUM')].map((char, index) => `<span class="resume-letter-shell" style="--resume-side:${index % 2 ? 1 : -1}"><span class="resume-letter">${escape(char)}</span></span>`).join(''));
+        const blob = document.createElement('span'); blob.className = 'resume-blob'; blob.setAttribute('aria-hidden', 'true'); resume.prepend(blob);
+        let start = 0, last = 0, clock = 0, active = false, staticMode = !motion(), actor = null, attempted = false, dirty = true;
+        let phase = null, phaseAt = 0, background = 0, letters = 0, fromBackground = 0, fromLetters = 0;
         journey.classList.toggle('is-static', staticMode); journey.classList.add('about-story-ready');
-        const poseProgress = () => smooth((progress - .32) / .42);
         function align(element, options = {}) {
             if (element !== resume || !motion()) return false;
-            const length = Math.max(1, journey.offsetHeight - stage.offsetHeight);
-            window.scrollTo({ top: layoutTop(journey) + length * .84, behavior: options.behavior || 'instant' });
-            target = .84; dirty = true; invalidate(); return true;
+            const overflow = Math.max(0, stage.offsetHeight - innerHeight);
+            window.scrollTo({ top: layoutTop(journey) + overflow + innerHeight * .6, behavior: options.behavior || 'instant' });
+            dirty = true; invalidate(); return true;
         }
         function layout() {
             const nextStatic = !motion();
             if (staticMode !== nextStatic) {
                 const wasVisible = getView() === 'about' && journey.getBoundingClientRect().top < innerHeight && journey.getBoundingClientRect().bottom > 0;
-                const wasResume = progress > .5;
+                const wasResume = phase === 'resume';
                 staticMode = nextStatic; journey.classList.toggle('is-static', staticMode);
                 if (wasVisible) {
                     if (wasResume && !staticMode) align(resume);
                     else window.scrollTo({ top: Math.max(0, layoutTop(wasResume ? resume : section) - (wasResume ? 106 : 0)), behavior: 'instant' });
                 }
             }
-            start = layoutTop(journey); range = Math.max(1, journey.offsetHeight - (staticMode ? innerHeight : stage.offsetHeight));
+            // Primero deja leer todo el perfil si la escena supera la altura disponible xd.
+            const overflow = staticMode ? 0 : Math.max(0, stage.offsetHeight - innerHeight);
+            set(journey, '--about-stage-overflow', `${overflow}px`);
+            start = layoutTop(journey) + overflow;
             const rect = journey.getBoundingClientRect(); active = getView() === 'about' && rect.top < innerHeight && rect.bottom > 0;
-            target = clamp((window.scrollY - start) / range); dirty = true;
+            dirty = true;
         }
         function loadRobot() {
             if (attempted || !window.portfolioAboutRobot) return;
@@ -312,32 +316,43 @@
             });
         }
         function render(now) {
-            if (!active) { entryAt = 0; return false; }
-            if (!entryAt) entryAt = now;
+            if (!active) { last = 0; return false; }
             loadRobot();
             const elapsed = last ? Math.min(64, now - last) : 16; last = now;
-            progress = motion() ? progress + (target - progress) * (1 - Math.exp(-elapsed / 110)) : target;
-            if (Math.abs(progress - target) < .0005) progress = target;
-            const change = poseProgress(), entry = motion() ? smooth((now - entryAt) / 800) : 1;
-            updateMeter(progress);
-            const background = Math.round(9 + change * 226), foreground = Math.round(245 - change * 222);
-            set(stage, '--about-background', `rgb(${background},${background},${background})`);
+            if (motion()) clock += elapsed;
+            const offset = window.scrollY - start;
+            const nextPhase = staticMode || stage.dataset.robot === 'fallback' ? 'profile' : window.portfolioAboutRobot.motion.phaseForOffset(offset, innerHeight);
+            if (phase !== nextPhase) {
+                fromBackground = background; fromLetters = letters; phaseAt = now; phase = nextPhase;
+                stage.dataset.aboutPhase = phase;
+            }
+            const age = now - phaseAt, isResume = phase === 'resume';
+            background = fromBackground + ((isResume ? 1 : 0) - fromBackground) * smooth(age / 1500);
+            letters = fromLetters + ((isResume ? 1 : 0) - fromLetters) * smooth((age - (isResume ? 1000 : 0)) / (isResume ? 2000 : 1000));
+            updateMeter(clamp(offset / (innerHeight * .6)));
+            const shade = Math.round(background * 230), foreground = Math.round(255 - background * 210);
+            set(stage, '--about-background', `rgb(${shade},${shade},${shade})`);
+            const center = Math.round(60 + background * 170);
+            set(stage, '--about-gradient-center', `rgb(${center},${center},${center})`);
             set(stage, '--about-foreground', `rgb(${foreground},${foreground},${foreground})`);
-            set(stage, '--about-enter', entry.toFixed(4));
-            set(stage, '--about-intro-exit', staticMode ? '0' : smooth((progress - .27) / .17).toFixed(4));
-            set(stage, '--about-cv-enter', staticMode ? '1' : smooth((progress - .48) / .27).toFixed(4));
-            stage.classList.toggle('is-cv-visible', staticMode || progress > .55);
-            set(resume, '--resume-word-x', `${staticMode ? 0 : -progress * innerWidth * .38}px`);
-            set(resume, '--resume-float', `${motion() ? Math.sin(now / 2300) * 35 : 0}px`);
-            set(resume, '--resume-rotation', `${staticMode ? -25 : -35 + progress * 120}deg`);
+            set(stage, '--about-cv-enter', staticMode ? '1' : letters.toFixed(4));
+            stage.classList.toggle('is-cv-visible', staticMode || isResume);
+            set(resume, '--resume-word-x', `${motion() ? innerWidth * .25 * (1 - Math.cos(clock * Math.PI / 25000)) : 0}px`);
+            set(resume, '--resume-float', `${motion() ? 50 * (1 - Math.cos(clock * Math.PI / 4000)) : 0}px`);
             const pointer = getPointer();
-            const animated = actor?.render({ progress: staticMode ? 0 : change, pointerX: pointer.x, pointerY: -pointer.y, motion: motion(), visible: active, now, force: dirty });
+            set(resume, '--resume-pointer-x', `${motion() ? pointer.x * 35 : 0}px`);
+            set(resume, '--resume-pointer-y', `${motion() ? pointer.y * 25 : 0}px`);
+            const animated = actor?.render({ phase, pointerX: pointer.x, pointerY: -pointer.y, motion: motion(), visible: active, now, force: dirty });
             dirty = false;
-            return motion() && (animated || entry < 1 || progress !== target || progress > .45);
+            return motion() && (animated || age < 4000 || isResume);
         }
-        resume.addEventListener('focusin', () => { if (motion() && target < .65) align(resume); });
-        document.addEventListener('portfolio:view', () => { entryAt = 0; layout(); invalidate(); });
+        resume.addEventListener('focusin', () => { if (motion() && phase !== 'resume') align(resume); });
+        document.addEventListener('portfolio:view', () => { layout(); invalidate(); });
         document.addEventListener('portfolio:language', () => { layout(); invalidate(); });
+        if ('ResizeObserver' in window) {
+            const observer = new ResizeObserver(invalidate);
+            observer.observe(intro); observer.observe(stage);
+        }
         layout();
         if (getView() === 'about') loadRobot();
         else if ('requestIdleCallback' in window) requestIdleCallback(loadRobot, { timeout: 1200 });
