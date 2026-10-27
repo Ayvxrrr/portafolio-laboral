@@ -6,7 +6,7 @@ import vm from 'node:vm';
 const source = await readFile(new URL('../js/about-robot.js', import.meta.url), 'utf8');
 const context = vm.createContext({ window: {} });
 vm.runInContext(source, context);
-const { poses, samplePose, phaseForOffset } = context.window.portfolioAboutRobot.motion;
+const { poses, samplePose, phaseForOffset, pointerForInput } = context.window.portfolioAboutRobot.motion;
 
 test('la escena empieza centrada y cambia a perfil y CV en los mismos umbrales de desplazamiento', () => {
   assert.equal(phaseForOffset(-10, 900), 'idle');
@@ -49,4 +49,18 @@ test('retroceder interrumpe la animación sin saltos y recupera el perfil', () =
   for (const key of Object.keys(start)) assert.equal(start[key], interrupted[key]);
   const end = samplePose(interrupted, 'profile', 1500);
   for (const key of Object.keys(end)) assert.ok(Math.abs(end[key] - poses.profile[key]) < 1e-10);
+});
+
+test('los gestos táctiles conservan el robot y la iluminación centrados', () => {
+  const touch = { x: -.95, y: .8, active: true };
+  const pointer = pointerForInput(touch, false);
+  assert.equal(pointer.x, 0);
+  assert.equal(pointer.y, 0);
+  assert.equal(touch.x, -.95);
+  assert.equal(touch.y, .8);
+});
+
+test('el seguimiento del ratón se conserva en escritorio', () => {
+  const mouse = { x: .6, y: -.4, active: true };
+  assert.equal(pointerForInput(mouse, true), mouse);
 });

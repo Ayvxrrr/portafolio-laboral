@@ -268,6 +268,7 @@
 
     function createAbout({ motion, getView, getQuality, getPointer, invalidate }) {
         const section = $('#about'), stage = $('.about-presentation', section), resume = $('#resume'), intro = $('.about-introduction', stage);
+        const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
         const journey = document.createElement('div'); journey.className = 'about-journey'; stage.before(journey); journey.append(stage); stage.append(resume); resume.hidden = false;
         stage.classList.add('about-story-stage'); resume.classList.add('about-resume-panel');
         const layer = document.createElement('div'); layer.className = 'about-robot-layer';
@@ -339,7 +340,8 @@
             stage.classList.toggle('is-cv-visible', staticMode || isResume);
             set(resume, '--resume-word-x', `${motion() ? innerWidth * .25 * (1 - Math.cos(clock * Math.PI / 25000)) : 0}px`);
             set(resume, '--resume-float', `${motion() ? 50 * (1 - Math.cos(clock * Math.PI / 4000)) : 0}px`);
-            const pointer = getPointer();
+            // Deslizar en el celular no debe actuar como el ratón ni oscurecer el robot xd.
+            const pointer = window.portfolioAboutRobot.motion.pointerForInput(getPointer(), finePointer.matches);
             set(resume, '--resume-pointer-x', `${motion() ? pointer.x * 35 : 0}px`);
             set(resume, '--resume-pointer-y', `${motion() ? pointer.y * 25 : 0}px`);
             const animated = actor?.render({ phase, pointerX: pointer.x, pointerY: -pointer.y, motion: motion(), visible: active, now, force: dirty });
@@ -349,6 +351,7 @@
         resume.addEventListener('focusin', () => { if (motion() && phase !== 'resume') align(resume); });
         document.addEventListener('portfolio:view', () => { layout(); invalidate(); });
         document.addEventListener('portfolio:language', () => { layout(); invalidate(); });
+        finePointer.addEventListener('change', invalidate);
         if ('ResizeObserver' in window) {
             const observer = new ResizeObserver(invalidate);
             observer.observe(intro); observer.observe(stage);

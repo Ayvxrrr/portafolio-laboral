@@ -22,6 +22,7 @@
         return result;
     }
     const phaseForOffset = (offset, height) => offset <= 0 ? 'idle' : offset < height * .5 ? 'profile' : 'resume';
+    const pointerForInput = (pointer, fine) => fine ? pointer : { x: 0, y: 0 };
     const scripts = new Map();
     function loadScript(source) {
         if (scripts.has(source)) return scripts.get(source);
@@ -273,5 +274,5 @@
         };
     }
 
-    window.portfolioAboutRobot = { create, createParticles, motion: { poses, samplePose, phaseForOffset } };
+    window.portfolioAboutRobot = { create, createParticles, motion: { poses, samplePose, phaseForOffset, pointerForInput } };
 })();
