@@ -48,13 +48,14 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script src="js/preferences.js?v=23"></script>
 
-    <link rel="stylesheet" href="css/style.css?v=29">
+    <link rel="stylesheet" href="css/style.css?v=30">
     <link rel="stylesheet" href="css/enhancements.css?v=23">
-    <link rel="stylesheet" href="css/extras.css?v=23">
+    <link rel="stylesheet" href="css/extras.css?v=24">
     <link rel="stylesheet" href="css/ayvarcitoo.css?v=23">
     <link rel="stylesheet" href="css/scroll-scenes.css?v=23">
-    <link rel="stylesheet" href="css/replica.css?v=28">
+    <link rel="stylesheet" href="css/replica.css?v=30">
     <link rel="stylesheet" href="css/scroll-narratives.css?v=26">
+    <link rel="stylesheet" href="css/skills-experience.css?v=2">
     <link rel="icon" type="image/x-icon" href="img/favicon.ico?v=3">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Ayvar Jose", "url": "https://ayvar.pages.dev/", "image": "https://ayvar.pages.dev/img/yo.jpg", "jobTitle": "Desarrollador Full Stack Junior", "description": "Titulado en Computación e Informática, con experiencia en proyectos de sistemas, páginas web y aplicaciones móviles. Desarrollador freelance y docente de computación.", "address": {"@type": "PostalAddress", "addressLocality": "Lima", "addressCountry": "PE"}, "sameAs": ["https://github.com/Ayvxrrr", "https://www.linkedin.com/in/jose-ayvar-82a980398"], "alumniOf": [{"@type": "EducationalOrganization", "name": "IESTP Trentino Juan Pablo II"}], "knowsAbout": ["JavaScript", "PHP", "Node.js", "React", "MySQL", "Desarrollo web Full Stack", "Docencia de programación"]}</script>
 </head>
@@ -309,7 +310,7 @@
         <a class="resume-download" href="docs/CV-Ayvar-Jose.pdf" id="downloadCV" download="CV-Ayvar-Jose.pdf"><span>DESCARGA AQUÍ</span><span>MI CV EN</span><span>FORMATO PDF <i class="fas fa-arrow-down" aria-hidden="true"></i></span></a>
     </section>
 
-    <section id="skills" class="skills-section section-padding" data-view="about">
+    <section id="skills" class="skills-section skills-experience section-padding" data-view="about">
         <div class="container">
             <div class="section-header text-center mb-5" data-aos="fade-up">
                 <h6 class="section-subtitle">02 / Mi ecosistema tecnológico</h6>
@@ -318,9 +319,10 @@
                 <p class="section-description mt-3">Del primer píxel a la última consulta. Un stack para construir de principio a fin.</p>
             </div>
 
-            <div class="row g-4">
+            <div class="row g-4 skills-deck">
                 <div class="col-md-6 col-lg-4" data-aos="fade-up">
-                    <div class="skill-category-card">
+                    <div class="skill-category-card skill-panel" data-skill-category="frontend">
+                        <div class="skill-card-cap"><span>01 / EXPERIENCIA</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></div>
                         <div class="skill-category-header">
                             <div class="category-icon">
                                 <i class="fas fa-paint-brush"></i>
@@ -329,37 +331,37 @@
                         </div>
                         <div class="skill-category-body">
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="html" aria-pressed="true">
                                     <span class="skill-name">HTML5 / CSS3</span>
                                     <span class="skill-percent">95%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="95"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="javascript" aria-pressed="false">
                                     <span class="skill-name">JavaScript ES6+</span>
                                     <span class="skill-percent">90%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="90"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="react" aria-pressed="false">
                                     <span class="skill-name">React.js</span>
                                     <span class="skill-percent">85%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="85"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="angular" aria-pressed="false">
                                     <span class="skill-name">Angular</span>
                                     <span class="skill-percent">80%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="80"></div>
                                 </div>
@@ -369,7 +371,8 @@
                 </div>
 
                 <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
-                    <div class="skill-category-card">
+                    <div class="skill-category-card skill-panel" data-skill-category="backend">
+                        <div class="skill-card-cap"><span>02 / LÓGICA</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></div>
                         <div class="skill-category-header">
                             <div class="category-icon">
                                 <i class="fas fa-server"></i>
@@ -378,37 +381,37 @@
                         </div>
                         <div class="skill-category-body">
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="node" aria-pressed="true">
                                     <span class="skill-name">Node.js / Express</span>
                                     <span class="skill-percent">85%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="85"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="php" aria-pressed="false">
                                     <span class="skill-name">PHP</span>
                                     <span class="skill-percent">90%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="90"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="python" aria-pressed="false">
                                     <span class="skill-name">Python</span>
                                     <span class="skill-percent">75%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="75"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="java" aria-pressed="false">
                                     <span class="skill-name">Java Spring Boot</span>
                                     <span class="skill-percent">70%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="70"></div>
                                 </div>
@@ -418,7 +421,8 @@
                 </div>
 
                 <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
-                    <div class="skill-category-card">
+                    <div class="skill-category-card skill-panel" data-skill-category="data">
+                        <div class="skill-card-cap"><span>03 / INFRAESTRUCTURA</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></div>
                         <div class="skill-category-header">
                             <div class="category-icon">
                                 <i class="fas fa-database"></i>
@@ -427,37 +431,37 @@
                         </div>
                         <div class="skill-category-body">
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="sql" aria-pressed="true">
                                     <span class="skill-name">MySQL / PostgreSQL</span>
                                     <span class="skill-percent">90%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="90"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="mongo" aria-pressed="false">
                                     <span class="skill-name">MongoDB</span>
                                     <span class="skill-percent">80%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="80"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="aws" aria-pressed="false">
                                     <span class="skill-name">AWS Services</span>
                                     <span class="skill-percent">75%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="75"></div>
                                 </div>
                             </div>
                             <div class="skill-item">
-                                <div class="skill-info">
+                                <button type="button" class="skill-info skill-trigger" data-tech="docker" aria-pressed="false">
                                     <span class="skill-name">Docker / Git</span>
                                     <span class="skill-percent">85%</span>
-                                </div>
+                                </button>
                                 <div class="skill-progress">
                                     <div class="progress-bar" data-width="85"></div>
                                 </div>
@@ -467,61 +471,39 @@
                 </div>
             </div>
 
-            <div class="architecture-lab" id="architectureLab" data-aos="fade-up">
+            <div class="architecture-lab skills-lab" id="architectureLab" data-active-layer="frontend" data-aos="fade-up">
                 <div class="lab-intro">
-                    <span class="section-subtitle"><span class="status-dot" aria-hidden="true"></span> LIVE LAB / INTERACTIVO</span>
-                    <h3>Del clic<br>al <span class="text-primary">dato.</span></h3>
-                    <p>Así se conectan las piezas de una aplicación Full Stack. Toca cada capa o sigue el recorrido de una solicitud.</p>
-                    <button type="button" class="btn btn-outline-primary" id="runFlow"><i class="fas fa-play" aria-hidden="true"></i><span>Simular solicitud</span></button>
-                    <span class="lab-disclaimer">Simulación visual · sin llamadas externas</span>
+                    <span class="section-subtitle"><span class="status-dot" aria-hidden="true"></span> DEMO AUTOMÁTICA</span>
+                    <h3>Flujo<br><span class="text-primary">Full Stack.</span></h3>
+                    <p>Recorrido de una solicitud web.</p>
+                    <div class="lab-timeline" aria-hidden="true"><span class="timeline-request">SOLICITUD</span><span class="timeline-api">API</span><span class="timeline-data">DATOS</span><span class="timeline-response">RESPUESTA</span></div>
                 </div>
                 <div class="lab-workspace">
-                    <div class="lab-toolbar"><span><i class="fas fa-code-branch" aria-hidden="true"></i> architecture / full-stack</span><span class="lab-status" id="labStatus">LISTO PARA EXPLORAR</span></div>
-                    <div class="flow-nodes" role="group" aria-label="Explorar capas de la arquitectura">
-                        <button type="button" class="flow-node is-selected" data-layer="frontend" aria-pressed="true" aria-controls="layerDetail"><span class="flow-step">01</span><i class="fas fa-laptop-code" aria-hidden="true"></i><strong>Interfaz</strong><small>React · JavaScript</small></button>
+                    <div class="lab-toolbar"><span class="lab-file"><span class="lab-window-dots" aria-hidden="true"><i></i><i></i><i></i></span> architecture / full-stack</span><span class="lab-status" id="labStatus">RECORRIDO AUTOMÁTICO</span></div>
+                    <div class="flow-nodes" role="list" aria-label="Flujo de una solicitud web">
+                        <div class="flow-node is-selected" data-layer="frontend" role="listitem" aria-current="step"><span class="flow-step">01</span><i class="fas fa-laptop-code" aria-hidden="true"></i><strong>Interfaz</strong><small>React · JavaScript</small></div>
                         <span class="flow-connector" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-                        <button type="button" class="flow-node" data-layer="backend" aria-pressed="false" aria-controls="layerDetail"><span class="flow-step">02</span><i class="fas fa-server" aria-hidden="true"></i><strong>Servidor</strong><small>Node.js · PHP</small></button>
+                        <div class="flow-node" data-layer="backend" role="listitem"><span class="flow-step">02</span><i class="fas fa-server" aria-hidden="true"></i><strong>Servidor</strong><small>Node.js · PHP</small></div>
                         <span class="flow-connector" aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
-                        <button type="button" class="flow-node" data-layer="database" aria-pressed="false" aria-controls="layerDetail"><span class="flow-step">03</span><i class="fas fa-database" aria-hidden="true"></i><strong>Datos</strong><small>MySQL · MongoDB</small></button>
+                        <div class="flow-node" data-layer="database" role="listitem"><span class="flow-step">03</span><i class="fas fa-database" aria-hidden="true"></i><strong>Datos</strong><small>MySQL · MongoDB</small></div>
                     </div>
-                    <div class="layer-detail" id="layerDetail" aria-live="polite"><h4 id="layerTitle">La experiencia comienza aquí.</h4><p id="layerDescription">Interfaces adaptables e interactivas que convierten las acciones del usuario en solicitudes al servidor.</p></div>
-                    <div class="flow-console" id="flowLog" role="status"><span class="terminal-prompt" aria-hidden="true">❯</span> Sistema listo. Explora una capa o inicia la simulación.</div>
+                    <div class="flow-console" id="flowLog" role="status" aria-live="off">Interfaz → envía una solicitud.</div>
                 </div>
             </div>
 
-            <div class="programming-languages mt-5" data-aos="fade-up">
-                <h4 class="text-center mb-4">Lenguajes de Programación</h4>
-                <div class="language-charts">
-                    <div class="language-chart" data-aos="zoom-in">
-                        <div class="chart-circle" data-percent="90">
-                            <span class="chart-value">90%</span>
-                        </div>
-                        <h5>JavaScript</h5>
-                    </div>
-                    <div class="language-chart" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="chart-circle" data-percent="90">
-                            <span class="chart-value">90%</span>
-                        </div>
-                        <h5>PHP</h5>
-                    </div>
-                    <div class="language-chart" data-aos="zoom-in" data-aos-delay="200">
-                        <div class="chart-circle" data-percent="85">
-                            <span class="chart-value">85%</span>
-                        </div>
-                        <h5>Python</h5>
-                    </div>
-                    <div class="language-chart" data-aos="zoom-in" data-aos-delay="300">
-                        <div class="chart-circle" data-percent="80">
-                            <span class="chart-value">80%</span>
-                        </div>
-                        <h5>Java</h5>
-                    </div>
-                    <div class="language-chart" data-aos="zoom-in" data-aos-delay="400">
-                        <div class="chart-circle" data-percent="75">
-                            <span class="chart-value">75%</span>
-                        </div>
-                        <h5>SQL</h5>
-                    </div>
+            <div class="programming-languages skills-languages" data-aos="fade-up">
+                <div class="languages-heading"><div><span class="skills-kicker">DISTINTOS LENGUAJES. UNA MISMA IDEA.</span><h4>Lenguajes de Programación</h4></div><p>Elige uno. Explora su papel en el stack.</p></div>
+                <div class="language-feature skill-panel" id="languageFeature" data-language-key="javascript" aria-live="polite">
+                    <div class="language-visual" aria-hidden="true"><span class="language-orbit orbit-outer"></span><span class="language-orbit orbit-inner"></span><span class="language-core" id="languageMonogram">JS</span><span class="language-satellite satellite-code">&lt;/&gt;</span><span class="language-satellite satellite-data">{ }</span><span class="language-orbit-point"></span></div>
+                    <div class="language-feature-copy"><span class="language-focus-label">LENGUAJE EN FOCO</span><h3 id="languageFeatureTitle">JavaScript</h3><p id="languageFeatureDescription">Interactividad en el navegador y lógica para conectar experiencias web.</p><div class="language-usage" id="languageFeatureUsage">Interfaz · lógica · interacción</div></div>
+                    <button type="button" class="language-next" id="nextLanguage" aria-label="Explorar siguiente lenguaje"><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+                <div class="language-charts" role="group" aria-label="Explorar lenguajes de programación">
+                    <button type="button" class="language-chart language-choice" data-language-key="javascript" aria-pressed="true" aria-controls="languageFeature"><span class="language-card-number" aria-hidden="true">01</span><span class="chart-circle" data-percent="90"><span class="chart-value">90%</span></span><span class="language-name">JavaScript</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+                    <button type="button" class="language-chart language-choice" data-language-key="php" aria-pressed="false" aria-controls="languageFeature"><span class="language-card-number" aria-hidden="true">02</span><span class="chart-circle" data-percent="90"><span class="chart-value">90%</span></span><span class="language-name">PHP</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+                    <button type="button" class="language-chart language-choice" data-language-key="python" aria-pressed="false" aria-controls="languageFeature"><span class="language-card-number" aria-hidden="true">03</span><span class="chart-circle" data-percent="85"><span class="chart-value">85%</span></span><span class="language-name">Python</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+                    <button type="button" class="language-chart language-choice" data-language-key="java" aria-pressed="false" aria-controls="languageFeature"><span class="language-card-number" aria-hidden="true">04</span><span class="chart-circle" data-percent="80"><span class="chart-value">80%</span></span><span class="language-name">Java</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
+                    <button type="button" class="language-chart language-choice" data-language-key="sql" aria-pressed="false" aria-controls="languageFeature"><span class="language-card-number" aria-hidden="true">05</span><span class="chart-circle" data-percent="75"><span class="chart-value">75%</span></span><span class="language-name">SQL</span><i class="fas fa-arrow-up-right-from-square" aria-hidden="true"></i></button>
                 </div>
             </div>
         </div>
@@ -854,7 +836,6 @@
         <button type="button" class="icon-button" id="motionToggle" aria-label="Pausar animaciones" aria-pressed="false" title="Pausar animaciones"><i class="fas fa-pause" aria-hidden="true"></i></button>
         <button type="button" class="icon-button" data-open-command aria-label="Abrir navegación rápida" aria-haspopup="dialog" title="Navegación rápida · Ctrl K"><i class="fas fa-terminal" aria-hidden="true"></i></button>
     </div>
-    <button type="button" class="icon-button" id="installApp" aria-label="Instalar app" title="Instalar app"><i class="fas fa-download" aria-hidden="true"></i></button>
 
     <dialog class="command-dialog" id="commandDialog" aria-labelledby="commandTitle">
         <div class="dialog-heading"><h2 id="commandTitle"><i class="fas fa-terminal" aria-hidden="true"></i> ¿A dónde vamos?</h2><button type="button" class="icon-button" data-close-dialog aria-label="Cerrar navegación rápida"><i class="fas fa-xmark" aria-hidden="true"></i></button></div>
@@ -873,15 +854,16 @@
     <div class="toast-region" id="toastRegion" role="status" aria-live="polite" aria-atomic="true"></div>
     <span class="visually-hidden" id="languageStatus" role="status" aria-live="polite"></span>
 
-    <script src="js/i18n.js?v=33"></script>
+    <script src="js/i18n.js?v=36"></script>
     <script src="js/presentation-intro.js?v=34"></script>
     <script src="js/about-robot.js?v=27"></script>
     <script src="js/scroll-narratives.js?v=27"></script>
     <script src="js/replica-experience.js?v=25"></script>
     <script src="js/chapter-transitions.js?v=23"></script>
     <script src="js/scroll-scenes.js?v=23"></script>
-    <script src="js/script.js?v=31"></script>
-    <script src="js/enhancements.js?v=28"></script>
+    <script src="js/script.js?v=34"></script>
+    <script src="js/skills-experience.js?v=2"></script>
+    <script src="js/enhancements.js?v=29"></script>
     <script src="js/extras.js?v=23"></script>
     <script src="js/ayvarcitoo.js?v=30"></script>
     <script src="js/portrait-robot.js?v=23"></script>

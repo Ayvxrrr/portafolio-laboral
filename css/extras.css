@@ -8,5 +8,4 @@
 .is-offscreen, .is-offscreen *, .is-offscreen::before, .is-offscreen::after, .is-offscreen *::before, .is-offscreen *::after { animation-play-state: paused !important; }
 #contact { content-visibility: auto; contain-intrinsic-size: auto 700px; }
 .form-fallback { color: var(--primary-color); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
-#installApp[hidden] { display: none; }
 :root[data-accent="mono"] .preview-site-bar > span:last-child { color: #f5f5f5; }

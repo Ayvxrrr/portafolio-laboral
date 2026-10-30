@@ -16,24 +16,6 @@
 .replica-site .language-switch button::after { content: ''; position: absolute; top: 50%; left: 0; width: 100%; height: max(100%, 44px); translate: 0 -50%; }
 .replica-site .language-switch button:focus-visible { outline-color: #fff; outline-offset: 5px; }
 .replica-site .experience-controls { display: none !important; }
-.replica-site #installApp {
-    position: fixed;
-    right: max(24px, env(safe-area-inset-right));
-    bottom: max(75px, calc(75px + env(safe-area-inset-bottom)));
-    left: auto;
-    z-index: 1400;
-    width: 42px;
-    height: 42px;
-    border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
-    border-radius: 50%;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
-    color: var(--text);
-    font-size: 14px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-}
-.replica-site #installApp:hover { background: var(--text); color: var(--bg); }
-.replica-site #installApp:focus-visible { outline-color: var(--text); outline-offset: 4px; }
 .replica-site .cursor-halo { color: #fff; border-color: #fff; mix-blend-mode: difference; width: 30px; height: 30px; opacity: 1; transition: width .22s, height .22s, background .22s, opacity .2s; }
 .replica-site .cursor-halo.is-hovering { width: 70px; height: 70px; background: #fff; opacity: 1; }
 .replica-site .cursor-halo.is-active { opacity: 1; }
@@ -169,6 +151,40 @@
 .replica-site .section-subtitle { color: var(--muted); }
 .replica-site .skill-category-card, .replica-site .certificate-card { border-radius: 0; background: transparent; border-width: 1px 0 0; box-shadow: none; }
 .replica-site .architecture-lab { border-radius: 0; }
+
+.replica-site #skills { font-family: 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .section-description { font-size: clamp(18px, 1.25vw, 24px); line-height: 1.7; }
+.replica-site #skills .skill-category-header h4 { font-size: clamp(24px, 1.8vw, 32px); font-weight: 700; }
+.replica-site #skills .skill-name { font-size: clamp(17px, 1.15vw, 22px); line-height: 1.5; }
+.replica-site #skills .skill-percent { font: 600 clamp(15px, .95vw, 18px)/1.5 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .skill-item { margin-bottom: 25px; }
+.replica-site #skills .lab-intro .section-subtitle { font-size: 13px; line-height: 1.5; letter-spacing: 1px; }
+.replica-site #skills .lab-intro h3 { font-size: clamp(36px, 3vw, 54px); font-weight: 800; line-height: 1.1; }
+.replica-site #skills .lab-intro > p { max-width: 36ch; font-size: clamp(17px, 1.15vw, 22px); line-height: 1.75; }
+.replica-site #skills .lab-disclaimer { font: 400 14px/1.6 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .lab-toolbar { flex-wrap: wrap; font: 500 14px/1.5 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .lab-status { max-width: none; font-size: 13px; line-height: 1.5; }
+.replica-site #skills .flow-node { min-height: 155px; padding: 34px 12px 24px; }
+.replica-site #skills .flow-step { font: 600 13px/1.4 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .flow-node > strong { font: 700 clamp(18px, 1.2vw, 23px)/1.4 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .flow-node > small { max-width: none; font: 400 clamp(14px, .95vw, 17px)/1.6 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .layer-detail { min-height: 150px; }
+.replica-site #skills .layer-detail h4 { font-size: clamp(20px, 1.35vw, 26px); line-height: 1.4; }
+.replica-site #skills .layer-detail p { font-size: clamp(17px, 1.1vw, 21px); line-height: 1.7; }
+.replica-site #skills .flow-console { min-height: 54px; font: 400 16px/1.65 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .programming-languages > h4 { font-size: clamp(24px, 1.8vw, 30px); }
+.replica-site #skills .chart-value { font: 600 18px/1.5 'Segoe UI', Arial, sans-serif; }
+.replica-site #skills .language-chart h5 { font-size: 17px; }
+
+@media (max-width: 650px) {
+    .replica-site #skills .flow-nodes { flex-direction: column; align-items: stretch; }
+    .replica-site #skills .flow-node { min-height: 140px; }
+    .replica-site #skills .flow-connector { width: 1px; height: 28px; align-self: center; }
+    .replica-site #skills .flow-connector > i { left: 50%; right: auto; top: auto; bottom: -1px; translate: -50% 0; rotate: 90deg; }
+    .replica-site #skills .flow-running .flow-connector::after { left: -2px; top: 0; animation-name: lab-packet-vertical; }
+    .replica-site #skills .layer-detail { min-height: 280px; }
+}
+@keyframes lab-packet-vertical { from { top: 0; } to { top: calc(100% - 3px); } }
 
 .replica-site #projects { --bg: #fff; --surface: #fff; --surface-muted: #f4f4f4; --surface-raised: #eee; --text: #171717; --muted: #626262; --accent: #111; --accent-ink: #fff; --primary-color: #111; --border: #00000022; --glow: #00000015; background: var(--bg) !important; color: var(--text); }
 :root[data-theme="light"] .replica-site #projects { --bg: #090909; --surface: #090909; --surface-muted: #151515; --surface-raised: #202020; --text: #f5f5f5; --muted: #aaa; --accent: #f5f5f5; --accent-ink: #111; --primary-color: #f5f5f5; --border: #ffffff22; --glow: #ffffff15; }
@@ -359,7 +375,6 @@
     .presentation-orb .orb-toggle { position: static; width: auto; height: auto; border: 0; transform: none; }
     .presentation-orb .orb-switch-ball { position: static; width: auto; height: auto; background: transparent; color: var(--text); font-size: 18px; }
     .presentation-orb:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
-    .replica-site #installApp { right: max(16px, env(safe-area-inset-right)); bottom: max(72px, calc(72px + env(safe-area-inset-bottom))); width: 44px; height: 44px; }
     .replica-site .ayv-fab { right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); width: 44px; height: 44px; }
     .replica-site .ayv-fab::after { inset: -3px; border-radius: 50%; }
     .replica-site .ayv-tip { right: 16px; bottom: 72px; max-width: min(240px, calc(100vw - 32px)); }

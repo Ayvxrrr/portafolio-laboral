@@ -280,72 +280,88 @@
 
     // Es una simulación visual; no envío solicitudes a un servidor xd.
     const lab = $('#architectureLab');
-    const runFlow = $('#runFlow');
     const flowLog = $('#flowLog');
-    const layerContent = {
-        frontend: { title: 'La experiencia comienza aquí.', description: 'Interfaces adaptables e interactivas que convierten las acciones del usuario en solicitudes al servidor.' },
-        backend: { title: 'La lógica que conecta todo.', description: 'El servidor recibe la solicitud, valida la información y coordina la respuesta mediante una API y las reglas de la aplicación.' },
-        database: { title: 'Información organizada, decisiones claras.', description: 'La capa de datos almacena y consulta la información que necesita la aplicación, usando bases de datos relacionales o documentales.' }
-    };
-    let flowTimer;
-    let flowRunning = false;
+    const labStatus = $('#labStatus');
+    const flowWorkspace = $('.lab-workspace', lab);
+    const flowNodes = $$('[data-layer]', lab);
+    const flowSteps = [
+        ['frontend', '01 / SOLICITUD', 'Interfaz → envía una solicitud.'],
+        ['backend', '02 / PROCESAMIENTO', 'Servidor → procesa la solicitud.'],
+        ['database', '03 / CONSULTA', 'Datos → consulta la información.']
+    ];
+    let flowTimer = null, flowRunning = false, flowVisible = false;
+    const canRunFlow = () => flowVisible && !document.hidden && motionEnabled() && !lab.closest('[hidden]');
     function selectLayer(layer) {
-        const content = layerContent[layer];
-        if (!content) return;
-        $$('[data-layer]').forEach(button => {
-            const selected = button.dataset.layer === layer;
-            button.classList.toggle('is-selected', selected);
-            button.setAttribute('aria-pressed', String(selected));
+        lab.dataset.activeLayer = layer;
+        flowNodes.forEach(node => {
+            const selected = node.dataset.layer === layer;
+            node.classList.toggle('is-selected', selected);
+            node.setAttribute('aria-current', selected ? 'step' : 'false');
         });
-        $('#layerTitle').textContent = content.title;
-        $('#layerDescription').textContent = content.description;
     }
     function stopFlow() {
         clearTimeout(flowTimer);
-        flowRunning = false;
-        runFlow.disabled = false;
+        flowTimer = null; flowRunning = false;
         lab.classList.remove('flow-running');
-        $('span', runFlow).textContent = 'Simular solicitud';
+        lab.dataset.flowState = 'paused';
     }
-    function finishFlow() {
-        stopFlow();
-        selectLayer('frontend');
-        $('#labStatus').textContent = 'RECORRIDO COMPLETADO';
-        flowLog.classList.add('is-complete');
-        i18n.text(flowLog, '✓ Simulación completada: interfaz → servidor → datos → respuesta.');
+    function scheduleFlow(callback, delay) {
+        clearTimeout(flowTimer);
+        flowTimer = setTimeout(() => { flowTimer = null; callback(); }, delay);
     }
-    $$('[data-layer]').forEach(button => button.addEventListener('click', () => {
-        stopFlow();
-        selectLayer(button.dataset.layer);
-        $('#labStatus').textContent = 'EXPLORANDO ARQUITECTURA';
-        flowLog.classList.remove('is-complete');
-        const layer = { frontend: 'Interfaz', backend: 'Servidor', database: 'Datos' }[button.dataset.layer];
-        i18n.text(flowLog, () => t('❯ Capa seleccionada: {layer}. Inicia la simulación para recorrer el flujo completo.', { layer: t(layer) }));
-    }));
-    runFlow.addEventListener('click', () => {
-        stopFlow();
-        if (!motionEnabled()) { finishFlow(); return; }
+    function runFlowStep(index = 0) {
+        if (!canRunFlow()) { stopFlow(); return; }
         flowRunning = true;
-        runFlow.disabled = true;
-        $('span', runFlow).textContent = 'Simulando…';
+        if (index === flowSteps.length) {
+            lab.classList.remove('flow-running'); lab.dataset.flowState = 'complete';
+            selectLayer('frontend');
+            i18n.text(labStatus, '04 / RESPUESTA');
+            flowLog.classList.add('is-complete');
+            i18n.text(flowLog, 'Respuesta → vuelve a la interfaz.');
+            scheduleFlow(() => runFlowStep(), 2000);
+            return;
+        }
+        lab.dataset.flowState = 'running';
         lab.classList.add('flow-running');
         flowLog.classList.remove('is-complete');
-        const steps = [
-            ['frontend', '01 / SOLICITUD', '❯ Interfaz → el usuario solicita la lista de proyectos.'],
-            ['backend', '02 / PROCESAMIENTO', '❯ Servidor → la API valida y prepara la consulta.'],
-            ['database', '03 / CONSULTA', '❯ Datos → la información vuelve al servidor y a la interfaz.']
-        ];
-        function step(index) {
-            if (index === steps.length) { finishFlow(); return; }
-            const [layer, status, message] = steps[index];
-            selectLayer(layer);
-            $('#labStatus').textContent = status;
-            i18n.text(flowLog, message);
-            flowTimer = setTimeout(() => step(index + 1), 1000);
+        const [layer, status, message] = flowSteps[index];
+        selectLayer(layer);
+        i18n.text(labStatus, status);
+        i18n.text(flowLog, message);
+        scheduleFlow(() => runFlowStep(index + 1), 1600);
+    }
+    function syncFlow() {
+        if (!canRunFlow()) {
+            stopFlow();
+            if (!motionEnabled()) {
+                i18n.text(labStatus, 'DEMO PAUSADA');
+                i18n.text(flowLog, 'Interfaz → servidor → datos → respuesta.');
+            }
+            return;
         }
-        step(0);
-    });
-    document.addEventListener('portfolio:motion', () => { if (flowRunning && !motionEnabled()) finishFlow(); });
+        if (!flowRunning && flowTimer === null) runFlowStep();
+    }
+    function updateFlowVisibility() {
+        const rect = flowWorkspace.getBoundingClientRect();
+        flowVisible = rect.width > 0 && rect.top < innerHeight && rect.bottom > 0;
+        syncFlow();
+    }
+    // Repito el recorrido solo mientras se ve; al salir no dejo temporizadores activos xd.
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+            flowVisible = entries[0].isIntersecting;
+            syncFlow();
+        }, { threshold: 0 });
+        observer.observe(flowWorkspace);
+    } else {
+        addEventListener('scroll', updateFlowVisibility, { passive: true });
+        addEventListener('resize', updateFlowVisibility, { passive: true });
+        updateFlowVisibility();
+    }
+    document.addEventListener('portfolio:view', updateFlowVisibility);
+    document.addEventListener('portfolio:motion', syncFlow);
+    document.addEventListener('visibilitychange', syncFlow);
+    syncFlow();
 
     function openDialog(dialog) {
         $$('dialog[open]').forEach(open => open.close());
@@ -453,7 +469,7 @@
     ].map(([label, id, icon]) => ({ label, icon, group: 'SECCIÓN', run: () => goTo(id) }));
     const commandActions = [
         ...navigationActions,
-        { label: 'Laboratorio Full Stack interactivo', icon: 'microchip', group: 'EXPLORAR', run: () => goTo('architectureLab') },
+        { label: 'Demostración Full Stack', icon: 'microchip', group: 'EXPLORAR', run: () => goTo('architectureLab') },
         ...projectItems.map(item => ({ label: $('.project-title', item).textContent, icon: 'arrow-up-right-from-square', group: 'PROYECTO', run: () => showProject(item.dataset.project) })),
         { label: 'Descargar CV', icon: 'download', group: 'ACCIÓN', run: () => $('#downloadCV').click() },
         { label: 'Copiar correo electrónico', icon: 'copy', group: 'ACCIÓN', run: copyEmail },
@@ -549,7 +565,7 @@
                 result = 'Ayvar Jose · Desarrollador Full Stack Junior\nTitulado en Computación e Informática.\nExperiencia en proyectos de sistemas, páginas web y aplicaciones móviles.\nDesarrollador freelance y docente de computación.\nPachacamac, Lima, Perú. Disponible para nuevos proyectos.';
                 break;
             case 'skills': result = $$('.skill-name').map(name => `→ ${name.textContent}`).join('\n'); break;
-            case 'lab': result = 'Abriendo el laboratorio. Explora las capas o simula una solicitud Full Stack.'; goTo('architectureLab'); break;
+            case 'lab': result = 'Demostración automática del flujo Full Stack.'; goTo('architectureLab'); break;
             case 'projects': result = 'Abriendo mis proyectos. Filtra por categoría o busca tu tecnología favorita.'; goTo('projects'); break;
             case 'contact': result = 'Conectemos: {email}\nTambién puedes usar el formulario de contacto.'; params = { email: emailAddress }; goTo('contact'); break;
             case 'cv': result = 'Descarga solicitada: CV-Ayvar-Jose.pdf'; $('#downloadCV').click(); break;

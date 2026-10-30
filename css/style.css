@@ -220,8 +220,6 @@ kbd { font: 10px var(--mono); background: var(--surface-raised); color: var(--mu
 .lab-intro .section-subtitle { display: flex; align-items: center; gap: 9px; font-size: 8px; letter-spacing: 1.2px; }
 .lab-intro h3 { font-size: 38px; letter-spacing: -1.5px; margin-bottom: 15px; font-weight: 500; }
 .lab-intro > p { color: var(--muted); font-size: 12px; line-height: 1.9; max-width: 270px; }
-.lab-intro .btn { min-height: 40px; padding: 10px 15px; font-size: 10px; gap: 11px; margin-top: 3px; }
-.lab-intro .btn > i { font-size: 9px; }
 .lab-disclaimer { display: block; font: 8px/1.7 var(--mono); color: var(--muted); margin-top: 12px; }
 .lab-workspace { min-width: 0; align-self: center; }
 .lab-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-bottom: 20px; font: 8px var(--mono); color: var(--muted); }

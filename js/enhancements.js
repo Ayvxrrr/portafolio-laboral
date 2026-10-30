@@ -112,17 +112,3 @@
     addEventListener('beforeinstallprompt', event => { event.preventDefault(); window.__pwaPrompt = event; });
     addEventListener('appinstalled', () => { window.__pwaPrompt = null; });
 })();
-
-(() => {
-    const btn = document.getElementById('installApp');
-    if (!btn) return;
-    if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) { btn.hidden = true; return; }
-    btn.addEventListener('click', async () => {
-        const prompt = window.__pwaPrompt;
-        if (prompt) { prompt.prompt(); await prompt.userChoice.catch(() => {}); window.__pwaPrompt = null; return; }
-        const toast = document.getElementById('toastRegion');
-        window.portfolioI18n.text(toast, /iphone|ipad|ipod/i.test(navigator.userAgent) ? 'En iPhone: toca Compartir y luego "Añadir a pantalla de inicio".' : 'Abre el menú del navegador y elige "Instalar app" o "Añadir a pantalla de inicio".');
-        toast.classList.add('is-visible');
-        setTimeout(() => toast.classList.remove('is-visible'), 4500);
-    });
-})();
