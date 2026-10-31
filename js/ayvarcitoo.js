@@ -11,12 +11,24 @@
     const norm = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9+\s]/g, ' ').replace(/\s+/g, ' ').trim();
     const has = (t, k) => k.length <= 3 ? ` ${t} `.includes(` ${k} `) : t.includes(k);
 
+    const CV_FILE = Object.freeze({ href: '/docs/CV-Ayvar-Jose.pdf', name: 'CV-Ayvar-Jose.pdf' });
+    function wantsCV(text) {
+        const n = norm(text);
+        if (!/\b(?:cv|c v|curriculum(?: vitae)?|curriculo|hoja de vida|resume)\b/.test(n)) return false;
+        if (/\b(?:mi|my|nuestro|our) (?:cv|curriculum|curriculo|hoja de vida|resume)\b/.test(n) && !/\b(?:ayvar|jose)\b/.test(n)) return false;
+        if (/\b(?:no (?:me )?(?:envies|mandes|pases|compartas|adjuntes|brindes)|no (?:quiero|necesito)(?: (?:el|su|tu|un))? (?:cv|curriculum|hoja de vida)|(?:do not|don t) (?:send|share|attach|give|want|need))\b/.test(n)) return false;
+        if (/\b(?:descarg\w*|envi\w*|mand[aeo]\w*|pas[aeo]\w*|brind\w*|compart\w*|adjunt\w*|facilit\w*|obten\w*|entreg\w*|dame|dar(?:me|nos)?|das|darias|send|give|share|attach|download|get|provide|forward|supply)\b/.test(n)) return true;
+        if (/\b(?:hacer|crear|redactar|mejorar|corregir|revisar|analizar|resumir|traducir|modificar|contiene|incluye|dice|review|write|create|improve|edit|summarize|translate|contain|says|feedback)\b/.test(n) || /^(?:que|cual|como|what|which|how)\b/.test(n) || /\b(?:quiero|necesito|want|need|like) (?:saber|conocer|entender|to know|to understand)\b/.test(n)) return false;
+        if (/\b(?:muestr\w*|mostrar|ver|quiero|necesito|abrir|abre|tienes|tiene|tener|recibir|conseguir|disponible|view|show|see|want|need|like|open|have|receive|available|where)\b/.test(n)) return true;
+        return /^(?:(?:el|su|tu|the|his|your|ayvar(?: jose)?(?: s)?) )?(?:cv|c v|curriculum(?: vitae)?|curriculo|hoja de vida|resume)(?: (?:de |del |of |for )?(?:ayvar(?: jose)?|jose(?: ayvar)?|him|you))?(?: por favor| please)?$/.test(n);
+    }
+
     const age = () => { const t = new Date(); let a = t.getFullYear() - 2005; if (t < new Date(t.getFullYear(), 3, 28)) a--; return a; };
     const WA = 'https://wa.me/51946016559?text=Hola%20Jose%2C%20vi%20tu%20portafolio%20y%20quiero%20hablar%20contigo.';
     const A = {
         wa: { label: 'WhatsApp', href: WA }, mail: { label: 'Correo', href: 'mailto:joseayvar28@gmail.com' },
         gh: { label: 'GitHub', href: 'https://github.com/Ayvxrrr' }, li: { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jose-ayvar-82a980398' },
-        cv: { label: 'Descargar CV', href: 'docs/CV-Ayvar-Jose.pdf', download: true },
+        cv: { attachment: 'cv' },
         go: (label, id) => ({ label, go: id })
     };
     const sections = [['inicio', 'home'], ['home', 'home'], ['sobre mi', 'about'], ['about', 'about'], ['stack', 'skills'], ['habilidades', 'skills'], ['skills', 'skills'], ['proyectos', 'projects'], ['projects', 'projects'], ['taller', 'playground'], ['retrato', 'playground'], ['particulas', 'playground'], ['playground', 'playground'], ['workshop', 'playground'], ['editor', 'playground'], ['retos', 'playground'], ['challenges', 'playground'], ['contacto', 'contact'], ['contact', 'contact']];
@@ -35,7 +47,6 @@
         { k: ['proyecto', 'proyectos', 'trabajos hechos', 'realizado', 'demo', 'portafolio de', 'ayvar pos', 'ayvar-pos'], a: 'Puedes probar <strong>Ayvar AI</strong>, su asistente de inteligencia artificial; <strong>El Toñito</strong>, una web para pollería con carta interactiva, pedidos por WhatsApp y asistente con IA; y <strong>Ayvar POS</strong>, un sistema de ventas e inventario con React, Node.js y Firebase. Los tres tienen vista previa, demo pública y código en GitHub. En la información de Ayvar POS están los accesos de administrador, cajero y almacén, exclusivos para la demo pública. Fitness y dashboard siguen siendo conceptos visuales.', act: [A.go('Ver proyectos', 'projects'), A.gh] },
         { k: ['contact', 'escribir', 'whatsapp', 'wsp', 'correo', 'email', 'mail', 'telefono', 'numero', 'llamar', 'celular', 'hablar con'], a: 'Puedes escribirle usando el botón de <strong>WhatsApp</strong>, el formulario de contacto o su correo <strong>joseayvar28@gmail.com</strong>.', act: [A.wa, A.mail, A.go('Formulario', 'contact')] },
         { k: ['disponible', 'contratar', 'contratarte', 'freelance', 'cotizar', 'presupuesto', 'precio', 'cobras', 'cuanto cuesta', 'tarifa', 'sitio web para', 'pagina web para'], a: 'Sí, Jose está <strong>disponible para nuevos proyectos</strong> web y sistemas a medida. El presupuesto depende de lo que necesites, así que lo mejor es contarle tu idea por WhatsApp.', act: [A.wa, A.mail] },
-        { k: ['cv', 'curriculum', 'hoja de vida', 'resume'], a: 'Aquí tienes su CV en PDF 📄', act: [A.cv] },
         { k: ['donde vive', 'ubicacion', 'ubicado', 'lima', 'pachacamac', 'pais', 'remoto', 'presencial'], a: 'Jose vive en <strong>Lima, Perú</strong> (Pachacámac). Para coordinar la modalidad de trabajo, escríbele directamente.', act: [A.wa] },
         { k: ['ingles', 'idioma', 'idiomas', 'english'], a: 'Su CV indica <strong>inglés nivel básico</strong>. Español es su idioma principal.' },
         { k: ['github', 'linkedin', 'redes', 'repositorio'], a: 'Encuentras a Jose en GitHub y LinkedIn:', act: [A.gh, A.li] },
@@ -62,7 +73,6 @@
         proyecto: ['project', 'portfolio', 'what has he built'],
         contact: ['reach him', 'write to', 'phone', 'number', 'message jose', 'talk to jose'],
         disponible: ['available', 'availability', 'hire', 'quote', 'budget', 'pricing', 'price', 'cost', 'rate', 'website for'],
-        cv: ['curriculum vitae'],
         'donde vive': ['where does he live', 'where is he', 'location', 'remote', 'on site', 'peru'],
         ingles: ['spoken language', 'spanish'],
         github: ['social', 'repository', 'repositories'],
@@ -120,10 +130,24 @@
     const hist = [];
     let ai = AI_ENDPOINT ? 'unknown' : 'off', welcomed = false, busy = false;
 
+    function cvAttachment() {
+        const card = document.createElement('a');
+        card.className = 'ayv-attachment';
+        card.href = CV_FILE.href;
+        card.download = CV_FILE.name;
+        card.setAttribute('data-attachment', 'cv');
+        card.setAttribute('aria-label', t('Descargar CV de Ayvar Jose en PDF'));
+        card.innerHTML = '<span class="ayv-file-icon" aria-hidden="true"><i class="fas fa-file-pdf"></i><small>PDF</small></span><span class="ayv-file-info"><strong></strong><span class="ayv-file-name" data-i18n-ignore></span><span class="ayv-file-download"></span></span><i class="fas fa-download ayv-file-arrow" aria-hidden="true"></i>';
+        i18n.text($('.ayv-file-info strong', card), 'CV de Ayvar Jose');
+        $('.ayv-file-name', card).textContent = CV_FILE.name;
+        i18n.text($('.ayv-file-download', card), 'Descargar CV');
+        return card;
+    }
     function actions(list) {
         const box = document.createElement('div');
         box.className = 'ayv-acts';
         list.forEach(a => {
+            if (a.attachment === 'cv') { box.append(cvAttachment()); return; }
             const el = document.createElement(a.go || a.install ? 'button' : 'a');
             el.className = 'ayv-act';
             el.textContent = a.label;
@@ -175,6 +199,7 @@
         } catch { if (ai === 'unknown') ai = 'off'; return null; } finally { clearTimeout(t); }
     }
     async function answer(text) {
+        if (wantsCV(text)) return { a: 'Aquí tienes su CV en PDF 📄', act: [A.cv] };
         const n = norm(text);
         const nav = /(llevame|lleva|ir a|ve a|vamos|muestrame|mostrar|abre|abrir|quiero ver|ver|take me|go to|show|open|want to see)\b/.test(n) && sections.find(([k]) => n.includes(k));
         if (nav) { setTimeout(() => go(nav[1]), 500); return { a: () => t('Te llevo a <strong>{section}</strong> 🚀', { section: t(sectionLabels[nav[1]]) }) }; }

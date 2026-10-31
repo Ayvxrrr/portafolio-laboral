@@ -24,6 +24,18 @@
 .ayv-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--primary-color); animation: ayv-bounce 1s infinite; }
 .ayv-typing i:nth-child(2) { animation-delay: .15s; } .ayv-typing i:nth-child(3) { animation-delay: .3s; }
 .ayv-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.ayv-msg { min-width: 0; }
+.ayv-attachment { flex: 1 0 100%; min-width: 0; display: grid; grid-template-columns: 36px minmax(0, 1fr) 16px; align-items: center; gap: 11px; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-muted); color: var(--text); text-decoration: none; }
+.ayv-attachment:hover { background: var(--surface-raised); border-color: var(--text); color: var(--text); }
+.ayv-attachment:focus-visible { outline-offset: -3px; }
+.ayv-file-icon { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text); }
+.ayv-file-icon > i { font-size: 26px; }
+.ayv-file-icon > small { font-size: 10px; font-weight: 700; letter-spacing: .05em; }
+.ayv-file-info { min-width: 0; display: flex; flex-direction: column; gap: 3px; overflow-wrap: anywhere; }
+.ayv-file-info > strong { font-size: 13px; line-height: 1.4; }
+.ayv-file-name { color: var(--muted); font-size: 11px; line-height: 1.5; }
+.ayv-file-download { width: fit-content; margin-top: 4px; font-size: 12px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.ayv-file-arrow { font-size: 15px; }
 .ayv-act, .ayv-chips button { padding: 7px 12px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--primary-color); font-size: 11px; font-weight: 600; text-decoration: none; transition: background .2s, border-color .2s, transform .2s; }
 .ayv-act:hover, .ayv-chips button:hover { background: var(--accent-soft); border-color: var(--primary-color); transform: translateY(-2px); }
 .ayv-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 12px; }

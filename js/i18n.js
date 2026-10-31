@@ -242,6 +242,7 @@
         ['Puedes escribirle usando el botón de <strong>WhatsApp</strong>, el formulario de contacto o su correo <strong>joseayvar28@gmail.com</strong>.', 'Reach him using the <strong>WhatsApp</strong> button, the contact form or email at <strong>joseayvar28@gmail.com</strong>.'],
         ['Sí, Jose está <strong>disponible para nuevos proyectos</strong> web y sistemas a medida. El presupuesto depende de lo que necesites, así que lo mejor es contarle tu idea por WhatsApp.', 'Yes, Jose is <strong>available for new projects</strong>, including websites and custom systems. Pricing depends on your needs, so tell him about your idea on WhatsApp.'],
         ['Aquí tienes su CV en PDF 📄', 'Here’s his CV in PDF format 📄'],
+        ['CV de Ayvar Jose', 'Ayvar Jose’s CV'], ['Descargar CV de Ayvar Jose en PDF', 'Download Ayvar Jose’s CV as a PDF'],
         ['Jose vive en <strong>Lima, Perú</strong> (Pachacámac). Para coordinar la modalidad de trabajo, escríbele directamente.', 'Jose lives in <strong>Lima, Peru</strong> (Pachacámac). Contact him directly to discuss working arrangements.'],
         ['Su CV indica <strong>inglés nivel básico</strong>. Español es su idioma principal.', 'His CV lists <strong>basic English</strong>. Spanish is his primary language.'],
         ['Encuentras a Jose en GitHub y LinkedIn:', 'Find Jose on GitHub and LinkedIn:'],
