@@ -171,9 +171,10 @@
                 const rect = stage.getBoundingClientRect();
                 pose.targetX = clamp((event.clientX - rect.left) / rect.width * 2 - 1, -1, 1);
                 pose.targetY = clamp((event.clientY - rect.top) / rect.height * 2 - 1, -1, 1);
+                pose.targetHover = 1;
                 invalidate();
             });
-            stage.addEventListener('pointerleave', () => { pose.targetX = pose.targetY = 0; invalidate(); });
+            stage.addEventListener('pointerleave', () => { pose.targetX = pose.targetY = pose.targetHover = 0; invalidate(); });
             description.addEventListener('pointermove', event => {
                 if (!canTilt() || event.pointerType === 'touch') return;
                 const rect = description.getBoundingClientRect();
@@ -185,9 +186,9 @@
             return record;
         });
         let progress = 0, target = 0, previousScroll = 0, velocity = 0, last = 0;
-        const pose = { x: 0, y: 0, copyX: 0, copyY: 0, targetX: 0, targetY: 0, targetCopyX: 0, targetCopyY: 0 };
+        const pose = { x: 0, y: 0, copyX: 0, copyY: 0, hover: 0, targetX: 0, targetY: 0, targetCopyX: 0, targetCopyY: 0, targetHover: 0 };
         const active = () => records[getCurrent()];
-        const canTilt = () => motion() && fine.matches && innerWidth > 650 && getView() === 'projects' && !isGrid();
+        const canTilt = () => motion() && fine.matches && innerWidth > 650 && getView() === 'projects' && !isGrid() && !section.classList.contains('is-works-transitioning') && !section.classList.contains('is-works-dragging');
         function readScroll() {
             if (isGrid() || getView() !== 'projects') return;
             const record = active();
@@ -207,7 +208,7 @@
             previousScroll = value;
         }
         function select() {
-            records.forEach(record => { record.content.scrollTop = 0; });
+            active().content.scrollTop = 0;
             progress = target = previousScroll = velocity = 0;
             Object.keys(pose).forEach(key => { pose[key] = 0; });
             i18n.html(backdrop, () => [...i18n.t($('.project-title', active().element).textContent)].map((char, index) => `<span class="work-backdrop-letter" style="--letter-side:${index % 2 ? 1 : -1};--letter-index:${index}">${char === ' ' ? '&nbsp;' : escape(char)}</span>`).join(''));
@@ -233,7 +234,7 @@
             if (Math.abs(progress - target) < .0005) progress = target;
             velocity = enabled ? velocity * Math.exp(-elapsed / 100) : 0;
             if (Math.abs(velocity) < .03) velocity = 0;
-            ['x', 'y', 'copyX', 'copyY'].forEach(key => {
+            ['x', 'y', 'copyX', 'copyY', 'hover'].forEach(key => {
                 const goal = canTilt() ? pose[`target${key[0].toUpperCase()}${key.slice(1)}`] : 0;
                 pose[key] = enabled ? pose[key] + (goal - pose[key]) * ease : goal;
                 if (Math.abs(pose[key] - goal) < .0005) pose[key] = goal;
@@ -244,12 +245,15 @@
             set(backdrop, '--works-fill', `${(12 * (1 - progress)).toFixed(3)}%`);
             set(backdrop, '--works-stroke', `${(progress * 14).toFixed(3)}%`);
             set(backdrop, '--works-word-depth', `${enabled ? progress * 24 : 0}px`);
-            set(record.stage, '--preview-x', `${(pose.x * 75).toFixed(3)}px`);
-            set(record.stage, '--preview-y', `${(pose.y * 60).toFixed(3)}px`);
-            set(record.stage, '--preview-rx', `${(-pose.y * 15).toFixed(3)}deg`);
-            set(record.stage, '--preview-ry', `${(pose.x * 15).toFixed(3)}deg`);
-            set(record.stage, '--preview-image-x', `${(-pose.x * 30).toFixed(3)}px`);
-            set(record.stage, '--preview-image-y', `${(-pose.y * 24).toFixed(3)}px`);
+            set(record.stage, '--preview-x', `${(pose.x * 48).toFixed(3)}px`);
+            set(record.stage, '--preview-y', `${(pose.y * 36).toFixed(3)}px`);
+            set(record.stage, '--preview-rx', `${(-pose.y * 12).toFixed(3)}deg`);
+            set(record.stage, '--preview-ry', `${(pose.x * 14).toFixed(3)}deg`);
+            set(record.stage, '--preview-image-x', `${(-pose.x * 4).toFixed(3)}%`);
+            set(record.stage, '--preview-image-y', `${(-pose.y * 4).toFixed(3)}%`);
+            set(record.stage, '--preview-hover', pose.hover.toFixed(4));
+            set(record.stage, '--preview-light-x', `${(50 + pose.x * 45).toFixed(2)}%`);
+            set(record.stage, '--preview-light-y', `${(50 + pose.y * 45).toFixed(2)}%`);
             set(record.description, '--copy-rx', `${(-pose.copyY * 30).toFixed(3)}deg`);
             set(record.description, '--copy-ry', `${(pose.copyX * 20).toFixed(3)}deg`);
             set(record.description, '--copy-word-z', `${(pose.copyX * 15).toFixed(3)}px`);
@@ -259,7 +263,7 @@
                 const reveal = enabled ? smooth((viewport * .96 - top) / Math.min(viewport * .5, step.height + viewport * .22)) : 1;
                 set(step.element, '--work-reveal', reveal.toFixed(4));
             });
-            const moving = progress !== target || velocity !== 0 || ['x', 'y', 'copyX', 'copyY'].some(key => canTilt() && pose[key] !== pose[`target${key[0].toUpperCase()}${key.slice(1)}`]);
+            const moving = progress !== target || velocity !== 0 || ['x', 'y', 'copyX', 'copyY', 'hover'].some(key => pose[key] !== (canTilt() ? pose[`target${key[0].toUpperCase()}${key.slice(1)}`] : 0));
             record.stage.classList.toggle('is-preview-moving', moving && canTilt());
             return enabled && moving;
         }

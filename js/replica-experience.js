@@ -263,6 +263,7 @@
         const previous = $('[data-works-prev]', controls), next = $('[data-works-next]', controls), count = $('.works-counter', controls);
         const viewToggle = document.createElement('button'); viewToggle.type = 'button'; viewToggle.className = 'works-view-toggle'; section.append(viewToggle);
         const story = window.portfolioNarratives?.createWorks({ section, cases, backdrop, cue, getCurrent: () => current, isGrid: () => all, getView: () => currentView, getFeatures: () => window.portfolioExperience.projectFeatures || {}, motion, fine, invalidate });
+        const transitions = window.portfolioWorksExperience?.create({ section, cases, backdrop, getCurrent: () => current, isGrid: () => all, getView: () => currentView, motion, fine, navigate: offset => show(current + offset), invalidate });
         function labels() {
             previous.setAttribute('aria-label', i18n.t('Proyecto anterior')); next.setAttribute('aria-label', i18n.t('Proyecto siguiente'));
             dotButtons.forEach((button, index) => button.setAttribute('aria-label', i18n.t('Ver proyecto {number}', { number: index + 1 })));
@@ -276,26 +277,30 @@
             if (Math.abs(lastHeight - height) > 1) { lastHeight = height; section.style.setProperty('--works-mobile-height', `${height}px`); }
         }
         function show(index, animate = true) {
-            const direction = index >= current ? 1 : -1;
-            current = clamp(index, 0, cases.length - 1);
-            cases.forEach((element, position) => {
-                const selected = position === current;
-                element.classList.toggle('is-current-project', selected);
-                element.inert = !all && !selected;
-                if (!all && !selected) element.setAttribute('aria-hidden', 'true'); else element.removeAttribute('aria-hidden');
-                dotButtons[position].setAttribute('aria-pressed', String(selected));
-            });
-            i18n.text(backdrop, () => i18n.t($('.project-title', cases[current]).textContent));
-            i18n.text(count, () => `${current + 1} / ${cases.length}`);
-            previous.disabled = current === 0; next.disabled = current === cases.length - 1;
-            labels(); resize();
-            story?.select();
-            if (animate && motion() && !all && currentView === 'projects' && typeof Element.prototype.animate === 'function') {
-                const preview = $('.project-preview', cases[current]), content = $('.project-content', cases[current]);
-                preview.animate([{ transform: `perspective(900px) translateX(${direction * 120}px) rotateY(${direction * 18}deg) scale(.94)`, opacity: 0 }, { transform: 'perspective(900px) translateX(0) rotateY(0deg) scale(1)', opacity: 1 }], { duration: 750, easing: 'cubic-bezier(.16,1,.3,1)' });
-                content.animate([{ transform: `translate3d(0, 45px, 0) rotateY(${direction * -9}deg)`, opacity: 0 }, { transform: 'translate3d(0, 0, 0) rotateY(0)', opacity: 1 }], { duration: 700, delay: 100, easing: 'cubic-bezier(.16,1,.3,1)' });
-            }
-            window.portfolioScroll?.refresh();
+            const destination = clamp(index, 0, cases.length - 1), changed = destination !== current;
+            if (!changed && animate) return false;
+            const direction = destination >= current ? 1 : -1, from = cases[current];
+            const restoreFocus = changed && from.contains(document.activeElement);
+            const update = () => {
+                current = destination;
+                cases.forEach((element, position) => {
+                    const selected = position === current;
+                    element.classList.toggle('is-current-project', selected);
+                    element.inert = !all && !selected;
+                    if (!all && !selected) element.setAttribute('aria-hidden', 'true'); else element.removeAttribute('aria-hidden');
+                    dotButtons[position].setAttribute('aria-pressed', String(selected));
+                });
+                i18n.text(backdrop, () => i18n.t($('.project-title', cases[current]).textContent));
+                i18n.text(count, () => `${current + 1} / ${cases.length}`);
+                previous.disabled = current === 0; next.disabled = current === cases.length - 1;
+                if (changed && !all && currentView === 'projects' && innerWidth <= 650) window.scrollTo({ top: Math.max(0, window.scrollY + section.getBoundingClientRect().top), behavior: 'instant' });
+                labels(); resize(); story?.select();
+                if (restoreFocus && !all) ($('.project-content', cases[current]) || $('.project-preview', cases[current])).focus({ preventScroll: true });
+                window.portfolioScroll?.refresh();
+            };
+            if (transitions) transitions.change({ from, to: cases[destination], direction, update, animate });
+            else update();
+            return changed;
         }
         previous.addEventListener('click', () => show(current - 1)); next.addEventListener('click', () => show(current + 1));
         viewToggle.addEventListener('click', () => {
@@ -317,7 +322,7 @@
             wheelDelta += event.deltaY;
             if (Math.abs(wheelDelta) > 65) { show(current + Math.sign(wheelDelta)); lastChange = now; wheelDelta = 0; }
         }, { passive: false });
-        section.addEventListener('pointerdown', event => { if (event.pointerType === 'touch') start = { x: event.clientX, y: event.clientY }; });
+        section.addEventListener('pointerdown', event => { if (!transitions && event.pointerType === 'touch') start = { x: event.clientX, y: event.clientY }; });
         section.addEventListener('pointerup', event => {
             if (!start || all) return;
             const dx = event.clientX - start.x, dy = event.clientY - start.y; start = null;
