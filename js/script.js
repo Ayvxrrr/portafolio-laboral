@@ -137,15 +137,6 @@
     document.addEventListener('portfolio:view', scheduleScroll);
     updateScroll();
 
-    const timeFormatter = new Intl.DateTimeFormat('es-PE', { timeZone: 'America/Lima', hour: '2-digit', minute: '2-digit', hour12: false });
-    function updateClock() {
-        if (document.hidden) return;
-        $('#localTime').textContent = `${timeFormatter.format(new Date())} PET`;
-    }
-    updateClock();
-    setInterval(updateClock, 60000);
-    document.addEventListener('visibilitychange', updateClock);
-
     function observeOnce(elements, callback, options = {}) {
         if (!('IntersectionObserver' in window)) { elements.forEach(callback); return; }
         const observer = new IntersectionObserver(entries => {
