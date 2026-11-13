@@ -34,7 +34,7 @@
     const sections = [['inicio', 'home'], ['home', 'home'], ['sobre mi', 'about'], ['about', 'about'], ['stack', 'skills'], ['habilidades', 'skills'], ['skills', 'skills'], ['proyectos', 'projects'], ['projects', 'projects'], ['taller', 'playground'], ['retrato', 'playground'], ['particulas', 'playground'], ['playground', 'playground'], ['workshop', 'playground'], ['editor', 'playground'], ['retos', 'playground'], ['challenges', 'playground'], ['contacto', 'contact'], ['contact', 'contact']];
     const sectionLabels = { home: 'Inicio', about: 'Sobre mí', skills: 'Stack', projects: 'Proyectos', playground: 'Robot interactivo', contact: 'Contacto' };
 
-    // Respuestas locales por si la IA falla xd.
+    // Respuestas locales por si la IA falla xd
     const kb = [
         { k: ['hola', 'buenas', 'hey', 'buenos dias', 'buenas tardes', 'buenas noches', 'saludos'], a: '¡Hola! 👋 Soy <strong>Ayvarcitoo</strong>. Pregúntame sobre el perfil de Jose, sus proyectos y tecnologías, o cómo se relacionan con una idea de trabajo.' },
         { k: ['quien eres', 'que eres', 'como te llamas', 'eres un bot', 'eres una ia', 'eres humano', 'ayvarcitoo'], a: 'Soy <strong>Ayvarcitoo</strong>, el asistente del portafolio de Jose. Puedo conversar sobre su perfil profesional, proyectos, tecnologías y explicar temas relacionados con su trabajo.' },
