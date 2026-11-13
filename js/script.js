@@ -559,7 +559,7 @@
             case 'lab': result = 'Demostración automática del flujo Full Stack.'; goTo('architectureLab'); break;
             case 'projects': result = 'Abriendo mis proyectos. Filtra por categoría o busca tu tecnología favorita.'; goTo('projects'); break;
             case 'contact': result = 'Conectemos: {email}\nTambién puedes usar el formulario de contacto.'; params = { email: emailAddress }; goTo('contact'); break;
-            case 'cv': result = 'Descarga solicitada: CV-Ayvar-Jose.pdf'; $('#downloadCV').click(); break;
+            case 'cv': result = 'Descarga solicitada: CV-Jose-Ayvar.pdf'; $('#downloadCV').click(); break;
             case 'theme': toggleTheme(); result = `Tema ${root.dataset.theme === 'dark' ? 'oscuro' : 'claro'} activado.`; break;
             default: result = 'Comando no encontrado: {command}\nEscribe help para explorar los comandos disponibles.'; params = { command: raw.trim() };
         }

@@ -206,7 +206,7 @@
         ['Demostración automática del flujo Full Stack.', 'Automatic Full Stack flow demonstration.'],
         ['Abriendo mis proyectos. Filtra por categoría o busca tu tecnología favorita.', 'Opening my projects. Filter by category or search for your favorite technology.'],
         ['Conectemos: {email}\nTambién puedes usar el formulario de contacto.', 'Let’s connect: {email}\nYou can also use the contact form.'],
-        ['Descarga solicitada: CV-Ayvar-Jose.pdf', 'Download requested: CV-Ayvar-Jose.pdf'], ['Tema oscuro activado.', 'Dark theme enabled.'], ['Tema claro activado.', 'Light theme enabled.'],
+        ['Descarga solicitada: CV-Jose-Ayvar.pdf', 'Download requested: CV-Jose-Ayvar.pdf'], ['Tema oscuro activado.', 'Dark theme enabled.'], ['Tema claro activado.', 'Light theme enabled.'],
         ['Comando no encontrado: {command}\nEscribe help para explorar los comandos disponibles.', 'Command not found: {command}\nType help to explore the available commands.'],
         ['Completa este campo para continuar.', 'Please fill in this field to continue.'], ['Escribe un correo electrónico válido.', 'Please enter a valid email address.'],
         ['Cuéntame un poco más: al menos 10 caracteres.', 'Tell me a little more: at least 10 characters.'], ['Usa un máximo de {count} caracteres.', 'Use no more than {count} characters.'],

@@ -86,11 +86,11 @@ test('la tarjeta descarga únicamente el PDF permitido con su nombre real y cons
   const box = app.actions([{ attachment: 'cv', href: 'https://invalid.example/otro.pdf' }, { label: 'GitHub', href: 'https://github.com/Ayvxrrr' }]);
   const [card, link] = box.children;
   assert.equal(card.tagName, 'A');
-  assert.equal(card.href, '/docs/CV-Ayvar-Jose.pdf');
-  assert.equal(card.download, 'CV-Ayvar-Jose.pdf');
+  assert.equal(card.href, '/docs/CV-Jose-Ayvar.pdf');
+  assert.equal(card.download, 'CV-Jose-Ayvar.pdf');
   assert.equal(card.getAttribute('data-attachment'), 'cv');
   assert.equal(card.getAttribute('aria-label'), 'Descargar CV de Ayvar Jose en PDF');
-  assert.equal(card.querySelector('.ayv-file-name').textContent, 'CV-Ayvar-Jose.pdf');
+  assert.equal(card.querySelector('.ayv-file-name').textContent, 'CV-Jose-Ayvar.pdf');
   assert.equal(card.target, undefined);
   assert.equal(link.href, 'https://github.com/Ayvxrrr');
   assert.equal(link.target, '_blank');
@@ -105,8 +105,8 @@ test('el título y la acción del adjunto se traducen sin modificar el archivo',
   app.setLanguage('es');
   assert.equal(card.querySelector('.ayv-file-info strong').textContent, 'CV de Ayvar Jose');
   assert.equal(card.querySelector('.ayv-file-download').textContent, 'Descargar CV');
-  assert.equal(card.href, '/docs/CV-Ayvar-Jose.pdf');
-  assert.equal(card.download, 'CV-Ayvar-Jose.pdf');
+  assert.equal(card.href, '/docs/CV-Jose-Ayvar.pdf');
+  assert.equal(card.download, 'CV-Jose-Ayvar.pdf');
 });
 
 test('el adjunto existe, es un PDF y coincide con la descarga principal y la caché sin conexión', async () => {
@@ -114,7 +114,7 @@ test('el adjunto existe, es un PDF y coincide con la descarga principal y la cac
   const pdf = await readFile(new URL('..' + CV_FILE.href, import.meta.url));
   assert.equal(pdf.subarray(0,5).toString(), '%PDF-');
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(html, /href="docs\/CV-Ayvar-Jose\.pdf" id="downloadCV" download="CV-Ayvar-Jose\.pdf"/);
+  assert.match(html, /href="docs\/CV-Jose-Ayvar\.pdf" id="downloadCV" download="CV-Jose-Ayvar\.pdf"/);
   const worker = await readFile(new URL('../sw.js', import.meta.url), 'utf8');
   assert.ok(worker.includes(`'${CV_FILE.href.slice(1)}'`));
   for (const asset of ['js/ayvarcitoo.js','css/ayvarcitoo.css','js/i18n.js']) {

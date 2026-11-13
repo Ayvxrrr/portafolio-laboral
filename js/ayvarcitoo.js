@@ -11,7 +11,7 @@
     const norm = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9+\s]/g, ' ').replace(/\s+/g, ' ').trim();
     const has = (t, k) => k.length <= 3 ? ` ${t} `.includes(` ${k} `) : t.includes(k);
 
-    const CV_FILE = Object.freeze({ href: '/docs/CV-Ayvar-Jose.pdf', name: 'CV-Ayvar-Jose.pdf' });
+    const CV_FILE = Object.freeze({ href: '/docs/CV-Jose-Ayvar.pdf', name: 'CV-Jose-Ayvar.pdf' });
     function wantsCV(text) {
         const n = norm(text);
         if (!/\b(?:cv|c v|curriculum(?: vitae)?|curriculo|hoja de vida|resume)\b/.test(n)) return false;
