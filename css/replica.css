@@ -366,7 +366,7 @@
 @media (max-width: 768px) {
     .replica-site .presentation { min-height: max(100svh, 560px); }
     .replica-site .presentation-social { bottom: max(48px, 6svh); }
-    .presentation-social .social-icons { display: grid; grid-template-rows: repeat(3, 44px); grid-template-columns: repeat(2, 44px); grid-auto-flow: column; gap: 2px 4px; }
+    .presentation-social .social-icons { gap: 2px; }
     .replica-site .presentation-social .social-icon { width: 44px; height: 44px; font-size: 18px; }
     .presentation-scroll { bottom: max(84px, calc(84px + env(safe-area-inset-bottom))); min-width: 44px; min-height: 44px; align-content: center; }
     .replica-site .presentation-orb { display: grid; place-items: center; top: auto; left: auto; right: max(128px, calc(128px + env(safe-area-inset-right))); bottom: max(16px, env(safe-area-inset-bottom)); width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
@@ -396,7 +396,6 @@
     .replica-site .presentation-actions { margin-top: 12px; gap: 6px 18px; }
     .presentation-actions a { font-size: 10px; }
     .replica-site .presentation-social { left: max(3vw, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); }
-    .presentation-social .social-icons { display: grid; grid-template-rows: repeat(3, 44px); grid-template-columns: repeat(2, 44px); grid-auto-flow: column; gap: 2px 4px; }
     .replica-site .presentation-social .social-icon { width: 44px; height: 44px; }
 }
 :root[data-motion="reduced"] .statement-line, :root[data-motion="reduced"] .statement-letter { transform: none !important; }
