@@ -92,6 +92,17 @@ test('respeta el idioma inglés y un modelo configurado en el servidor', async (
   assert.deepEqual(payload(result), { reply: 'Hello.' });
 });
 
+test('no entrega teléfonos ni enlaces de WhatsApp aunque la IA los genere', async () => {
+  for (const text of ['Su número es +51 946 016 559', 'https://wa.me/51946016559', 'tel:+51946016559']) {
+    const result = await handleChat(request(), async () => response(text));
+    assert.equal(result.statusCode, 200);
+    assert.doesNotMatch(payload(result).reply, /946|wa\.me|tel:/i);
+    assert.match(payload(result).reply, /privado/);
+  }
+  const english = await handleChat(request({ body: JSON.stringify({ messages: [{ role: 'user', content: 'Phone?' }], language: 'en' }) }), async () => response('+51 946 016 559'));
+  assert.match(payload(english).reply, /private/);
+});
+
 test('recorta el historial a seis mensajes y 500 caracteres por mensaje', async () => {
   const messages = [
     { role: 'user', content: 'fuera del historial' },

@@ -578,9 +578,9 @@
         while (terminalOutput.children.length > 30) terminalOutput.firstElementChild.remove();
         terminalOutput.scrollTop = terminalOutput.scrollHeight;
     }
-    $('#terminalForm').addEventListener('submit', event => { event.preventDefault(); runTerminal(terminalInput.value); });
-    $$('[data-command]').forEach(button => button.addEventListener('click', () => runTerminal(button.dataset.command)));
-    terminalInput.addEventListener('keydown', event => {
+    $('#terminalForm')?.addEventListener('submit', event => { event.preventDefault(); runTerminal(terminalInput.value); });
+    if (terminalInput && terminalOutput) $$('[data-command]').forEach(button => button.addEventListener('click', () => runTerminal(button.dataset.command)));
+    terminalInput?.addEventListener('keydown', event => {
         if (!['ArrowUp', 'ArrowDown'].includes(event.key) || !terminalHistory.length) return;
         event.preventDefault();
         if (historyIndex === terminalHistory.length) terminalDraft = terminalInput.value;

@@ -65,12 +65,9 @@ test('la tarjeta conserva el tema blanco y negro con una foto a color, sin cambi
   assert.ok(meta('og:image').endsWith('/og-image-neon-portrait.jpg'));
 });
 
-test('se restaura el texto de portada sin volver a utilizar Netlify Forms', async () => {
-  assert.ok(html.includes('<p class="presentation-description">Sitios web y sistemas a medida para negocios y emprendimientos.</p>'));
+test('la portada mantiene el diseño simplificado y el formulario usa Formspree', () => {
+  assert.equal(html.includes('class="presentation-description"'), false);
+  assert.equal(html.includes('class="hero-actions presentation-actions"'), false);
   assert.ok(html.includes('action="https://formspree.io/f/meoykyar"'));
   assert.equal(html.includes('data-netlify='), false);
-  const translations = await readFile(new URL('../js/i18n.js', import.meta.url), 'utf8');
-  assert.ok(translations.includes('Websites and custom systems for businesses and entrepreneurs.'));
-  const css = await readFile(new URL('../css/replica.css', import.meta.url), 'utf8');
-  assert.ok(css.includes('.presentation-description {'));
 });

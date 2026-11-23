@@ -157,15 +157,18 @@
         const material = new THREE.ShaderMaterial({
             transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
             uniforms: {
-                uPointer: { value: new THREE.Vector2() }, uInteraction: { value: 0 },
+                uPointer: { value: new THREE.Vector2() }, uInteraction: { value: 0 }, uAssembly: { value: 1 }, uTime: { value: 0 },
                 uRotation: { value: 0 }, uTilt: { value: 0 },
                 uPixelRatio: { value: 1 }, uAspect: { value: 1 }, uHeight: { value: 600 }
             },
             vertexShader: `
                 attribute vec3 aNormal;
                 uniform vec2 uPointer;
-                uniform float uInteraction, uRotation, uTilt, uPixelRatio, uAspect, uHeight;
+                uniform float uInteraction, uAssembly, uTime, uRotation, uTilt, uPixelRatio, uAspect, uHeight;
                 varying float vAlpha;
+                float randomPoint(vec3 value) {
+                    return fract(sin(dot(value, vec3(12.9898, 78.233, 37.719))) * 43758.5453);
+                }
                 void main() {
                     float c = cos(uRotation), s = sin(uRotation), ct = cos(uTilt), st = sin(uTilt);
                     vec3 point = position, facing = aNormal;
@@ -173,18 +176,31 @@
                     facing.xz = vec2(c * facing.x - s * facing.z, s * facing.x + c * facing.z);
                     point.yz = vec2(ct * point.y - st * point.z, st * point.y + ct * point.z);
                     facing.yz = vec2(ct * facing.y - st * facing.z, st * facing.y + ct * facing.z);
+                    float particleDelay = randomPoint(position + vec3(4.2)) * 0.3;
+                    float assembled = smoothstep(particleDelay, particleDelay + 0.7, uAssembly);
+                    float cloudX = randomPoint(position + vec3(1.3)) + randomPoint(position + vec3(2.7)) + randomPoint(position + vec3(3.9)) - 1.5;
+                    float cloudY = randomPoint(position + vec3(5.7)) + randomPoint(position + vec3(6.4)) + randomPoint(position + vec3(7.8)) - 1.5;
+                    float cloudZ = randomPoint(position + vec3(9.1)) + randomPoint(position + vec3(10.6)) + randomPoint(position + vec3(11.2)) - 1.5;
+                    vec3 cloud = vec3(cloudX * max(7.0, 6.0 * uAspect), cloudY * 6.5, cloudZ * 4.0);
+                    float turn = uTime * 0.32;
+                    cloud.xz = mat2(cos(turn), -sin(turn), sin(turn), cos(turn)) * cloud.xz;
+                    cloud.xy = mat2(cos(turn * 0.35), -sin(turn * 0.35), sin(turn * 0.35), cos(turn * 0.35)) * cloud.xy;
+                    float phase = randomPoint(position + vec3(13.4)) * 6.28318;
+                    cloud += vec3(sin(uTime * 0.8 + phase), cos(uTime * 0.6 + phase * 1.7), sin(uTime * 0.5 + phase * 2.3)) * 0.24;
+                    point = mix(cloud, point, assembled);
                     vec4 viewPosition = modelViewMatrix * vec4(point, 1.0);
                     vec4 clipPosition = projectionMatrix * viewPosition;
                     vec2 delta = (clipPosition.xy / clipPosition.w - uPointer) * vec2(uAspect, 1.0);
-                    float influence = (1.0 - smoothstep(0.02, 0.48, length(delta))) * uInteraction;
                     float seed = fract(dot(position, vec3(13.73, 27.19, 8.51)));
-                    vec3 direction = normalize(vec3(delta, (seed - 0.5) * 0.3) + vec3(0.0001));
-                    point += direction * influence * (0.95 + seed * 0.35);
+                    float distanceToPointer = length(delta);
+                    float influence = uInteraction * assembled * 0.085 / (distanceToPointer + 0.13);
+                    vec3 direction = normalize(vec3(delta, (seed - 0.5) * 0.12) + vec3(0.0001));
+                    point += direction * influence * (0.75 + seed * 0.5);
                     viewPosition = modelViewMatrix * vec4(point, 1.0);
                     gl_Position = projectionMatrix * viewPosition;
                     float size = clamp(1.3 * uHeight / 600.0 * 8.0 / max(1.0, -viewPosition.z), 0.8, 1.6);
                     gl_PointSize = max(1.0, size * uPixelRatio);
-                    vAlpha = mix(0.4, 1.0, smoothstep(-0.65, 0.65, facing.z));
+                    vAlpha = mix(0.65, mix(0.4, 1.0, smoothstep(-0.65, 0.65, facing.z)), assembled);
                 }
             `,
             fragmentShader: `
@@ -226,7 +242,7 @@
             material.uniforms.uHeight.value = height;
             sizeDirty = false;
         }
-        function render({ progress = .5, pointerX = 0, pointerY = 0, pointerActive = false, motion = true, visible = true, now = performance.now() } = {}) {
+        function render({ progress = .5, assembly = 1, pointerX = 0, pointerY = 0, pointerActive = false, motion = true, visible = true, now = performance.now() } = {}) {
             if (disposed || !visible || document.hidden || renderer.getContext().isContextLost()) { last = 0; return false; }
             const requested = getQuality(), selected = Object.hasOwn(presets, requested) ? requested : 'medium';
             if (quality !== selected) { quality = selected; density = resolution = 1; sampleTime = sampleFrames = sampleElapsed = 0; sizeDirty = true; }
@@ -243,6 +259,8 @@
             follow('tilt', motion ? pointerY * .16 : 0);
             material.uniforms.uPointer.value.set(pose.pointerX, pose.pointerY);
             material.uniforms.uInteraction.value = pose.interaction;
+            material.uniforms.uAssembly.value = motion ? Math.max(0, Math.min(1, assembly)) : 1;
+            material.uniforms.uTime.value = clock;
             material.uniforms.uRotation.value = pose.rotation;
             material.uniforms.uTilt.value = pose.tilt;
             renderer.render(scene, camera); frames++;

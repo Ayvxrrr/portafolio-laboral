@@ -7,7 +7,7 @@
     if (!section || !stage || !canvas || !status) return;
 
     const pointer = { x: 0, y: 0, active: false };
-    let visible = false, frame = 0, robot = null, attempted = false, progress = .5, measureNeeded = true, bounds = null;
+    let visible = false, frame = 0, robot = null, attempted = false, progress = .5, measureNeeded = true, bounds = null, assemblyStarted = 0;
     let motionEnabled = document.documentElement.dataset.motion !== 'reduced';
 
     function readQuality() {
@@ -59,8 +59,11 @@
         if (!visible || document.hidden || !robot) return;
         if (measureNeeded) measure();
         if (!bounds.width || bounds.bottom <= 0 || bounds.top >= innerHeight || stage.closest('[hidden]')) return;
+        if (!assemblyStarted) assemblyStarted = now;
+        const assembly = motionEnabled ? Math.min(1, (now - assemblyStarted) / 3200) : 1;
         const keepAnimating = robot.render({
             progress,
+            assembly,
             pointerX: pointer.x,
             pointerY: pointer.y,
             pointerActive: pointer.active,
@@ -116,7 +119,7 @@
             if (visible) {
                 loadRobot();
                 invalidate();
-            } else stop();
+            } else { assemblyStarted = 0; stop(); }
         });
         observer.observe(stage);
     } else {

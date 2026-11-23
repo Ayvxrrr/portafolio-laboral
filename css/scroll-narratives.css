@@ -107,14 +107,21 @@
 }
 @media (max-width: 650px) {
     .works-slider-ready.work-story-enabled:not(.works-grid-view) .project-content { padding: 0 9vw 95px; height: auto; overflow: visible; }
-    .work-story-enabled .work-copy { min-height: 0; padding: 0; display: block; }
+    .work-story-enabled .work-copy { min-height: 0; padding: 0; display: flex; flex-direction: column; }
+    .work-story-enabled .work-copy > .project-title { order: 1; }
+    .work-story-enabled .work-copy > .project-category { order: 2; }
+    .work-story-enabled .work-copy > .project-description { order: 3; }
+    .work-story-enabled .work-copy > .project-technologies { order: 4; }
+    .work-story-enabled .work-copy > .project-live-actions { order: 5; }
+    .work-story-enabled .work-copy > .project-detail-link { order: 6; }
+    .work-story-enabled .work-copy > .work-features { order: 7; }
     .work-story-enabled .work-features { padding-top: 55px; }
     .work-features h3 { font-size: 25px; }
     .work-features li { font-size: 15px; padding-left: 30px; margin-bottom: 28px; }
-    .works-slider-ready.work-story-enabled:not(.works-grid-view) .work-preview-stage { top: 145px; right: 9%; translate: none; width: 82%; height: 49vw; min-height: 0; max-height: 240px; }
+    .works-slider-ready.work-story-enabled:not(.works-grid-view) .work-preview-stage { top: 155px; right: 17.5%; translate: none; width: 65%; height: 40vw; min-height: 0; max-height: 200px; }
     .works-slider-ready.work-story-enabled:not(.works-grid-view) .work-preview-stage .project-preview { position: relative; top: auto; right: auto; width: 100%; height: 100%; min-height: 0; transform: none !important; }
     .works-slider-ready.work-story-enabled:not(.works-grid-view) .work-preview-stage .project-screenshot { transform: none; }
-    .works-progress-cue { display: block; top: 118px; left: 9%; translate: none; width: 72px; text-align: left; font-size: 7px; letter-spacing: 1px; }
+    .works-progress-cue { display: block; top: 118px; left: 9%; translate: none; width: 90px; text-align: left; font-size: 10px; letter-spacing: 1px; }
     .works-progress-cue .scroll-meter-track { height: 2px; margin-bottom: 4px; }
     .works-progress-cue .scroll-meter-caption { white-space: nowrap; }
     .about-journey.about-story-ready { height: calc(240svh + var(--about-stage-overflow, 0px)); }
@@ -130,9 +137,9 @@
 }
 @media (max-width: 450px) {
     .replica-site[data-view="about"] .navbar .nav-link { font-size: 12px; }
-    .about-story-stage .about-introduction { width: 50vw; padding: 0; }
-    .about-story-stage .about-introduction h2 { font-size: 20px; }
-    .about-story-stage .about-introduction > p:not(.experience-eyebrow) { width: 100%; font-size: 13px; line-height: 15px; }
+    .about-story-stage .about-introduction { width: 55vw; padding: 0; }
+    .about-story-stage .about-introduction h2 { font-size: clamp(20px, 5.5vw, 24px); }
+    .about-story-stage .about-introduction > p:not(.experience-eyebrow) { width: 100%; font-size: 14px; line-height: 1.4; }
     .about-robot-layer { height: 100vw; }
     .about-story-stage .resume-download { top: 45%; font-size: 30px; }
     .about-story-stage .resume-blob { top: calc(45% - 16vw); }
@@ -140,7 +147,7 @@
 @media (max-width: 350px) {
     .replica-site[data-view="about"] .navbar { padding-inline: 10px; }
     .replica-site[data-view="about"] .logo-word { font-size: 20px; }
-    .about-story-stage .about-introduction h2 { font-size: 16px; }
+    .about-story-stage .about-introduction h2 { font-size: 19px; }
 }
 @media (prefers-reduced-motion: reduce) {
     .work-step, .work-paragraph, .work-word, .work-backdrop-letter, .work-preview-stage .project-preview, .work-preview-stage .project-screenshot { opacity: 1 !important; transform: none !important; }
@@ -165,7 +172,7 @@
         margin-inline: 0;
     }
     .replica-site #contact .section-title { font-size: clamp(28px, 8.5vw, 56px); }
-    .replica-site #contact .contact-form-container { padding: clamp(18px, 5vw, 28px); }
+    .replica-site #contact .contact-form-container { padding: clamp(18px, 5vw, 28px) 0; }
     .replica-site #contact .contact-form .row { --bs-gutter-x: 1rem; margin-inline: 0; }
 }
 

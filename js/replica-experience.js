@@ -261,13 +261,11 @@
         controls.innerHTML = '<button type="button" data-works-prev>⟵</button><p class="works-counter" role="status" aria-live="polite"></p><button type="button" data-works-next>⟶</button>';
         section.append(controls);
         const previous = $('[data-works-prev]', controls), next = $('[data-works-next]', controls), count = $('.works-counter', controls);
-        const viewToggle = document.createElement('button'); viewToggle.type = 'button'; viewToggle.className = 'works-view-toggle'; section.append(viewToggle);
         const story = window.portfolioNarratives?.createWorks({ section, cases, backdrop, cue, getCurrent: () => current, isGrid: () => all, getView: () => currentView, getFeatures: () => window.portfolioExperience.projectFeatures || {}, motion, fine, invalidate });
         const transitions = window.portfolioWorksExperience?.create({ section, cases, backdrop, getCurrent: () => current, isGrid: () => all, getView: () => currentView, motion, fine, navigate: offset => show(current + offset), invalidate });
         function labels() {
             previous.setAttribute('aria-label', i18n.t('Proyecto anterior')); next.setAttribute('aria-label', i18n.t('Proyecto siguiente'));
             dotButtons.forEach((button, index) => button.setAttribute('aria-label', i18n.t('Ver proyecto {number}', { number: index + 1 })));
-            i18n.text(viewToggle, all ? 'Volver a la galería' : 'Ver todos los proyectos');
         }
         function resize() {
             story?.layout();
@@ -303,15 +301,6 @@
             return changed;
         }
         previous.addEventListener('click', () => show(current - 1)); next.addEventListener('click', () => show(current + 1));
-        viewToggle.addEventListener('click', () => {
-            all = !all;
-            if (!all) $('#resetProjects').click();
-            section.classList.toggle('works-grid-view', all);
-            viewToggle.setAttribute('aria-expanded', String(all));
-            show(current, false);
-            if (all) $('#projectSearch').focus({ preventScroll: true }); else viewToggle.focus({ preventScroll: true });
-            invalidate();
-        });
         section.addEventListener('wheel', event => {
             if (story || currentView !== 'projects' || all || innerWidth <= 650 || event.ctrlKey || $('dialog[open]') || !$('.chapter-curtain')?.hidden) return;
             const content = event.target.closest('.project-content');
@@ -391,8 +380,6 @@
         new MutationObserver(records => {
             records.forEach(record => record.addedNodes.forEach(node => { if (node.nodeType === 1 && node.classList.contains('marquee')) { node.dataset.view = 'about'; node.hidden = currentView !== 'about'; } }));
         }).observe(main, { childList: true });
-        const stack = $('.stack-strip');
-        if (stack) $('#skills').before(stack);
         $$('.marquee').forEach(element => { element.dataset.view = 'about'; element.hidden = currentView !== 'about'; $('#skills').before(element); });
         const target = viewFromLocation();
         if (target && target !== main) requestAnimationFrame(() => scrollTarget(target));
