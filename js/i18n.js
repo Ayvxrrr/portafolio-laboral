@@ -67,7 +67,7 @@
         ['Certificaciones', 'Certifications'], ['Fundamentos de Python: variables, estructuras de control y funciones.', 'Python fundamentals: variables, control flow and functions.'],
         ['Formación básica', 'Foundational training'], ['Formación técnica', 'Technical training'],
         ['Java - Curso Técnico', 'Java — Technical Course'], ['Programación orientada a objetos, manejo de APIs y desarrollo de aplicaciones.', 'Object-oriented programming, APIs and application development.'],
-        ['02 / Mi ecosistema tecnológico', '02 / My technology ecosystem'], ['Las herramientas.', 'The tools.'], ['Las posibilidades.', 'The possibilities.'],
+        ['02 / Mi ecosistema tecnológico', '02 / My technology ecosystem'], ['Las herramientas.', 'The tools.'], ['Las posibilidades.', 'The possibilities.'], ['Habilidades técnicas', 'Technical skills'], ['Lenguajes de programación', 'Programming languages'],
         ['Del primer píxel a la última consulta. Un stack para construir de principio a fin.', 'From the first pixel to the final query. A stack for building from start to finish.'],
         ['01 / EXPERIENCIA', '01 / EXPERIENCE'], ['02 / LÓGICA', '02 / LOGIC'], ['03 / INFRAESTRUCTURA', '03 / INFRASTRUCTURE'],
         ['SOLICITUD', 'REQUEST'], ['DATOS', 'DATA'], ['RESPUESTA', 'RESPONSE'],

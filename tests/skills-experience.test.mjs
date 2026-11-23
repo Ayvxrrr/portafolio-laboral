@@ -9,7 +9,7 @@ const i18n = await readFile(new URL('../js/i18n.js', import.meta.url), 'utf8');
 const entries = vm.runInNewContext(i18n.slice(i18n.indexOf('    const entries = '), i18n.indexOf('    ];') + 6) + '\nentries');
 const english = new Map(entries);
 
-function fixture({ fine = true, motion = 'full', observe = true } = {}) {
+function fixture({ fine = true, motion = 'full', observe = true, featurePresent = true } = {}) {
   const events = new Map(), frames = new Map(), bindings = new Map();
   let frameId = 0, observer;
   const state = { fine, language: 'es', focused: null, animations: 0, cancellations: 0 };
@@ -44,7 +44,7 @@ function fixture({ fine = true, motion = 'full', observe = true } = {}) {
   const elements = new Map(['languageFeature','languageMonogram','languageFeatureTitle','languageFeatureDescription','languageFeatureUsage','nextLanguage'].map(id => [`#${id}`, element()]));
   const panels = [...cards, elements.get('#languageFeature')];
   const section = element();
-  section.querySelector = selector => elements.get(selector);
+  section.querySelector = selector => !featurePresent && ['#languageFeature', '#languageMonogram'].includes(selector) ? null : elements.get(selector);
   section.querySelectorAll = selector => ({ '.skill-category-card': cards, '.language-choice': choices, '.skill-panel': panels })[selector];
   const media = { get matches() { return state.fine; }, addEventListener: (name, handler) => events.set('media:' + name, handler) };
   const document = { readyState: 'complete', hidden: false, documentElement: { dataset: { motion } }, getElementById: () => section, addEventListener: (name, handler) => events.set(name, handler) };
@@ -81,6 +81,14 @@ test('cada tecnología mantiene su selección visual sin añadir descripciones',
   }
   assert.equal(app.cards[0].dataset.selectedTech, 'angular');
   assert.equal(app.cards[1].dataset.selectedTech, 'java');
+});
+
+test('los lenguajes muestran únicamente nombre y porcentaje sin panel adicional', () => {
+  assert.doesNotMatch(html, /id="languageFeature"|LENGUAJE EN FOCO|DISTINTOS LENGUAJES\. UNA MISMA IDEA\.|Elige uno\. Explora su papel en el stack\./);
+  assert.equal([...html.matchAll(/class="language-chart language-choice" role="listitem"/g)].length, 5);
+  const app = fixture({ featurePresent: false });
+  app.document.hidden = true;
+  assert.doesNotThrow(() => app.event('visibilitychange'));
 });
 
 test('el teclado explora tecnologías con flechas, Inicio y Fin sin salir de la categoría', () => {
@@ -148,7 +156,7 @@ test('todas las descripciones dinámicas están traducidas y conservan el idioma
 });
 
 test('las tarjetas no contienen subtítulos, pies explicativos ni controles a elementos eliminados', () => {
-  const deck = html.slice(html.indexOf('<div class="row g-4 skills-deck">'), html.indexOf('<div class="architecture-lab'));
+  const deck = html.slice(html.indexOf('<div class="row g-4 skills-deck">'), html.indexOf('<div class="programming-languages'));
   assert.doesNotMatch(deck, /<p\b|skill-card-detail|TechDetail|EN PRÁCTICA/);
   assert.doesNotMatch(html, /skills-interaction-hint/);
   assert.equal([...deck.matchAll(/class="skill-info skill-trigger"/g)].length, 12);

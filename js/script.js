@@ -271,6 +271,7 @@
 
     // Es una simulación visual; no envío solicitudes a un servidor xd.
     const lab = $('#architectureLab');
+    if (lab) {
     const flowLog = $('#flowLog');
     const labStatus = $('#labStatus');
     const flowWorkspace = $('.lab-workspace', lab);
@@ -353,6 +354,7 @@
     document.addEventListener('portfolio:motion', syncFlow);
     document.addEventListener('visibilitychange', syncFlow);
     syncFlow();
+    }
 
     function openDialog(dialog) {
         $$('dialog[open]').forEach(open => open.close());
@@ -460,7 +462,6 @@
     ].map(([label, id, icon]) => ({ label, icon, group: 'SECCIÓN', run: () => goTo(id) }));
     const commandActions = [
         ...navigationActions,
-        { label: 'Demostración Full Stack', icon: 'microchip', group: 'EXPLORAR', run: () => goTo('architectureLab') },
         ...projectItems.map(item => ({ label: $('.project-title', item).textContent, icon: 'arrow-up-right-from-square', group: 'PROYECTO', run: () => showProject(item.dataset.project) })),
         { label: 'Descargar CV', icon: 'download', group: 'ACCIÓN', run: () => $('#downloadCV').click() },
         { label: 'Copiar correo electrónico', icon: 'copy', group: 'ACCIÓN', run: copyEmail },

@@ -35,7 +35,7 @@ test('la vista previa está declarada en el HTML inicial sin ejecutar JavaScript
 
 test('la tarjeta social usa una imagen JPEG pública, ligera y de 1200 × 630', async () => {
   const imageURL = new URL(meta('og:image'));
-  assert.equal(imageURL.href, `${site}img/og-ayvar-2026.jpg`);
+  assert.equal(imageURL.href, `${site}img/og-ayvar-neon-v2.jpg`);
   assert.equal(meta('og:image:secure_url'), imageURL.href);
   assert.equal(meta('twitter:image'), imageURL.href);
   assert.equal(meta('og:image:type'), 'image/jpeg');
@@ -62,7 +62,7 @@ test('la tarjeta usa el nuevo diseño sin cambiar el tema de la web', async () =
   assert.ok(html.includes('data-accent="mono"'));
   const preferences = await readFile(new URL('../js/preferences.js', import.meta.url), 'utf8');
   assert.ok(preferences.includes("root.dataset.accent = 'mono'"));
-  assert.ok(meta('og:image').endsWith('/og-ayvar-2026.jpg'));
+  assert.ok(meta('og:image').endsWith('/og-ayvar-neon-v2.jpg'));
 });
 
 test('la portada mantiene el diseño simplificado y el formulario usa Formspree', () => {

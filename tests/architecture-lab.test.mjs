@@ -111,11 +111,9 @@ test('movimiento reducido muestra un resumen estático y reanuda la demo al acti
   assert.equal(app.timers.size, 1);
 });
 
-test('la demostración no tiene botones ni instrucciones para hacer clic', () => {
-  const markup = html.slice(html.indexOf('<div class="architecture-lab'), html.indexOf('<div class="programming-languages'));
-  assert.doesNotMatch(markup, /<button\b|tabindex|aria-pressed|layerDetail|layerTitle|layerDescription|Toca|INTERACTIVO|Del clic/);
-  assert.match(markup, /DEMO AUTOMÁTICA/);
-  assert.match(markup, /role="list" aria-label="Flujo de una solicitud web"/);
+test('la demostración eliminada ya no aparece en la página', () => {
+  assert.doesNotMatch(html, /id="architectureLab"|DEMO AUTOMÁTICA|id="flowLog"/);
+  assert.match(html, /class="programming-languages skills-languages"/);
 });
 
 test('los mensajes son breves y la capa actual se identifica sin controles falsos', () => {

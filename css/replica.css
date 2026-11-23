@@ -130,8 +130,8 @@
 .resume-download i { font-size: .65em; margin-left: .2em; }
 .replica-site #skills, .replica-site #playground { padding: 110px 5vw; }
 .replica-site #skills .container, .replica-site #playground .container { max-width: none; padding: 0; }
-.replica-site #playground { min-height: 100svh; display: grid; align-items: center; overflow: clip; background: #050505; }
-.replica-site .portrait-feature { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); align-items: center; gap: 2vw; }
+.replica-site #playground { min-height: 100svh; padding: 0; display: grid; align-items: center; overflow: clip; background: #050505; }
+.replica-site .portrait-feature { display: block; }
 .portrait-copy { position: relative; z-index: 1; padding-block: 35px; }
 .replica-site #playground { --detail-yellow: #fff; --muted: #a8acb2; background: #000; color: #f4f6fa; }
 .portrait-eyebrow { margin: 0 0 28px; color: #a8acb2; font: 600 10px/1.5 var(--mono); letter-spacing: .17em; }
@@ -141,12 +141,13 @@
 .portrait-contact { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; padding-bottom: 8px; border-bottom: 1px solid currentColor; color: #f4f6fa; font-size: 10px; font-weight: 700; letter-spacing: .11em; text-decoration: none; }
 .portrait-contact:hover { color: #fff; text-shadow: 0 0 12px rgb(255 255 255 / 75%); }
 .portrait-contact i { font-size: 11px; }
-.portrait-stage { position: relative; min-width: 0; height: min(82svh, 800px); min-height: 540px; isolation: isolate; overflow: hidden; background: #000; touch-action: pan-y pinch-zoom; }
+.portrait-stage { position: relative; width: 100%; min-width: 0; height: 100svh; min-height: 420px; isolation: isolate; overflow: hidden; background: #000; touch-action: pan-y pinch-zoom; }
 .portrait-stage canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 .portrait-stage canvas { z-index: 1; }
+.portrait-stage #robotParticles { mask-image: linear-gradient(to bottom, transparent, #000 96px); }
 .portrait-status { position: absolute; top: 12px; left: 50%; z-index: 2; translate: -50% 0; color: #c5cbd4; font: 9px/1.5 var(--mono); text-align: center; }
 .portrait-stage[data-state="error"] .portrait-status { top: 50%; width: min(80%, 300px); translate: -50% -50%; }
-.portrait-links { position: absolute; left: 0; top: 50%; z-index: 3; translate: 0 -50%; display: flex; flex-direction: column; gap: clamp(28px, 8svh, 64px); }
+.portrait-links { position: absolute; left: max(5vw, env(safe-area-inset-left)); top: 50%; z-index: 3; translate: 0 -50%; display: flex; flex-direction: column; gap: clamp(28px, 8svh, 64px); }
 .portrait-links a { display: grid; place-items: center; width: 44px; height: 44px; color: #fff; font-size: 17px; }
 .portrait-links a:hover, .portrait-links a:focus-visible { color: #f4dd1e; }
 .replica-site .section-title { font-weight: 800; font-size: clamp(40px, 5vw, 76px); line-height: .98; }
@@ -331,13 +332,13 @@
     .resume-background { font-size: 65vw; }
     .resume-sphere { left: -15vw; width: 75vw; opacity: .22; }
     .resume-download { font-size: 8.5vw; }
-    .replica-site #skills, .replica-site #playground { padding: 90px 6vw; }
+    .replica-site #skills { padding: 90px 6vw; }
     .replica-site .portrait-feature { grid-template-columns: 1fr; gap: 0; }
     .portrait-copy { padding-block: 12px 0; }
     .portrait-title { max-width: 600px; font-size: clamp(42px, 9vw, 68px); }
     .portrait-message { max-width: 620px; margin-top: 18px; }
     .portrait-contact { margin-top: 22px; }
-    .portrait-stage { width: calc(100% + 12vw); max-width: none; height: 100svh; min-height: 560px; max-height: 900px; margin: 20px -6vw 0; }
+    .portrait-stage { width: 100%; height: 100svh; min-height: 560px; margin: 0; }
     .portrait-links { left: 6vw; }
     .replica-site .section-title { font-size: 10vw; }
     .replica-site #projects.works-slider-ready:not(.works-grid-view) { min-height: max(100svh, 780px, var(--works-mobile-height, 780px)); height: auto; }

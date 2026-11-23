@@ -47,6 +47,7 @@
             selectTechnology(card, buttons.find(button => button.getAttribute('aria-pressed') === 'true')?.dataset.tech || buttons[0].dataset.tech);
         });
 
+        if (feature) {
         function selectLanguage(key, animate = true) {
             const language = languages[key];
             if (!language) return;
@@ -83,6 +84,7 @@
             selectLanguage(choices[(index + 1) % choices.length].dataset.languageKey);
         });
         selectLanguage(selectedLanguage, false);
+        }
 
         // Solo calculo la inclinación al mover un ratón real, nunca al deslizar en móvil xd.
         const resets = new Map();
@@ -119,7 +121,7 @@
         } else resets.forEach((reset, panel) => { panel.dataset.inView = 'true'; });
         const resetPanels = () => {
             resets.forEach(reset => reset());
-            if (!motion() || document.hidden) $('#languageMonogram').getAnimations?.().forEach(animation => animation.cancel());
+            if (!motion() || document.hidden) $('#languageMonogram')?.getAnimations?.().forEach(animation => animation.cancel());
         };
         fine.addEventListener('change', resetPanels);
         document.addEventListener('portfolio:motion', resetPanels);
